@@ -14,6 +14,8 @@ const KakaoMap = () => {
     const [infoDisplay, setInfoDisplay] = useState(true);
     const navigate = useNavigate();
 
+    const [currentKeyword, setCurrentKeyword ]= useState('대형마트')
+
     useEffect(() => {
         const loadKakaoMap = () => {
             if (!window.kakao || !window.kakao.maps) {
@@ -42,7 +44,8 @@ const KakaoMap = () => {
         script.async = true;
         script.onload = loadKakaoMap;
         document.head.appendChild(script);
-    }, []);
+
+    }, [currentKeyword]);
 
     const menuOpen = () => {
         console.log('test');
@@ -125,9 +128,9 @@ const MapContent = styled.div`
             justify-content: center;
             margin: 5px;
             &:active {
-                background-color: #55DD16;
                 box-shadow: 0 3px 15px gray;
-                transform: translateY(4px);
+                transform: scale(1.1);
+                border: 2px solid #557000;
             }
         }
     }
@@ -161,11 +164,11 @@ const MapContent = styled.div`
             &:active { /* refresh 클릭 시 배경색 초록색, 버튼 클릭 되는 느낌 */
                 background-color: #55A416;
                 box-shadow: 0 2px #666;
-                transform: translateY(4px);
+                transform: translateY(2px);
                 #iorefresh { /* 아이콘 회전 */
                     transform: rotate(90deg);
                 }
-                transition: transform 1s ease-in-out;
+                transition: transform .2s ease-in-out;
             }
             div {
                 display: flex;
