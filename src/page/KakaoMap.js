@@ -281,7 +281,7 @@ const MapContent = styled.div`
             border-radius: 1rem;
             width: 25vh;
             z-index: 10;
-            padding: .5rem 1rem;
+            padding: .3rem 1rem;
             align-items: center;
             justify-content: center;
             font-size: .8rem;
@@ -316,10 +316,9 @@ const MapContent = styled.div`
         .keywordList .keyword {
             height: 45px;
             width: 45px;
-            padding: .25rem;
             .icon{
-                height: 20px;
-                width: 20px;
+                height: 28px;
+                width: 28px;
             }
         }
     }
@@ -327,10 +326,9 @@ const MapContent = styled.div`
         .keywordList .keyword {
             height: 25px;
             width: 25px;
-            padding: .2rem;
             .icon{
-                height: 15px;
-                width: 15px;
+                height: 20px;
+                width: 20px;
             }
         }
     }
