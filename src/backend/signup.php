@@ -19,7 +19,7 @@
     $now= date('Y-m-d H:i:s');
 
      // 데이터들을 MySQL DB에 저장하기 [테이블명: userData]
-     $db= mysqli_connect("localhost","root","itmi#472","mwomeokji");
+     $db= mysqli_connect("localhost","www-user","itmi#472","mwomeokji");
      mysqli_query($db,"set names utf8"); // 한글 깨지지 않게 설정
 
      //$sql = "SELECT * FROM userData WHERE nickname = '$nickname' OR email = '$email'";
@@ -32,7 +32,7 @@
         echo "중복확인을 해주세요";
     } else {
     
-        // 데이터들 market테이블에 삽입하기 [$nickname, $email, $password, $now]
+        // 데이터들 userData테이블에 삽입하기 [$nickname, $email, $password, $now]
         $sql= "INSERT INTO userData(nickname,email,password,now) VALUES('$nickname','$email','$password','$now')";
         $result= mysqli_query($db,$sql);
 

@@ -9,18 +9,22 @@
     mysqli_query($db,"set names utf8"); // 한글 깨지지 않게 설정
 
 
-    $sqlname = "SELECT * FROM userData WHERE nickname = '$nickname'";
-    $result= mysqli_query($db,$sqlname);
-
-    $conunt= mysqli_num_rows($result);
-
-    if($conunt > 0) {
-        echo "이미 사용중입니다";
-    } else {
-        echo "사용가능합니다";
+    if(isset($nickname)){
+        $sql = "SELECT * FROM userData WHERE nickname = '$nickname'";
+    } else if(isset($email)){
+        $sql = "SELECT * FROM userData WHERE email = '$email'";
     }
 
-    mysqli_close($db)
+    $result= mysqli_query($db,$sql);
+    $conunt= mysqli_num_rows($result);
+
+    if($conunt > 0)  echo "false";
+    else echo "true";
+    
+
+    mysqli_close($db);
 
 ?>
 
+
+   

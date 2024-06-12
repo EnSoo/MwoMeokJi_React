@@ -15,7 +15,7 @@
     $password= $_POST['password'];
 
 
-    $db= mysqli_connect("localhost","root","itmi#472","mwomeokji");
+    $db= mysqli_connect("localhost","www-user","itmi#472","mwomeokji");
     mysqli_query($db,"set names utf8"); // 한글 깨지지 않게 설정
 
     
