@@ -54,7 +54,7 @@ const Recipe = () => {
 export default Recipe;
 
 const Grid = styled.div`
-    display: flex;
+    display: grid;
     flex-direction: column;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 1rem;
@@ -85,7 +85,6 @@ const Image = styled.img`
 `
 
 const TextContainer = styled.div`
-    flex: 1;
     text-align: left;   
 `
 const StyledLink = styled(Link)`
