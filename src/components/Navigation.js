@@ -9,6 +9,7 @@ const Navigation = () => {
     
     // 이 코드를 추가하여 bnvRoute 함수를 전역으로 사용할 수 있게 합니다.
     window.bnvRoute = bnvRoute;
+    
 }
 
 export default Navigation
