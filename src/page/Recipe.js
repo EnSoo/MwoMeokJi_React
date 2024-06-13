@@ -16,20 +16,20 @@ const Recipe = () => {
                 Papa.parse(csv, {
                     header: true,
                     complete: (results) => {
-                        setRecipes(results.data);
+                        setRecipes(results.data)
                         console.log("recipe", recipes)
-                        setLoading(false);
+                        setLoading(false)
                     }
                 })
             })
             .catch(err => {
-                setError(err.message);
-                setLoading(false);
+                setError(err.message)
+                setLoading(false)
             })
     }, [])
 
-    if (loading) return <div>Loading...</div>;
-    if (error) return <div>Error: {error}</div>;
+    if (loading) return <div>Loading...</div>
+    if (error) return <div>Error: {error}</div>
 
     return (
         <div>
