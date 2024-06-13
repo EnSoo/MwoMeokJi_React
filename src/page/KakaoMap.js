@@ -131,30 +131,32 @@ const KakaoMap = () => {
 
     // kakaomap 라이브러리를 index.html에서 불러와도, kakaomap 불러오는 것은 비동기로 동작하므로 useEffect로 다시 라이브러리를 불러옴
     useEffect(() => {
-        // 현재 위치정보를 불러왔을 경우에만 동작
-        if (location.latitude && location.longitude) {
-            const loadKakaoMap = () => {
-                if (!window.kakao || !window.kakao.maps) {
-                    console.error('kakao.maps API가 로드되지 않았습니다.');
-                    return;
+        const script = document.createElement('script');
+        script.src = 'https://dapi.kakao.com/v2/maps/sdk.js?appkey=cefb8bef456fdc33b55d22b9108938be&libraries=services,clusterer,drawing';
+        script.async = true;
+        script.onload = () => {
+            if (window.kakao && window.kakao.maps) {
+                if (location.latitude && location.longitude) {
+                    const container = document.getElementById('map');
+                    const options = {
+                        center: new kakao.maps.LatLng(location.latitude, location.longitude),
+                        draggable: true,
+                        level: 7,
+                    };
+                    mapRef.current = new kakao.maps.Map(container, options);
+                    fetchNearbyPlaces();
                 }
-                const container = document.getElementById('map');
-                const options = {
-                    center: new kakao.maps.LatLng(location.latitude, location.longitude), // 지도 상의 중심 좌표 지정
-                    draggable: true, // 드래그 가능 여부
-                    level: 7, // 줌 확대 레벨. 낮을 수록 최대 확대 된것임
-                };
-                mapRef.current = new kakao.maps.Map(container, options); // map을 생성하면서 map 참조변수 지정
-                fetchNearbyPlaces(); // 카카오 검색 REST API 메소드
-            };
+            } else {
+                console.error('kakao.maps API가 로드되지 않았습니다.');
+            }
+        };
+        document.head.appendChild(script);
 
-            const script = document.createElement('script');
-            script.src = 'https://dapi.kakao.com/v2/maps/sdk.js?appkey=cefb8bef456fdc33b55d22b9108938be';
-            script.async = true;
-            script.onload = loadKakaoMap;
-            document.head.appendChild(script);
-        }
-    }, [location]);
+        return () => {
+            // Clean up script tag when component unmounts
+            document.head.removeChild(script);
+        };
+    }, [location, currentKeyword]);
 
     // keyword로 불러온 장소가 1개 이상일 경우 마커 삭제 및 마커 재 추가
     useEffect(() => {
@@ -162,7 +164,7 @@ const KakaoMap = () => {
             clearMarkers();
             addMarkers();
         }
-    }, [Places]);
+    }, [Places, currentKeyword]);
 
     // 우상단 메뉴 
     const menuOpen = () => {
