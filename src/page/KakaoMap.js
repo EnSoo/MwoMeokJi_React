@@ -77,6 +77,13 @@ const KakaoMap = () => {
         infoWindowsRef.current = [];
     };
 
+
+    const handleInfoWindowClick = (place) => {
+        // 원하는 동작을 여기서 수행하세요. 예를 들어, 특정 페이지로 이동하기:
+        window.InfoWindow.DetailActivity(place.place_url)
+        window.location.href=place.place_url
+    };
+
     // 마커 목록 및 infoWindow 추가 
     const addMarkers = () => {
         if (!mapRef.current) return;
@@ -89,7 +96,7 @@ const KakaoMap = () => {
                 title: place.place_name
             });
             
-            const iwContent= renderToString(<InfoWindow place={place}/>)
+            const iwContent= renderToString(<InfoWindow place={place} onClick={() => handleInfoWindowClick(place)}/>)
 
             // infowindow 생성
             const infowindow = new kakao.maps.InfoWindow({
@@ -107,8 +114,15 @@ const KakaoMap = () => {
             kakao.maps.event.addListener(marker, 'click', () => {
                 const isOpen = infowindow.getMap() // infowindow가 맵상에 존재할 경우 true, 존재하지 않을 경우 false
                 infoWindowsRef.current.forEach(window => window.close()); // 무조건 close 동작
-                if(!isOpen) { // infowindow가 열려 있을 경우(true) open 동작하지 않고, infowindow가 닫혀 있을 경우(false) open 동작함
+                if (!isOpen) {
                     infowindow.open(mapRef.current, marker);
+                    // 여기서 인포윈도우 내부에 이벤트 리스너를 추가!! 중요
+                    setTimeout(() => {
+                        const infoWindowDiv = document.querySelector('.infoWindowClass');
+                        if (infoWindowDiv) {
+                            infoWindowDiv.addEventListener('click', () => handleInfoWindowClick(place));
+                        }
+                    }, 0);
                 }
             });
 
