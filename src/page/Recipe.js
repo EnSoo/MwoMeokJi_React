@@ -67,7 +67,7 @@ const Card = styled.div`
     box-sizing: border-box;
     background-color: white;
     border: 1px solid black;
-    margin: 1rem;
+    margin: 1rem auto;
     color: black;
     font-size: 14px;
     padding: 1rem;
@@ -83,7 +83,6 @@ const Image = styled.img`
 `
 
 const TextContainer = styled.div`
-    flex: 1;
     text-align: left;   
 `
 const StyledLink = styled(Link)`
