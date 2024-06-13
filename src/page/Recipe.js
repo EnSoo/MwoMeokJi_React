@@ -83,7 +83,6 @@ const Image = styled.img`
 `
 
 const TextContainer = styled.div`
-    flex: 1;
     text-align: left;   
 `
 const StyledLink = styled(Link)`
