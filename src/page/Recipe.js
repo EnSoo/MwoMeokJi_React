@@ -67,7 +67,7 @@ const Card = styled.div`
     box-sizing: border-box;
     background-color: white;
     border: 1px solid black;
-    margin: 1rem;
+    margin: 1rem 1rem auto auto;
     color: black;
     font-size: 14px;
     padding: 1rem;
