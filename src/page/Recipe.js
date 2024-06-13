@@ -54,10 +54,12 @@ const Recipe = () => {
 export default Recipe;
 
 const Grid = styled.div`
-    display: grid;
+    display: flex;
+    flex-direction: column;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 1rem;
     padding: 2rem;
+    
 `
 
 const Card = styled.div`
@@ -67,7 +69,7 @@ const Card = styled.div`
     box-sizing: border-box;
     background-color: white;
     border: 1px solid black;
-    margin: 1rem;
+    margin: 1rem 1rem auto auto;
     color: black;
     font-size: 14px;
     padding: 1rem;
@@ -90,6 +92,7 @@ const StyledLink = styled(Link)`
     text-decoration: none;
     color: inherit;
     display: block;
+    
 
     &:hover {
         text-decoration: none;
