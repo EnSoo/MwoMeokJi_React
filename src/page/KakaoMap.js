@@ -81,7 +81,6 @@ const KakaoMap = () => {
     const handleInfoWindowClick = (place) => {
         // 원하는 동작을 여기서 수행하세요. 예를 들어, 특정 페이지로 이동하기:
         window.InfoWindow.DetailActivity(place.place_url)
-        window.location.href=place.place_url
     };
 
     // 마커 목록 및 infoWindow 추가 
