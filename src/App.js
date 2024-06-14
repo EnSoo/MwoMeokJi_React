@@ -1,4 +1,7 @@
-const App = () =>{
+import React from 'react';
+import MainRouter from './MainRouter'; // MainRouter 임포트
+
+const App = () => {
 
   // 안드로이드 bottomnavigationView 클릭 시 동작 하는 부분
   const bnvRoute = (route) => {
@@ -10,9 +13,9 @@ const App = () =>{
 
   return (
     <div>
-      App Page
+      <MainRouter />
     </div>
   )
 }
 
-export default App
+export default App;
