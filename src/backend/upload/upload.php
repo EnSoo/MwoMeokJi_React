@@ -18,12 +18,12 @@
     //영구히 사라지지 않는 본인의 폴더[html 폴더 안으로]로 이동 해야 함
 
     //이동시킬 폴더 경로 및 파일명을 지정해야 함
-    $dstName= "../img/" . date("YmdHis") . $fileName;
+    $dstName= "./img/" . date("YmdHis") . $fileName;
     
     //임시저장소($tmpName)에 있는 파일을 원하는 위치($dstName)로 이동
     $result= move_uploaded_file($tmpName,$dstName); //결과를 true or false로 리턴
     if($result) {
-        $dstName=str_replace("../img/", "", $dstName);
+        $dstName=str_replace("./img/", "", $dstName);
         echo $dstName;
     } else {
         echo '5404';

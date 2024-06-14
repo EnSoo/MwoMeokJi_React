@@ -18,14 +18,18 @@
     $db= mysqli_connect("localhost","www-user","itmi#472","mwomeokji");
     mysqli_query($db,"set names utf8"); // 한글 깨지지 않게 설정
 
-
-    $sql = "SELECT * FROM userData WHERE email = '$email' AND password = '$password'";
+    $sql = "SELECT * FROM userData WHERE email = '$email'";
     $resultcheck= mysqli_query($db,$sql);
     $count= mysqli_num_rows($resultcheck);
+    $row = mysqli_fetch_array($resultcheck);
+    $salt=$row['salt'];
+    $hash_password=$row['password'];
+
+    $isPasswordValid = password_verify($password.$salt, $hash_password);
     
-    if($count > 0) {
+    if($isPasswordValid) {
         //일치하는 정보가 있으면 삭제
-        $userDelete = "DELETE FROM userData WHERE email = '$email' AND password = '$password'";
+        $userDelete = "DELETE FROM userData WHERE email = '$email'";
         $result = mysqli_query($db,$userDelete);
 
         if($result){

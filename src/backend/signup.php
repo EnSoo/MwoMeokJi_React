@@ -6,7 +6,8 @@
     // 그 파일을 읽어서 $_POST라는 배열변수에 대입하기
 
     $data= file_get_contents('php://input');
-    
+      error_reporting(E_ALL);
+      ini_set('display_errors', 1);
     // $data가 json문자열임
     $_POST= json_decode($data, true); // json --> 연관배열
 
@@ -31,16 +32,27 @@
     if($conunt > 0) {
         echo "중복확인을 해주세요";
     } else {
-    
+        $salt=generateSalt();
+        $hashedPassword=password_hash($password.$salt,PASSWORD_BCRYPT);
+   
         // 데이터들 userData테이블에 삽입하기 [$nickname, $email, $password, $now]
-        $sql= "INSERT INTO userData(nickname,email,password,now) VALUES('$nickname','$email','$password','$now')";
+        $sql= "INSERT INTO userData(nickname,email,password,salt,now) VALUES('$nickname','$email','$hashedPassword','$salt','$now')";
         $result= mysqli_query($db,$sql);
 
-        if($result) echo "회원가입이 완료되었습니다.";
+        if($result) echo "가입에 성공하셨습니다";
         else echo "가입에 실패했습니다. 관리자에게 문의하세요";
     }
 
      mysqli_close($db);
 
+    function generateSalt($length = 64){
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $charactersLength = strlen($characters);
+        $salt = '';
+        for ($i = 0; $i < $length; $i++) {
+            $salt .= $characters[rand(0, $charactersLength - 1)];
+        }
+        return $salt;
+    }
 ?>
 
