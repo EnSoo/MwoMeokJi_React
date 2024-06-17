@@ -7,7 +7,7 @@ const AlertDialog = () => {
   return (
     <Wrapper>
         <Box>
-            <img src={ai} alt='logo' width={300}></img>
+            <img className='img' src={ai} alt='logo'></img>
             <p className='element'>AI 쉐프가 최고의 레시피를 <br/>
                 추천하는 중입니다.<br/>
                 잠시만 기다려 주세요!
@@ -46,6 +46,11 @@ const Box  = styled.div`
     text-align: center;
     font-size:16px;
     margin-top: 5px;
+
+    .img{
+        width: 300px;
+        
+    }
 }
 
 ` 
