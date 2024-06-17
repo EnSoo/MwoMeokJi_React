@@ -39,5 +39,4 @@ const Container = styled.div`
         border-style: solid;
         border-color: #55A416 transparent transparent transparent;
     }
-    transform: translateY(-13px);
 `;
