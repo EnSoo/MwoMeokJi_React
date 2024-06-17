@@ -25,7 +25,6 @@ const Wrapper = styled.div`
     justify-content: center;
     align-items: center;
     height: 100vh; /* 화면 전체 높이 */
-    max-width: 300px;
 `
 
 const Box  = styled.div`
