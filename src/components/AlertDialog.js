@@ -29,11 +29,11 @@ const Wrapper = styled.div`
 `
 
 const Box  = styled.div`
-    width: 50%;
-    max-width: 975px;
+    /* width: 50%;
+    max-width: 975px; */
     margin: 0 auto;
     display: flex;
-    height: 80vh;
+    /* height: 80vh; */
     flex-direction: column;
     justify-content: center;
     align-items: center;
