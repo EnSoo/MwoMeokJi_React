@@ -30,7 +30,7 @@ const Wrapper = styled.div`
 const Box  = styled.div`
     width: 50vh;
     max-width: 375px;
-    padding: 20px;
+    /* padding: 20px; */
     /* margin: 0 auto; */
     display: flex;
     /* height: 80vh; */
