@@ -4,6 +4,7 @@ import KakaoMap from './page/KakaoMap'
 import Recipe from './page/Recipe'
 import RecipeDetail from './page/RecipeDetail'
 import RecipeEdit from './components/RecipeEdit'
+import AlertDialog from './components/AlertDialog'
 
 const MainRouter = () => {
     return(
@@ -11,12 +12,14 @@ const MainRouter = () => {
             <BrowserRouter basename={process.env.PUBLIC_URL}>
                 <Routes>
                     <Route path='/' element={<Home/>}/>
+                    <Route path='/alert' element={<AlertDialog/>}/>
                     <Route path='/map' element={<KakaoMap/>}></Route>
                     <Route path='/recipe' element={<Recipe/>}></Route>
                     <Route path='/my_recipe' element={<Recipe/>}></Route>
                     <Route path='/recipe/modify/:id' element={<RecipeEdit/>}></Route>
                     <Route path='/recipe/add' element={<RecipeEdit/>}/>
                     <Route path='/recipe/detail/:id' element={<RecipeDetail/>}/>
+                    
                 </Routes>
             </BrowserRouter>
         </div>

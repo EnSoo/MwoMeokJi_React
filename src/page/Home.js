@@ -26,6 +26,7 @@ const Home = () => {
             <h2>Home Page</h2>
             <Link to='/map'>맵</Link><br></br>
             <Link to='/recipe'>레시피</Link>
+            <Link to='/alert'>다이얼로그</Link>
         </div>
     )
 }
