@@ -21,7 +21,7 @@ export default AlertDialog
 
 const Wrapper = styled.div`
     width: 100%;
-    display: flex !important;
+    display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh; /* 화면 전체 높이 */
@@ -29,8 +29,8 @@ const Wrapper = styled.div`
 `
 
 const Box  = styled.div`
-    /* width: 50%;
-    max-width: 975px; */
+    width: 80%;
+    max-width: 400px;
     margin: 0 auto;
     display: flex;
     /* height: 80vh; */
@@ -46,10 +46,10 @@ const Box  = styled.div`
     font-weight: bold;
     text-align: center;
     font-size:16px;
-    margin-top: 5px;
+    margin-top: 20px;
 
     .img{
-        width: 300px;
+        width: 100px;
 
     }
 }
