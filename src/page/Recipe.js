@@ -13,8 +13,8 @@ const Recipe = () => {
     const isUserRecipes = location.pathname === '/my-recipes';
 
     // 이메일을 지정합니다. 임의의 이메일을 사용할 수 있습니다.
-    const email = 'g@g';
-    const data1 = { email: 'g@g' };
+    const email = 's@s';
+    const data1 = { email: 's@s' };
     const data = JSON.stringify(data1);
 
     const isLoggedIn = () => {
@@ -69,8 +69,8 @@ const Recipe = () => {
                             <TextContainer>
                             {recipe.isMyRecipe === 1 && (
                                 <div>
-                                    <EditLink to={`/recipe/modify/${recipe.no}`}>수정</EditLink>
-                                    <DeleteLink to="#" onClick={() => handleDelete(recipe.no)}>삭제</DeleteLink>
+                                    <EditLink to={`/recipe/modify/${email}`}>수정</EditLink>
+                                    <DeleteLink to="#" onClick={() => handleDelete(email)}>삭제</DeleteLink>
                                 </div>
                             )}
                             </TextContainer>
