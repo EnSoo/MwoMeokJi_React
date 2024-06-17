@@ -20,7 +20,7 @@ const AlertDialog = () => {
 export default AlertDialog
 
 const Wrapper = styled.div`
-    width: 100vh;
+    width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -30,7 +30,7 @@ const Wrapper = styled.div`
 const Box  = styled.div`
     width: 50vh;
     max-width: 375px;
-    /* padding: 20px; */
+    padding: 20px;
     /* margin: 0 auto; */
     display: flex;
     /* height: 80vh; */
@@ -51,7 +51,7 @@ const Box  = styled.div`
     }
 
     .img{
-        width: 100px;
+        width: 100%;
         max-width: 150px; /* 이미지의 최대 너비를 박스 크기 내로 설정 */
         height: auto; /* 이미지 비율을 유지하면서 크기 조정 */
     }
