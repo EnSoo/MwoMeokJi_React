@@ -21,7 +21,7 @@ export default AlertDialog
 
 const Wrapper = styled.div`
     width: 100%;
-    display: flex;
+    display: flex !important;
     justify-content: center;
     align-items: center;
     height: 100vh; /* 화면 전체 높이 */
