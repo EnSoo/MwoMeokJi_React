@@ -12,6 +12,10 @@ const RecipeEdit = () => {
     const [image, setImage] = useState(null);
     const [imagePreview, setImagePreview] = useState(null);
 
+    //fetch는 add-recipe.php, modify-recipe.php만 있으면 됨 - 파일만 만들었음 내용은 추후 써야함 
+    //recipe에서 state 로 객체 값을 받아서 화면에 뿌려주면됨. 없을 경우 안뿌려주고
+    // state로 값을 받았을 경우 modfiy처리하고, state로 값을 받지 않았을 경우 add 처리
+
     // 쿼리 파라미터에서 이메일 가져오기
     const query = new URLSearchParams(location.search);
     const email = query.get('email');
@@ -40,7 +44,7 @@ const RecipeEdit = () => {
                     조리법: recipe.recipe,
                     이미지: recipe.imgurl
                 });
-                setImagePreview(`${process.env.PUBLIC_URL}/imgs/${recipe.imgurl}`);
+                setImagePreview(`${process.env.PUBLIC_URL}/imgs/${encodeURIComponent(recipe.imgurl)}`);
             } else {
                 setError('Recipe not found');
             }
@@ -85,6 +89,8 @@ const RecipeEdit = () => {
             setError(error.message);
         }
     };
+
+    
 
     const handleImageChange = (event) => {
         const file = event.target.files[0];
