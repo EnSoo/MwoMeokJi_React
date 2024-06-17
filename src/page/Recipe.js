@@ -69,8 +69,8 @@ const Recipe = () => {
                             <TextContainer>
                             {recipe.isMyRecipe === 1 && (
                                 <div>
-                                    <EditLink to={`/recipe/modify/${recipe.no}`}>수정</EditLink>
-                                    <DeleteLink to="#" onClick={() => handleDelete(recipe.no)}>삭제</DeleteLink>
+                                    <EditLink to={`/recipe/modify/${email}`}>수정</EditLink>
+                                    <DeleteLink to="#" onClick={() => handleDelete(email)}>삭제</DeleteLink>
                                 </div>
                             )}
                             </TextContainer>
