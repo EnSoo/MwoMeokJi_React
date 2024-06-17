@@ -30,7 +30,7 @@ const Wrapper = styled.div`
 const Box  = styled.div`
     width: 80%;
     max-width: 400px;
-    margin: 0 auto;
+    /* margin: 0 auto; */
     display: flex;
     /* height: 80vh; */
     flex-direction: column;
@@ -49,7 +49,8 @@ const Box  = styled.div`
 
     .img{
         width: 100px;
-
+        max-width: 150px; /* 이미지의 최대 너비를 박스 크기 내로 설정 */
+        height: auto; /* 이미지 비율을 유지하면서 크기 조정 */
     }
 }
 
