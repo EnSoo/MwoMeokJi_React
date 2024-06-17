@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import ai from './img/logo.gif'
+import ai from './img/Analytical Robot.gif'
 
 const AlertDialog = () => {
     
