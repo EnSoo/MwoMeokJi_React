@@ -1,101 +1,144 @@
-import React, { useState, useEffect } from 'react'
-import Papa from 'papaparse'
-import axios from 'axios'
-import { useParams } from 'react-router-dom'
-import Navigation from "../components/Navigation"
-import styled from 'styled-components'
+import React, { useState } from 'react';
+import { useParams, useLocation } from 'react-router-dom';
+import Navigation from "../components/Navigation";
+import styled from 'styled-components';
 
 const RecipeEdit = () => {
-    const { id } = useParams()
-    const [recipe, setRecipe] = useState({ 제목: '', 재료: '', 조리법: '' })
-    const [loading, setLoading] = useState(true)
-    const [error, setError] = useState(null)
-    const [image, setImage] = useState(null)
-    const [imagePreview, setImagePreview] = useState(null)
-    const [hasRecipes, setHasRecipes] = useState(false)
+    const { no } = useParams();
+    const location = useLocation();
+    const [recipe, setRecipe] = useState({ 제목: '', 재료: '', 조리법: '', 이미지: '' });
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [image, setImage] = useState(null);
+    const [imagePreview, setImagePreview] = useState(null);
 
-    useEffect(() => {
-        if (id) {
-            // id가 있을 경우, 기존 레시피 정보를 불러와 수정 모드로 설정
-            console.log('Fetching recipe for id:', id)
-            fetch(`/recipes/${id}.csv`)
-                .then(response => response.text())
-                .then(csv => {
-                    Papa.parse(csv, {
-                        header: true,
-                        complete: (results) => {
-                            console.log('Parsed data:', results.data)
-                            const recipeData = results.data.find(r => r.id === id)
-                            setRecipe(recipeData)
-                            setLoading(false)
-                        }
-                    })
-                })
-                .catch(err => {
-                    setError(err.message)
-                    setLoading(false)
-                })
-        } else {
-            // 서버에서 id와 레시피 존재 여부 확인
-            axios.get('/backend/get-recipe.php')
-                .then(response => {
-                    setHasRecipes(response.data.hasRecipes)
-                    setLoading(false)
-                })
-                .catch(error => {
-                    console.error('Error fetching data:', error)
-                    setLoading(false)
-                })
+    // 쿼리 파라미터에서 이메일 가져오기
+    const query = new URLSearchParams(location.search);
+    const email = query.get('email');
+
+    // 데이터를 즉시 가져오는 함수
+    const loadData = async () => {
+        try {
+            const response = await fetch('./backend/get-recipe.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ email })
+            });
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok ' + response.statusText);
+            }
+
+            const data = await response.json();
+            const recipe = data.find(r => r.no === parseInt(no));
+            if (recipe) {
+                setRecipe({
+                    제목: recipe.title,
+                    재료: recipe.ingredients,
+                    조리법: recipe.recipe,
+                    이미지: recipe.imgurl
+                });
+                setImagePreview(`${process.env.PUBLIC_URL}/imgs/${recipe.imgurl}`);
+            } else {
+                setError('Recipe not found');
+            }
+        } catch (error) {
+            setError(error.message);
+        } finally {
+            setLoading(false);
         }
-    }, [id])
+    };
 
-    if (loading) return <div>Loading...</div>
-    if (error) return <div>Error: {error}</div>
-    if (!recipe) return <div>Recipe not found</div>
-
-    const handleSubmit = (event) => {
-        event.preventDefault()
-        // 폼 제출 로직 (저장 또는 업데이트)
-        console.log('Form submitted:', recipe, image)
+    // 컴포넌트가 마운트되었을 때 즉시 데이터 로드
+    if (loading) {
+        loadData();
     }
+
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        const updatedRecipe = {
+            no,
+            email,
+            title: recipe.제목,
+            ingredients: recipe.재료,
+            recipe: recipe.조리법,
+            imgurl: image ? image.name : recipe.이미지 // 이미지가 변경된 경우 업데이트
+        };
+        try {
+            const response = await fetch('./backend/modify-recipe.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(updatedRecipe)
+            });
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok ' + response.statusText);
+            }
+
+            await response.json();
+            alert('Recipe updated successfully');
+        } catch (error) {
+            setError(error.message);
+        }
+    };
 
     const handleImageChange = (event) => {
-        const file = event.target.files[0]
+        const file = event.target.files[0];
         if (file && file.type.startsWith('image/')) {
-            setImage(file)
-            setImagePreview(URL.createObjectURL(file))
+            setImage(file);
+            setImagePreview(URL.createObjectURL(file));
         } else {
-            console.error('Invalid image file')
-            setImage(null)
-            setImagePreview(null)
+            console.error('Invalid image file');
+            setImage(null);
+            setImagePreview(null);
         }
-    }
+    };
+
+    if (loading) return <div>Loading...</div>;
+    if (error) return <div>Error: {error}</div>;
 
     return (
         <RecipeEditContainer>
             <Navigation />
             <RecipeForm onSubmit={handleSubmit}>
-                <h1>{hasRecipes ? "나만의 레시피 보기" : "나만의 레시피 등록"}</h1>
+                <h1>나만의 레시피 수정</h1>
                 <RecipeLabel>
                     <LabelText>제목:</LabelText>
-                    <RecipeInput type="text" placeholder="제목을 입력해주세요 (20자 이내)" value={recipe.제목} onChange={(e) => setRecipe({ ...recipe, 제목: e.target.value })} />
+                    <RecipeInput
+                        type="text"
+                        placeholder="제목을 입력해주세요 (20자 이내)"
+                        value={recipe.제목}
+                        onChange={(e) => setRecipe({ ...recipe, 제목: e.target.value })}
+                    />
                 </RecipeLabel>
                 <RecipeLabel>
                     <LabelText>재료:</LabelText>
-                    <RecipeTextarea placeholder="재료을 입력해주세요" value={recipe.재료} onChange={(e) => setRecipe({ ...recipe, 재료: e.target.value })} />
+                    <RecipeTextarea
+                        placeholder="재료를 입력해주세요"
+                        value={recipe.재료}
+                        onChange={(e) => setRecipe({ ...recipe, 재료: e.target.value })}
+                    />
                 </RecipeLabel>
                 <RecipeLabel>
                     <LabelText>조리법:</LabelText>
-                    <RecipeTextarea placeholder="조리법를 입력해주세요.&#13;모두가 쉽게 이용할 수 있도록 부탁드립니다." value={recipe.조리법} onChange={(e) => setRecipe({ ...recipe, 조리법: e.target.value })} />
+                    <RecipeTextarea
+                        placeholder="조리법을 입력해주세요. 모두가 쉽게 이용할 수 있도록 부탁드립니다."
+                        value={recipe.조리법}
+                        onChange={(e) => setRecipe({ ...recipe, 조리법: e.target.value })}
+                    />
                 </RecipeLabel>
-                <hr></hr>
+                <hr />
                 <RecipeLabel>
                     <LabelText>사진 첨부:</LabelText>
                     <RecipeFileInput type="file" accept="image/*" onChange={handleImageChange} />
                     {imagePreview && <ImagePreview src={imagePreview} alt="Preview" />}
                 </RecipeLabel>
                 <RecipeFooter>
-                    <RecipeButton type="submit">{hasRecipes ? "보기" : "등록하기"}</RecipeButton>
+                    <RecipeButton type="submit">수정하기</RecipeButton>
                 </RecipeFooter>
             </RecipeForm>
         </RecipeEditContainer>

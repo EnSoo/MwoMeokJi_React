@@ -13,6 +13,7 @@ const MainRouter = () => {
                     <Route path='/' element={<Home/>}/>
                     <Route path='/map' element={<KakaoMap/>}></Route>
                     <Route path='/recipe' element={<Recipe/>}></Route>
+                    <Route path='/my_recipe' element={<Recipe/>}></Route>
                     <Route path='/recipe/modify/:id' element={<RecipeEdit/>}></Route>
                     <Route path='/recipe/add' element={<RecipeEdit/>}/>
                     <Route path='/recipe/detail/:id' element={<RecipeDetail/>}/>
