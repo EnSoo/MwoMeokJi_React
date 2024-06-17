@@ -30,6 +30,7 @@ const Wrapper = styled.div`
 const Box  = styled.div`
     width: 80%;
     max-width: 400px;
+    padding: 20px;
     /* margin: 0 auto; */
     display: flex;
     /* height: 80vh; */
@@ -39,12 +40,13 @@ const Box  = styled.div`
     box-shadow: 0 0 15px gray;
     border-radius: 10%;
     border: 2px solid #55A416;
+    box-sizing: border-box;
 
     .element{
     color: red;
     font-weight: bold;
     text-align: center;
-    font-size:16px;
+    font-size:32px;
     margin-top: 20px;
 
     .img{
