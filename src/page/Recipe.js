@@ -13,8 +13,8 @@ const Recipe = () => {
     const isUserRecipes = location.pathname === '/my-recipes';
 
     // 이메일을 지정합니다. 임의의 이메일을 사용할 수 있습니다.
-    const email = 'g@g';
-    const data1 = { email: 'g@g' };
+    const email = 's@s';
+    const data1 = { email: 's@s' };
     const data = JSON.stringify(data1);
 
     const isLoggedIn = () => {
