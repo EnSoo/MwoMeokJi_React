@@ -19,6 +19,7 @@ const MainRouter = () => {
                     <Route path='/recipe/modify/:id' element={<RecipeEdit/>}></Route>
                     <Route path='/recipe/add' element={<RecipeEdit/>}/>
                     <Route path='/recipe/detail/:id' element={<RecipeDetail/>}/>
+                    <Route path='/detail/:id' element={<RecipeDetail/>}/>
                     
                 </Routes>
             </BrowserRouter>
