@@ -2,34 +2,28 @@ import React, { useState, useEffect } from "react";
 import Navigation from "../components/Navigation";
 import styled from 'styled-components';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-// import userAccountReducer, { setUserAccount } from '../redux/userAccount';
-import { useDispatch, useSelector } from "react-redux"
-
 
 const Recipe = () => {
-    const [recipes, setRecipes] = useState([])
-    const [loading, setLoading] = useState(true)
-    const [error, setError] = useState(null)
-    const [tab, setTab] = useState('all')
-    const navigate = useNavigate()
-    const location = useLocation()
-    const isModifyRecipe = location.pathname === 'recipe/modify/:id'
+    const [recipes, setRecipes] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [tab, setTab] = useState('all');
+    const navigate = useNavigate();
+    const location = useLocation();
+    const isUserRecipes = location.pathname === '/my-recipes';
 
-
-    const userAccount = useSelector(state => state.userAccountReducer.userAccount)
-    const dispatch = useDispatch()
-
-    const email = userAccount.email
+    // 이메일을 지정합니다. 임의의 이메일을 사용할 수 있습니다.
+    const email = 's@s';
+    const data1 = { email: 's@s' };
+    const data = JSON.stringify(data1);
 
     const isLoggedIn = () => {
         // 이메일이 있으면 로그인 상태로 간주합니다.
-        return Boolean(email)
-    }
+        return Boolean(email);
+    };
 
     useEffect(() => {
-        const email = 's@s'
         // 사용자의 레시피를 가져옵니다.
-        const data = JSON.stringify({ email })
         fetch('./backend/get-recipe.php', {
             method: 'POST',
             headers: {
@@ -37,42 +31,29 @@ const Recipe = () => {
             },
             body: data
         })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok ' + response.statusText);
-                }
-                return response.json();
-            })
-            .then(data => {
-                setRecipes(data);
-                setLoading(false);
-            })
-            .catch(error => {
-                setError(error.message);
-                setLoading(false);
-            });
-    }, []);
-
-    function handleDelete(recipeNo) {
-        // 삭제 로직을 추가합니다.
-        alert('레시피를 삭제합니다.');
-        // 실제 삭제 로직을 구현하세요.
-    }
-    const toggleMenu = (index) => {
-        setShowMenu(showMenu === index ? null : index)
-    }
-
-    const handleDeleteClick = (recipeNo) => {
-        handleDelete(recipeNo)
-        setShowMenu(null)
-    }
-
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok ' + response.statusText);
+            }
+            return response.json();
+        })
+        .then(data => {
+            const updatedData = data.map(recipe => ({
+                ...recipe,
+                isMyRecipe: recipe.email === email ? 1 : 0
+            }));
+            setRecipes(updatedData);
+            setLoading(false);
+        })
+        .catch(error => {
+            setError(error.message);
+            setLoading(false);
+        });
+    }, [isUserRecipes, email, navigate]);
 
     if (loading) return <div>Loading...</div>;
     if (error) return <div>Error: {error}</div>;
 
-    // const filteredRecipes = tab === 'my' ? recipes.filter(recipe => recipe.email_check == 1 ) : recipes;
-   
     return (
         <div>
             <Navigation />
@@ -81,70 +62,31 @@ const Recipe = () => {
                 <Tab onClick={() => setTab('my')} active={tab === 'my'}>나만의 레시피</Tab>
             </Tabs>
             <Grid>
-                {tab === 'my' ? (
-                    recipes.filter(recipe => recipe.email_check === 1).map((recipe, index) => (
-                        <StyledLink to={`/recipe/detail/${recipe.no}`} key={index} className="recipe-link">
-                            <Card>
-                                <Image src={`${process.env.PUBLIC_URL}/imgs/${recipe.imgurl}`} alt={recipe.title} />
-                                <TextContainer>
-                                    <p>{recipe.title}</p>
-                                    {recipe.email_check === 1 && (
-                                        <ActionContainer>
-                                            <MenuButton onClick={() => toggleMenu(index)}>...</MenuButton>
-                                            <DropdownMenu show={showMenu === index}>
-                                                <MenuItem to={`/recipe/modify/${recipe.no}`}>수정</MenuItem>
-                                                <MenuItemSpan onClick={() => handleDeleteClick(recipe.no)}>삭제</MenuItemSpan>
-                                            </DropdownMenu>
-                                        </ActionContainer>
-                                    )}
-                                </TextContainer>
-                            </Card>
-                        </StyledLink>
-                    ))
-                ) : (
-                    recipes.map((recipe, index) => (
-                        <StyledLink to={`/recipe/detail/${recipe.no}`} key={index} className="recipe-link">
-                            <Card>
-                                <Image src={`${process.env.PUBLIC_URL}/imgs/${recipe.imgurl}`} alt={recipe.title} />
-                                <TextContainer>
-                                    <p>{recipe.title}</p>
-                                    {recipe.email_check === 1 && (
-                                        <ActionContainer>
-                                            <MenuButton onClick={() => toggleMenu(index)}>...</MenuButton>
-                                            <DropdownMenu show={showMenu === index}>
-                                                <MenuItem to={`/recipe/modify/${recipe.no}`}>수정</MenuItem>
-                                                <MenuItemSpan onClick={() => handleDeleteClick(recipe.no)}>삭제</MenuItemSpan>
-                                            </DropdownMenu>
-                                        </ActionContainer>
-                                    )}
-                                </TextContainer>
-                            </Card>
-                        </StyledLink>
-                    ))
-                )}
-            </Grid>
-        </div>
-    );
-
-
-};
-
-
-{/* {recipes.map((recipe, index) => (
+                {recipes.map((recipe, index) => (
                     <StyledLink to={`/recipe/detail/${index}`} key={index} className="recipe-link">
                         <Card>
                             <Image src={`${process.env.PUBLIC_URL}/imgs/${recipe.imgurl}`} alt={recipe.title} />
                             <TextContainer>
                             {recipe.isMyRecipe === 1 && (
                                 <div>
-                                    <EditLink to={`/recipe/modify/${recipe.no}`}>수정</EditLink>
-                                    <DeleteLink to="#" onClick={() => handleDelete(recipe.no)}>삭제</DeleteLink>
+                                    <EditLink to={`/recipe/modify/${email}`}>수정</EditLink>
+                                    <DeleteLink to="#" onClick={() => handleDelete(email)}>삭제</DeleteLink>
                                 </div>
                             )}
                             </TextContainer>
                         </Card>
                     </StyledLink>
-                ))} */}
+                ))}
+            </Grid>
+        </div>
+    );
+
+    function handleDelete(recipeNo) {
+        // 삭제 로직을 추가합니다.
+        alert('레시피를 삭제합니다.');
+        // 실제 삭제 로직을 구현하세요.
+    }
+};
 
 export default Recipe;
 
@@ -155,12 +97,11 @@ const Grid = styled.div`
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 1rem;
     padding: 2rem;
-`
+`;
 
 const Card = styled.div`
     display: flex;
     align-items: center;
-    flex-direction: row;
     width: 100%;
     box-sizing: border-box;
     background-color: white;
@@ -171,64 +112,13 @@ const Card = styled.div`
     padding: 1rem;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    position: relative;
-`
-
-const ActionContainer = styled.div`
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    display: flex;
-    gap: 10px;
-`
-const MenuButton = styled.button`
-    background: none;
-    border: none;
-    font-size: 24px;
-    cursor: pointer;
-    padding: 0;
-    margin: 0;
 `;
-
-const DropdownMenu = styled.div`
-    position: absolute;
-    top: 30px;
-    right: 0;
-    background-color: white;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    display: ${props => (props.show ? 'block' : 'none')};
-    z-index: 1;
-`;
-
-const MenuItem = styled(Link)`
-    display: block;
-    padding: 10px;
-    color: black;
-    text-decoration: none;
-
-    &:hover {
-        background-color: #f0f0f0;
-    }
-`;
-
-const MenuItemSpan = styled.span`
-    display: block;
-    padding: 10px;
-    color: black;
-    cursor: pointer;
-
-    &:hover {
-        background-color: #f0f0f0;
-    }
-`
 
 const Tabs = styled.div`
     display: flex;
     justify-content: center;
     margin: 20px 0;
-`
+`;
 
 const Tab = styled.button`
     background: ${props => props.active ? '#007BFF' : '#FFF'};
@@ -243,19 +133,18 @@ const Tab = styled.button`
         background: #007BFF;
         color: #FFF;
     }
-`
+`;
 
 const Image = styled.img`
     width: 150px;
     height: 150px;
     border-radius: 8px;
     margin-right: 1rem;
-`
+`;
 
 const TextContainer = styled.div`
-    flex: 1;
     text-align: left;
-`
+`;
 
 const StyledLink = styled(Link)`
     text-decoration: none;
@@ -269,15 +158,15 @@ const StyledLink = styled(Link)`
     & > ${Card} {
         cursor: pointer;
     }
-`
+`;
 
 const EditLink = styled(Link)`
     margin-right: 10px;
     color: blue;
     cursor: pointer;
-`
+`;
 
 const DeleteLink = styled.span`
     color: red;
     cursor: pointer;
-`
+`;
