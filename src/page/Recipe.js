@@ -121,8 +121,6 @@ const Recipe = () => {
 
 export default Recipe;
 
-const More = styled.div``;
-
 const Grid = styled.div`
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -244,13 +242,3 @@ const StyledLink = styled(Link)`
     }
 `
 
-const EditLink = styled(Link)`
-    margin-right: 10px;
-    color: blue;
-    cursor: pointer;
-`
-
-const DeleteLink = styled.span`
-    color: red;
-    cursor: pointer;
-`
