@@ -10,18 +10,18 @@ const Recipe = () => {
     const [error, setError] = useState(null);
     const [tab, setTab] = useState('all');
     const [showMenu, setShowMenu] = useState(null); // 이 줄을 추가합니다.
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
     const location = useLocation();
-    const isModifyRecipe = location.pathname === 'recipe/modify/:id';
+    // const isModifyRecipe = location.pathname === 'recipe/modify/:id';
 
     const userAccount = useSelector(state => state.userAccountReducer.userAccount);
-    const dispatch = useDispatch();
+    // const dispatch = useDispatch();
 
     const email = userAccount.email;
 
-    const isLoggedIn = () => {
-        return Boolean(email);
-    };
+    // const isLoggedIn = () => {
+    //     return Boolean(email);
+    // };
 
     useEffect(() => {
         const email = 's@s';
