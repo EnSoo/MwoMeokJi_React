@@ -99,7 +99,8 @@ const KakaoMap = () => {
 
             // infowindow 생성
             const infowindow = new kakao.maps.InfoWindow({
-                content: iwContent
+                content: iwContent,
+
             });
 
             // 마커를 맵에 표시
@@ -286,6 +287,9 @@ const MapContent = styled.div`
         #map {
             width: 100%;
             height: 100%;
+        }
+        #map div div div div {
+             border: none !important;
         }
 
         .refresh {
