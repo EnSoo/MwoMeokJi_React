@@ -6,13 +6,13 @@ import { useNavigate } from "react-router-dom";
 const Card = ({recipe}) =>{
     const navigate = useNavigate()
     return (
-        <Item onClick={()=>navigate(`detail/${recipe.no}`, recipe)}> {/* /recipe/detail/:no, /detail/:no 경로로 recipe 객체 정보를 넘겨줌 */}
-          <CardImage src={recipe.imgurl} alt="Card image" />
+      <Item onClick={()=>navigate(`detail/${recipe.no}`, {state:{recipe}})}> {/* /recipe/detail/:no, /detail/1 경로로 recipe 객체 정보를 넘겨줌 */}
+          <CardImage src={`${process.env.PUBLIC_URL}/imgs/${recipe.imgurl}`} alt={recipe.title}/>
           <CardContent>
             <CardTitle>{recipe.title}</CardTitle> {/* 음식 제목 */}
-            <div>
+            {/* <div>
               <CardDescription><FaHeart/> 좋아요 {recipe.favor}</CardDescription>
-            </div>
+            </div> */}
           </CardContent>
           </Item>
     )
