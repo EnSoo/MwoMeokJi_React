@@ -3,6 +3,7 @@ import Papa from 'papaparse';
 import { useLocation, useParams } from 'react-router-dom';
 import Navigation from "../components/Navigation";
 import styled from 'styled-components';
+import Comment from '../components/CommentList';
 
 const RecipeModify = () => {
     const { id } = useParams();
@@ -33,6 +34,9 @@ const RecipeModify = () => {
                     <p>총 조리시간: {recipe.times}<span>분</span></p>
                 </RecipeRecipe>
             </RecipeContent>
+            <hr></hr>
+            <Comment></Comment>
+
         </RecipeDetailContainer>
     )
 }
