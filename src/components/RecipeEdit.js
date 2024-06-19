@@ -2,91 +2,42 @@ import React, { useState, useEffect } from 'react'
 import { useParams, useLocation, useNavigate } from 'react-router-dom'
 import Navigation from "../components/Navigation"
 import styled from 'styled-components'
+import { useSelector } from 'react-redux';
 
 const RecipeEdit = () => {
-    const { no } = useParams()
+    const [recipe, setRecipe] = useState({})
     const location = useLocation()
     const navigate = useNavigate()
-    const [recipe, setRecipe] = useState({ 제목: '', 재료: '', 조리법: '', 이미지: '' })
-    const [loading, setLoading] = useState(true)
-    const [error, setError] = useState(null)
+
+    //선택된 이미지
     const [image, setImage] = useState(null)
+
+    // 업로드된 이미지 프리뷰
     const [imagePreview, setImagePreview] = useState(null)
 
-    // 쿼리 파라미터에서 이메일 가져오기
-    const query = new URLSearchParams(location.search)
-    const email = query.get('email')
+    // 작성, 수정
+    const [comment, setComment]= useState(null)
 
-    useEffect(() => {
-        const loadData = async () => {
-            try {
-                const response = await fetch('./backend/get-recipe.php', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ email })
-                });
+    const userAccount = useSelector (state => state.userAccountReducer.userAccount)
+    const email = userAccount.email
+    useEffect(()=>{
+        if (location.pathname.startsWith('/recipe/modify')) {
+            setComment('수정')
 
-                if (!response.ok) {
-                    throw new Error('Network response was not ok ' + response.statusText)
-                }
+            setRecipe(location.state.recipe)
+            setImagePreview(`${process.env.PUBLIC_URL}/imgs/${location.state.recipe.imgurl}`)
 
-                const data = await response.json()
-                const recipe = data.find(r => r.no === parseInt(no))
-                if (recipe) {
-                    setRecipe({
-                        제목: recipe.title,
-                        재료: recipe.ingredients,
-                        조리법: recipe.recipe,
-                        이미지: recipe.imgurl
-                    })
-                    setImagePreview(`${process.env.PUBLIC_URL}/imgs/${encodeURIComponent(recipe.imgurl)}`)
-                } else {
-                    setError('Recipe not found')
-                }
-            } catch (error) {
-                setError(error.message)
-            } finally {
-                setLoading(false)
-            }
-        };
-
-        loadData()
-    }, [])
-
-    const handleSubmit = async (event) => {
-        event.preventDefault()
-        const updatedRecipe = {
-            no,
-            email,
-            title: recipe.제목,
-            ingredients: recipe.재료,
-            recipe: recipe.조리법,
-            imgurl: image ? image.name : recipe.이미지 // 이미지가 변경된 경우 업데이트
+        } else if (location.pathname === '/recipe/add') {
+            setComment('작성')
         }
-        try {
-            const response = await fetch('./backend/modify-recipe.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(updatedRecipe)
-            })
+    },[comment])
 
-            if (!response.ok) {
-                throw new Error('Network response was not ok ' + response.statusText)
-            }
+    //실행중인 디바이스가 브라우저일 경우 일반적인 파일 탐색기 오픈, 스마트폰일 경우 하이브리드 동작(리액트->안드로이드)
+    const handleFileChange = (event) => {
+        ChangeFile(event);
+    };
 
-            await response.json()
-            alert('Recipe updated successfully')
-            navigate(`/recipe/detail/${no}`)
-        } catch (error) {
-            setError(error.message)
-        }
-    }
-
-    const handleImageChange = (event) => {
+    const ChangeFile = (event) => {
         const file = event.target.files[0]
         if (file && file.type.startsWith('image/')) {
             setImage(file)
@@ -97,48 +48,98 @@ const RecipeEdit = () => {
             setImagePreview(null)
         }
     }
-
-    if (loading) return <div>Loading...</div>
-    if (error) return <div>Error: {error}</div>
+    const Submit = (event) => {
+        if(email == '' ) {
+            alert('앱에서만 가능한 기능입니다')
+            navigate('/', { state: { refresh: true } })
+        } else {
+            event.preventDefault()
+            const sendData = new FormData()
+            for (const key in recipe) {
+                if (recipe.hasOwnProperty(key)) {
+                    sendData.append(key, recipe[key]);
+                }
+            }
+            if (image) {
+                sendData.append('imgs[]', image);
+            }
+            let requestUrl=''
+            if(comment=='작성') {
+                requestUrl=`${process.env.PUBLIC_URL}/backend/recipe_add.php`
+                sendData.append('email',email)
+            } else if(comment=='수정') {
+                requestUrl=`${process.env.PUBLIC_URL}/backend/recipe_modify.php`
+            }
+            fetch(requestUrl,{
+                method:'POST',
+                body:sendData,
+            })
+            .then(res=>res.text())
+            .then(text=>{
+                if(text=="200") {
+                    // 글 작성 성공 시
+                    alert("글 작성에 성공 하였습니다.")
+                    navigate('/recipe', { state: { refresh: true } })
+                } else if(text=="201") {
+                    // 글 작성 실패 시
+                    alert('레시피 작성에 실패하였습니다.')
+                }
+            }).catch(error => console.error('Error:', error));
+        }
+    }
 
     return (
         <RecipeEditContainer>
             <Navigation />
-            <RecipeForm onSubmit={handleSubmit}>
-                <h1>나만의 레시피 수정</h1>
+            <RecipeForm onSubmit={Submit}>
+                <h1>나만의 레시피 {comment}</h1>
                 <RecipeLabel>
                     <LabelText>제목:</LabelText>
                     <RecipeInput
                         type="text"
                         placeholder="제목을 입력해주세요 (20자 이내)"
-                        value={recipe.제목}
-                        onChange={(e) => setRecipe({ ...recipe, 제목: e.target.value })}
+                        value={recipe.title}
+                        onChange={(e)=>setRecipe({...recipe, title:e.target.value})}
                     />
                 </RecipeLabel>
                 <RecipeLabel>
                     <LabelText>재료:</LabelText>
                     <RecipeTextarea
+                        type="text"
                         placeholder="재료를 입력해주세요"
-                        value={recipe.재료}
-                        onChange={(e) => setRecipe({ ...recipe, 재료: e.target.value })}
+                        value={recipe.ingredients}
+                        onChange={(e)=>setRecipe({...recipe, ingredients:e.target.value})}
                     />
                 </RecipeLabel>
                 <RecipeLabel>
                     <LabelText>조리법:</LabelText>
                     <RecipeTextarea
                         placeholder="조리법을 입력해주세요. 모두가 쉽게 이용할 수 있도록 부탁드립니다."
-                        value={recipe.조리법}
-                        onChange={(e) => setRecipe({ ...recipe, 조리법: e.target.value })}
+                        value={recipe.recipe}
+                        onChange={(e)=>setRecipe({...recipe, recipe:e.target.value})}
+                    />
+                </RecipeLabel>
+                <RecipeLabel>
+                    <LabelText>조리시간/분:</LabelText>
+                    <RecipeTextarea
+                        placeholder="조리시간을 입력해주세요."
+                        value={recipe.times}
+                        onChange={(e)=>{
+                            const value=e.target.value
+                            if(value.length<=10){
+                                setRecipe({...recipe, times:value})
+                            }
+                    }}
                     />
                 </RecipeLabel>
                 <hr />
                 <RecipeLabel>
                     <LabelText>사진 첨부:</LabelText>
-                    <RecipeFileInput type="file" accept="image/*" onChange={handleImageChange} />
-                    {imagePreview && <ImagePreview src={imagePreview} alt="Preview" />}
+                    <RecipeFileInput type="file" accept="image/*" name="imgs[]" onChange={handleFileChange}/>
+                    {imagePreview && <ImagePreview src={imagePreview} alt="Preview"/>}
                 </RecipeLabel>
                 <RecipeFooter>
-                    <RecipeButton type="submit">수정하기</RecipeButton>
+                    <RecipeButton type="submit">{comment}하기</RecipeButton>
                 </RecipeFooter>
             </RecipeForm>
         </RecipeEditContainer>
@@ -151,9 +152,10 @@ const RecipeEditContainer = styled.div`
     font-family: 'Arial', sans-serif;
     max-width: 600px;
     margin: auto;
+    height: 100%;
     background: #fff;
     padding: 20px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    box-shadow: 0 0 15px gray;
 `
 
 const RecipeForm = styled.form`

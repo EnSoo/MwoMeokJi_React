@@ -1,26 +1,56 @@
-import styled from "styled-components"
-import { FaHeart } from "react-icons/fa";
-import { FaThumbsUp } from "react-icons/fa6";
-import { useNavigate } from "react-router-dom";
+import React, { useState } from "react";
+import styled from "styled-components";
+import { FaEllipsisV } from "react-icons/fa";
+import { useLocation, useNavigate } from "react-router-dom";
 
-const Card = ({recipe}) =>{
-    const navigate = useNavigate()
-    return (
-      <Item onClick={()=>navigate(`detail/${recipe.no}`, {state:{recipe}})}> {/* /recipe/detail/:no, /detail/1 경로로 recipe 객체 정보를 넘겨줌 */}
-          <CardImage src={`${process.env.PUBLIC_URL}/imgs/${recipe.imgurl}`} alt={recipe.title}/>
-          <CardContent>
-            <CardTitle>{recipe.title}</CardTitle> {/* 음식 제목 */}
-            {/* <div>
-              <CardDescription><FaHeart/> 좋아요 {recipe.favor}</CardDescription>
-            </div> */}
-          </CardContent>
-          </Item>
-    )
-}
+const Card = ({ recipe }) => {
+  const navigate = useNavigate();
+  const location = useLocation()
+  const [showMenu, setShowMenu] = useState(false);
 
-export default Card
+  const toggleMenu = (e) => {
+    e.stopPropagation(); // Prevent the card click event
+    setShowMenu(!showMenu);
+  };
 
-const Item =styled.div`
+  const handleEdit = (e) => {
+    e.stopPropagation(); // Prevent the card click event
+    navigate(`${process.env.PUBLIC_URL}/recipe/modify/${recipe.no}`, { state: { recipe } })
+  };
+
+  const handleDelete = (e) => {
+    e.stopPropagation(); // Prevent the card click event
+    alert("Delete");
+  };
+
+  return (
+    <Item onClick={() => navigate(`detail/${recipe.no}`, { state: { recipe } })}>
+      <CardHeader>
+      {location.pathname === '/recipe' && recipe.my_recipe === "1" && (
+          <>
+            <MenuIcon onClick={toggleMenu}>
+              <FaEllipsisV />
+            </MenuIcon>
+            {showMenu && (
+              <DropdownMenu>
+                <MenuItem onClick={handleEdit}>수정</MenuItem>
+                <MenuItem onClick={handleDelete}>삭제</MenuItem>
+              </DropdownMenu>
+            )}
+          </>
+        )}
+      </CardHeader>
+      <CardImage src={`${process.env.PUBLIC_URL}/imgs/${recipe.imgurl}`} alt={recipe.title} />
+      <CardContent>
+        <CardTitle>{recipe.title}</CardTitle>
+      </CardContent>
+    </Item>
+  );
+};
+
+export default Card;
+
+const Item = styled.div`
   background-color: #fff;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -29,6 +59,7 @@ const Item =styled.div`
   width: 300px;
   transition: 0.3s;
   border: 1px solid #55A416;
+  position: relative;
   &:hover {
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
     background: #55A416;
@@ -36,11 +67,43 @@ const Item =styled.div`
   &:active{
     background: #55A416;
   }
-`
+`;
+
+const CardHeader = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  position: relative;
+`;
+
+const MenuIcon = styled.div`
+  cursor: pointer;
+  font-size: 1em;
+  margin-bottom: 5px;
+`;
+
+const DropdownMenu = styled.div`
+  position: absolute;
+  top: 24px;
+  right: 0;
+  background: #fff;
+  border: 1px solid #55a400;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+`;
+
+const MenuItem = styled.div`
+  padding: 8px 16px;
+  cursor: pointer;
+  &:hover {
+    background: #55DD16;
+  }
+`;
 
 const CardImage = styled.img`
   border-radius: 10px 10px 0 0;
   width: 100%;
+  user-select: none;
 `;
 
 const CardContent = styled.div`

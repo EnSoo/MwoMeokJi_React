@@ -4,10 +4,12 @@ import styled, { css } from "styled-components"
 const RecipeTap = ({tab, setTab}) => {
 
     return(
-        <TapContainer>
-            <TabItem onClick={() => setTab('all')} isActive={tab === 'all'}>전체 레시피</TabItem>
-            <TabItem onClick={() => setTab('my')} isActive={tab === 'my'}>나만의 레시피</TabItem>
-        </TapContainer>
+        <FixedContainer>
+            <TapContainer>
+                <TabItem onClick={() => setTab('all')} isActive={tab === 'all'}>전체 레시피</TabItem>
+                <TabItem onClick={() => setTab('my')} isActive={tab === 'my'}>나만의 레시피</TabItem>
+            </TapContainer>
+        </FixedContainer>
     )
 }
 
@@ -17,6 +19,15 @@ export default RecipeTap
 const activeStyle = css`
     background: #55A416;
     color: #FFF;
+`;
+
+const FixedContainer = styled.div`
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background: #fff;
+    z-index: 1000; /* 다른 요소보다 위에 표시되도록 설정 */
+    border-bottom: 1px solid #e0e0e0;
 `;
 
 const TapContainer=styled.div`
