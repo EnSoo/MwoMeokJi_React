@@ -80,7 +80,7 @@ const RecipeDetail = () => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ id: commentId, text: newText }),
+                body: JSON.stringify({ id: commentId, comment: newText }),
             });
             const updatedComment = await response.json();
             setComments(comments.map(comment =>

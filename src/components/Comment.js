@@ -6,7 +6,7 @@ const Comment = ({ onAddComment, email }) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        const newComment = { id: Date.now(), email, nickname: email, text };
+        const newComment = { id: Date.now(), email, comment: text};
         onAddComment(newComment);
         setText('');
     };
@@ -55,4 +55,4 @@ const Button = styled.button`
     &:hover {
         background-color: #0056b3;
     }
-`;
+`

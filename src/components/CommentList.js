@@ -6,12 +6,12 @@ const CommentList = ({ comments, email, onDeleteComment, onEditComment }) => {
         <div>
             {comments.map(comment => (
                 <CommentContainer key={comment.id}>
-                    <p><strong>{comment.nickname}:</strong> {comment.text}</p>
+                    <p><strong>{comment.nickname}:</strong> {comment.comment}</p>
                     {comment.email === email && (
                         <ButtonContainer>
                             <Button onClick={() => onDeleteComment(comment.id)}>삭제</Button>
                             <Button onClick={() => {
-                                const newText = prompt('새로운 댓글 내용을 입력하세요:', comment.text);
+                                const newText = prompt('새로운 댓글 내용을 입력하세요:', comment.comment);
                                 if (newText) {
                                     onEditComment(comment.id, newText);
                                 }
