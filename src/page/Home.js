@@ -5,12 +5,17 @@ import styled from 'styled-components'
 import ai from "../components/img/AIRecommendm.png"
 
 //redux
-import { useDispatch, useSelector } from "react-redux"
+import { useDispatch, useSelector, useNavigate } from "react-redux"
 import { setUserAccount } from "../redux/userAccount"
 import { useEffect, useState } from "react"
 import RecipeList from "../components/RecipeList"
 
 const Home = () => {
+
+    const navigate = useNavigate()
+    const handleNavigate = (path) => {
+        navigate(path)
+    }
 
     //redux 저장소 불러오기
     const dispatch= useDispatch()
@@ -36,7 +41,7 @@ const Home = () => {
         <>
             <HomeLayout />
             <Image>
-                <img src={ai} alt="로봇"></img>
+                <img src={ai} alt="로봇" onClick={()=>handleNavigate('/recipe_recommender')}></img>
             </Image>
             <Content>
                 <Title>여름철 간편음식</Title>
