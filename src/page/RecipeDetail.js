@@ -11,21 +11,25 @@ const RecipeDetail = () => {
     useEffect(() => {
         if (location.state && location.state.recipe) {
             setRecipe(location.state.recipe);
+            if(recipe.email!=''){
+                const sendData = new FormData()
+                sendData.append('email', recipe.email);
+                sendData.append('myrecipe_id', recipe.no);
+                fetch(`${process.env.PUBLIC_URL}/backend/recipe_view.php`, {
+                    method: 'POST',
+                    body: sendData,
+                })
+                    .then(res => res.text())
+                    .then(text => {
+                        if (text == "200") {
+                        } else if (text == "201") {
+                        }
+                    }).catch(error => console.error('Error:', error));
+            } else {
+                // 앱이 아닌 브라우저에서 볼 경우 조회수가 증가되지 않음
+            }   
         } else {
         }
-        const sendData = new FormData()
-        sendData.append('email', recipe.email);
-        sendData.append('myrecipe_id', recipe.no);
-        fetch(`${process.env.PUBLIC_URL}/backend/recipe_view.php`, {
-            method: 'POST',
-            body: sendData,
-        })
-            .then(res => res.text())
-            .then(text => {
-                if (text == "200") {
-                } else if (text == "201") {
-                }
-            }).catch(error => console.error('Error:', error));
     }, [id]);
 
 
