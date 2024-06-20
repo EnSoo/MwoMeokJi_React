@@ -225,6 +225,7 @@ const RecipeButton = styled.button`
     border-radius: 5px;
     cursor: pointer;
     font-size: 16px;
+    margin-bottom: 100px;
 
     &:hover {
         background-color: #0056b3;
