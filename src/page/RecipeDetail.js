@@ -1,49 +1,49 @@
-import React, { useState, useEffect } from 'react';
-import { useLocation, useParams } from 'react-router-dom';
-import Navigation from "../components/Navigation";
-import styled from 'styled-components';
-import Comment from '../components/Comment';
-import CommentList from '../components/CommentList';
+import React, { useState, useEffect } from 'react'
+import { useLocation, useParams } from 'react-router-dom'
+import Navigation from "../components/Navigation"
+import styled from 'styled-components'
+import Comment from '../components/Comment'
+import CommentList from '../components/CommentList'
 
 const RecipeDetail = () => {
-    const { id } = useParams();
-    const [recipe, setRecipe] = useState({});
-    const [comments, setComments] = useState([]);
-    const location = useLocation();
-    const email = 'g@g.com';
+    const { id } = useParams()
+    const [recipe, setRecipe] = useState({})
+    const [comments, setComments] = useState([])
+    const location = useLocation()
+    const email = 'g@g.com'
 
     useEffect(() => {
         if (location.state && location.state.recipe) {
-            setRecipe(location.state.recipe);
+            setRecipe(location.state.recipe)
         } else {
-            fetchRecipeDetails();
+            fetchRecipeDetails()
         }
-        fetchComments();
-    }, [id]);
+        fetchComments()
+    }, [id])
 
     const fetchRecipeDetails = async () => {
         try {
-            const response = await fetch(`/backend/get-recipe.php?id=${id}`);
-            const data = await response.json();
-            setRecipe(data);
+            const response = await fetch(`/backend/get-recipe.php?id=${id}`)
+            const data = await response.json()
+            setRecipe(data)
         } catch (error) {
-            console.error('Error fetching recipe details:', error);
+            console.error('Error fetching recipe details:', error)
         }
-    };
+    }
 
     const fetchComments = async () => {
         try {
-            const response = await fetch(`/backend/comment.php?myrecipe_id=${id}`);
-            const data = await response.json();
+            const response = await fetch(`/backend/comment.php?myrecipe_id=${id}`)
+            const data = await response.json()
             if (data.status === 'success') {
-                setComments(data.comments);
+                setComments(data.comments)
             } else {
-                console.error('Error fetching comments:', data.message);
+                console.error('Error fetching comments:', data.message)
             }
         } catch (error) {
-            console.error('Error fetching comments:', error);
+            console.error('Error fetching comments:', error)
         }
-    };
+    }
 
     const handleAddComment = async (comment) => {
         try {
@@ -53,17 +53,17 @@ const RecipeDetail = () => {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(comment),
-            });
-            const newComment = await response.json();
+            })
+            const newComment = await response.json()
             if (newComment.status === 'success') {
                 fetchComments() // 댓글 추가 후 댓글 목록을 다시 가져옵니다.
             } else {
-                console.error('Error adding comment:', newComment.message);
+                console.error('Error adding comment:', newComment.message)
             }
         } catch (error) {
-            console.error('Error adding comment:', error);
+            console.error('Error adding comment:', error)
         }
-    };
+    }
 
     const handleDeleteComment = async (commentNo) => {
         try {
@@ -100,7 +100,7 @@ const RecipeDetail = () => {
         }
     }
 
-    if (!recipe) return <div>Loading...</div>;
+    if (!recipe) return <div>Loading...</div>
 
     return (
         <RecipeDetailContainer>
@@ -132,10 +132,10 @@ const RecipeDetail = () => {
                 onEditComment={handleEditComment}
             />
         </RecipeDetailContainer>
-    );
-};
+    )
+}
 
-export default RecipeDetail;
+export default RecipeDetail
 
 const RecipeDetailContainer = styled.div`
     font-family: 'Arial', sans-serif;
