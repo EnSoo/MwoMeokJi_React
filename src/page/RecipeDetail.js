@@ -12,19 +12,22 @@ const RecipeDetail = () => {
         if (location.state && location.state.recipe) {
             setRecipe(location.state.recipe);
         } else {
-            fetchRecipeDetails();
         }
     }, [id]);
+    const sendData = new FormData()
+    sendData.append('email', recipe.email);
+    sendData.append('myrecipe_id', recipe.no);
+    fetch(`${process.env.PUBLIC_URL}/backend/recipe_view.php`, {
+        method: 'POST',
+        body: sendData,
+    })
+        .then(res => res.text())
+        .then(text => {
+            if (text == "200") {
+            } else if (text == "201") {
+            }
+        }).catch(error => console.error('Error:', error));
 
-    const fetchRecipeDetails = async () => {
-        try {
-            const response = await fetch(`/backend/get-recipe.php?id=${id}`);
-            const data = await response.json();
-            setRecipe(data);
-        } catch (error) {
-            console.error('Error fetching recipe details:', error);
-        }
-    };
 
     if (!recipe) return <div>Loading...</div>;
 
