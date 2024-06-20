@@ -5,6 +5,7 @@ import Recipe from './page/Recipe'
 import RecipeDetail from './page/RecipeDetail'
 import RecipeEdit from './components/RecipeEdit'
 import AlertDialog from './components/AlertDialog'
+import RecipeRecommender from './page/RecipeRecommender'
 
 const MainRouter = () => {
     return(
@@ -13,6 +14,7 @@ const MainRouter = () => {
                 <Routes>
                     <Route path='/' element={<Home/>}/>
                     <Route path='/alert' element={<AlertDialog/>}/>
+                    <Route path='/recipe_recommender' element={<RecipeRecommender/>}/>
                     <Route path='/map' element={<KakaoMap/>}></Route>
                     <Route path='/recipe' element={<Recipe/>}></Route>
                     <Route path='/my_recipe' element={<Recipe/>}></Route>
