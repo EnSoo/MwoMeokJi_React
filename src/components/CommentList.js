@@ -1,5 +1,5 @@
-import React from 'react';
-import styled from 'styled-components';
+import React from 'react'
+import styled from 'styled-components'
 
 const CommentList = ({ comments, email, onDeleteComment, onEditComment }) => {
     return (
@@ -10,21 +10,17 @@ const CommentList = ({ comments, email, onDeleteComment, onEditComment }) => {
                     {comment.email === email && (
                         <ButtonContainer>
                             <Button onClick={() => onDeleteComment(comment.no)}>삭제</Button>
-                            <Button onClick={() => {
-                                const newText = prompt('새로운 댓글 내용을 입력하세요:', comment.comment);
-                                if (newText) {
-                                    onEditComment(comment.no, newText);
-                                }
-                            }}>수정</Button>
+                            <Button onClick={() => {const newText = prompt('새로운 댓글 내용을 입력하세요:', comment.comment)
+                                if (newText) { onEditComment(comment.no, newText) }}}>수정</Button>
                         </ButtonContainer>
                     )}
                 </CommentContainer>
             ))}
         </div>
-    );
-};
+    )
+}
 
-export default CommentList;
+export default CommentList
 
 const CommentContainer = styled.div`
     border-bottom: 1px solid #ccc;

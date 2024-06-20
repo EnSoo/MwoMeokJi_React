@@ -1,16 +1,29 @@
-import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
+import React, { useState, useEffect } from 'react'
+import styled from 'styled-components'
 
 const Comment = ({ onAddComment, email, recipeNo }) => {
     const [text, setText] = useState('');
     const [nickname, setNickname] = useState('');
 
     useEffect(() => {
-        // 이메일을 통해 닉네임 가져오기
-        fetch(`/backend/get-nickname.php?email=${email}`)
-            .then(response => response.json())
-            .then(data => setNickname(data.nickname))
-            .catch(error => console.error('Error fetching nickname:', error));
+        // 식별값을 통해 닉네임 가져오기
+        const fetchNickname = async () => {
+            try {
+                const response = await fetch('/backend/comment.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email })
+                });
+                const data = await response.json();
+                setNickname(data.nickname);
+            } catch (error) {
+                console.error('Error fetching nickname:', error);
+            }
+        };
+
+        fetchNickname();
     }, [email]);
 
     const handleSubmit = (e) => {
