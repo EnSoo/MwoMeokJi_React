@@ -17,22 +17,26 @@ const Card = ({ recipe, onDelete }) => {
 
   const favoriteRequest =(e) => {
     e.stopPropagation(); // Prevent the card click event
-    const sendData = new FormData()
-    sendData.append('email', recipe.email);
-    sendData.append('myrecipe_id', recipe.no);
-    fetch(`${process.env.PUBLIC_URL}/backend/recipe_favor.php`,{
-      method:'POST',
-      body:sendData,
-    })
-    .then(res=>res.text())
-    .then(text=>{
-        if(text=="200") {
-            // favor 동작 성공 시
-            setMyLike(!my_like)
-        } else if(text=="201") {
-            // favor 동작 실패 시
-        }
-    }).catch(error => console.error('Error:', error));
+    if(email!='') {
+      const sendData = new FormData()
+      sendData.append('email', recipe.email);
+      sendData.append('myrecipe_id', recipe.no);
+      fetch(`${process.env.PUBLIC_URL}/backend/recipe_favor.php`,{
+        method:'POST',
+        body:sendData,
+      })
+      .then(res=>res.text())
+      .then(text=>{
+          if(text=="200") {
+              // favor 동작 성공 시
+              setMyLike(!my_like)
+          } else if(text=="201") {
+              // favor 동작 실패 시
+          }
+      }).catch(error => console.error('Error:', error));
+    } else {
+      alert('앱에서만 가능한 기능입니다')
+    }
   }
 
   const toggleMenu = (e) => {
