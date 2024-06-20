@@ -219,7 +219,7 @@ const RecipeFooter = styled.div`
 const RecipeButton = styled.button`
     width: 100%;
     padding: 10px;
-    background-color: #007BFF;
+    background-color: #55A416;
     color: white;
     border: none;
     border-radius: 5px;
@@ -228,6 +228,6 @@ const RecipeButton = styled.button`
     margin-bottom: 100px;
 
     &:hover {
-        background-color: #0056b3;
+        background-color: #55DD16;
     }
 `

@@ -57,7 +57,7 @@ const Recipe = () => {
                 setCurrentList(myRecipes);
             }
         }
-  }, [email, tab]);
+  }, [recipes, email, tab]);
     return (
         <div style={{display:"flex", flexDirection:"column"}}>
             <Navigation />
