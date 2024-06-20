@@ -10,13 +10,12 @@ const RecipeDetail = () => {
     const [recipe, setRecipe] = useState({});
     const [comments, setComments] = useState([]);
     const location = useLocation();
-    const email = 'g@g.com'; // 예시 이메일
+    const email = 'g@g.com';
 
     useEffect(() => {
         if (location.state && location.state.recipe) {
             setRecipe(location.state.recipe);
         } else {
-            // Fetch recipe details if not passed via location.state
             fetchRecipeDetails();
         }
         fetchComments();
@@ -34,7 +33,7 @@ const RecipeDetail = () => {
 
     const fetchComments = async () => {
         try {
-            const response = await fetch(`/backend/comment.php?id=${id}`);
+            const response = await fetch(`/backend/comment.php?no=${id}`);
             const data = await response.json();
             setComments(data);
         } catch (error) {
@@ -52,40 +51,46 @@ const RecipeDetail = () => {
                 body: JSON.stringify(comment),
             });
             const newComment = await response.json();
-            setComments([...comments, newComment]);
+            if (newComment.status === 'success') {
+                setComments([...comments, newComment]);
+            } else {
+                console.error('Error adding comment:', newComment.message);
+            }
         } catch (error) {
             console.error('Error adding comment:', error);
         }
     };
 
-    const handleDeleteComment = async (commentId) => {
+    const handleDeleteComment = async (commentNo) => {
         try {
             await fetch('/backend/comment.php', {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ id: commentId }),
+                body: JSON.stringify({ no: commentNo }),
             });
-            setComments(comments.filter(comment => comment.id !== commentId));
+            setComments(comments.filter(comment => comment.no !== commentNo));
         } catch (error) {
             console.error('Error deleting comment:', error);
         }
     };
 
-    const handleEditComment = async (commentId, newText) => {
+    const handleEditComment = async (commentNo, newText) => {
         try {
             const response = await fetch('/backend/comment.php', {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ id: commentId, comment: newText }),
+                body: JSON.stringify({ no: commentNo, comment: newText }),
             });
-            const updatedComment = await response.json();
-            setComments(comments.map(comment =>
-                comment.id === commentId ? updatedComment : comment
-            ));
+            const result = await response.json();
+            if (result.status === 'success') {
+                setComments(comments.map(comment => comment.no === commentNo ? { ...comment, comment: newText } : comment));
+            } else {
+                console.error('Error editing comment:', result.message);
+            }
         } catch (error) {
             console.error('Error editing comment:', error);
         }
@@ -102,7 +107,7 @@ const RecipeDetail = () => {
             <RecipeContent>
                 <RecipeDescription>
                     <p>{recipe.recipe}</p>
-                    <RecipeImage src={recipe.imgurl ? `${process.env.PUBLIC_URL}/imgs/${recipe.imgurl}` : 'default-image-url'} alt={recipe.title} />
+                    <RecipeImage src={`${process.env.PUBLIC_URL}/imgs/${recipe.imgurl}`} alt={recipe.title} />
                 </RecipeDescription>
                 <RecipeIngredients>
                     <h3>재료</h3>
@@ -115,7 +120,7 @@ const RecipeDetail = () => {
                 </RecipeRecipe>
             </RecipeContent>
             <hr />
-            <Comment onAddComment={handleAddComment} email={email} />
+            <Comment onAddComment={handleAddComment} email={email} recipeNo={id} />
             <CommentList
                 comments={comments}
                 email={email}
@@ -124,7 +129,7 @@ const RecipeDetail = () => {
             />
         </RecipeDetailContainer>
     );
-}
+};
 
 
 

@@ -1,12 +1,21 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 
-const Comment = ({ onAddComment, email }) => {
+const Comment = ({ onAddComment, email, recipeNo }) => {
     const [text, setText] = useState('');
+    const [nickname, setNickname] = useState('');
+
+    useEffect(() => {
+        // 이메일을 통해 닉네임 가져오기
+        fetch(`/backend/get-nickname.php?email=${email}`)
+            .then(response => response.json())
+            .then(data => setNickname(data.nickname))
+            .catch(error => console.error('Error fetching nickname:', error));
+    }, [email]);
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        const newComment = { id: Date.now(), email, comment: text};
+        const newComment = { no: recipeNo, email, nickname, comment: text };
         onAddComment(newComment);
         setText('');
     };
@@ -40,7 +49,7 @@ const Textarea = styled.textarea`
     border: 1px solid #ccc;
     border-radius: 4px;
     font-size: 16px;
-    resize: none; /* 크기 조절 기능을 없앰 */
+    resize: none;
 `;
 
 const Button = styled.button`
@@ -55,4 +64,4 @@ const Button = styled.button`
     &:hover {
         background-color: #0056b3;
     }
-`
+`;

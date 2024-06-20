@@ -5,15 +5,15 @@ const CommentList = ({ comments, email, onDeleteComment, onEditComment }) => {
     return (
         <div>
             {comments.map(comment => (
-                <CommentContainer key={comment.id}>
+                <CommentContainer key={comment.no}>
                     <p><strong>{comment.nickname}:</strong> {comment.comment}</p>
                     {comment.email === email && (
                         <ButtonContainer>
-                            <Button onClick={() => onDeleteComment(comment.id)}>삭제</Button>
+                            <Button onClick={() => onDeleteComment(comment.no)}>삭제</Button>
                             <Button onClick={() => {
                                 const newText = prompt('새로운 댓글 내용을 입력하세요:', comment.comment);
                                 if (newText) {
-                                    onEditComment(comment.id, newText);
+                                    onEditComment(comment.no, newText);
                                 }
                             }}>수정</Button>
                         </ButtonContainer>
