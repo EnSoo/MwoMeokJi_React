@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 
 const Comment = ({ onAddComment, email, recipeNo }) => {
-    const [text, setText] = useState('');
-    const [nickname, setNickname] = useState('');
+    const [text, setText] = useState('')
+    const [nickname, setNickname] = useState('')
 
     useEffect(() => {
         // 식별값을 통해 닉네임 가져오기
@@ -15,23 +15,23 @@ const Comment = ({ onAddComment, email, recipeNo }) => {
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({ email })
-                });
-                const data = await response.json();
-                setNickname(data.nickname);
+                })
+                const data = await response.json()
+                setNickname(data.nickname)
             } catch (error) {
-                console.error('Error fetching nickname:', error);
+                console.error('Error fetching nickname:', error)
             }
-        };
+        }
 
-        fetchNickname();
-    }, [email]);
+        fetchNickname()
+    }, [email])
 
     const handleSubmit = (e) => {
-        e.preventDefault();
-        const newComment = { no: recipeNo, email, nickname, comment: text };
-        onAddComment(newComment);
-        setText('');
-    };
+        e.preventDefault()
+        const newComment = { no: recipeNo, email, nickname, comment: text }
+        onAddComment(newComment)
+        setText('')
+    }
 
     return (
         <Form onSubmit={handleSubmit}>
@@ -42,17 +42,17 @@ const Comment = ({ onAddComment, email, recipeNo }) => {
             />
             <Button type="submit">댓글 추가</Button>
         </Form>
-    );
-};
+    )
+}
 
-export default Comment;
+export default Comment
 
 const Form = styled.form`
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     width: 100%;
-`;
+`
 
 const Textarea = styled.textarea`
     width: 100%;
@@ -63,7 +63,7 @@ const Textarea = styled.textarea`
     border-radius: 4px;
     font-size: 16px;
     resize: none;
-`;
+`
 
 const Button = styled.button`
     align-self: flex-end;
@@ -77,4 +77,4 @@ const Button = styled.button`
     &:hover {
         background-color: #0056b3;
     }
-`;
+`

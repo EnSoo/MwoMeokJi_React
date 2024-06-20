@@ -25,11 +25,11 @@ export default CommentList
 const CommentContainer = styled.div`
     border-bottom: 1px solid #ccc;
     padding: 10px 0;
-`;
+`
 
 const ButtonContainer = styled.div`
     margin-top: 5px;
-`;
+`
 
 const Button = styled.button`
     margin-right: 5px;
@@ -43,4 +43,4 @@ const Button = styled.button`
     &:hover {
         background-color: #0056b3;
     }
-`;
+`

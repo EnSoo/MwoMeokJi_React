@@ -145,32 +145,32 @@ const RecipeDetailContainer = styled.div`
     background: #fff;
     padding: 20px;
     box-shadow: 0 0 15px gray;
-`;
+`
 
 const RecipeHeader = styled.div`
     text-align: center;
     margin-bottom: 20px;
-`;
+`
 
 const RecipeContent = styled.div`
     margin-bottom: 20px;
-`;
+`
 
 const RecipeDescription = styled.div`
     margin-bottom: 20px;
-`;
+`
 
 const RecipeIngredients = styled.div`
     margin-bottom: 20px;
-`;
+`
 
 const RecipeRecipe = styled.div`
     margin-bottom: 20px;
-`;
+`
 
 const RecipeImage = styled.img`
     width: 100%;
     height: auto;
     border-radius: 8px;
     margin-top: 10px;
-`;
+`
