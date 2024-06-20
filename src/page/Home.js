@@ -1,11 +1,11 @@
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import Navigation from "../components/Navigation"
 import HomeLayout from "../components/HomeLayout"
 import styled from 'styled-components'
 import ai from "../components/img/AIRecommendm.png"
 
 //redux
-import { useDispatch, useSelector, useNavigate } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { setUserAccount } from "../redux/userAccount"
 import { useEffect, useState } from "react"
 import RecipeList from "../components/RecipeList"
