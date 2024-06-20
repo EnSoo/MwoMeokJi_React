@@ -28,6 +28,6 @@ const List=styled.div`
     justify-content: center;
     gap: 1rem;
     padding: 2rem;
-    margin-top: 100px;
-    margin-bottom: 100px;
+    margin-top: 40px;
+    margin-bottom: 20px;
 `
