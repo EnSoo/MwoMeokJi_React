@@ -33,9 +33,13 @@ const RecipeDetail = () => {
 
     const fetchComments = async () => {
         try {
-            const response = await fetch(`/backend/comment.php?no=${id}`);
+            const response = await fetch(`/backend/comment.php?myrecipe_id=${id}`);
             const data = await response.json();
-            setComments(data);
+            if (data.status === 'success') {
+                setComments(data.comments);
+            } else {
+                console.error('Error fetching comments:', data.message);
+            }
         } catch (error) {
             console.error('Error fetching comments:', error);
         }
@@ -52,7 +56,7 @@ const RecipeDetail = () => {
             });
             const newComment = await response.json();
             if (newComment.status === 'success') {
-                setComments([...comments, newComment]);
+                fetchComments() // 댓글 추가 후 댓글 목록을 다시 가져옵니다.
             } else {
                 console.error('Error adding comment:', newComment.message);
             }
@@ -69,12 +73,12 @@ const RecipeDetail = () => {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({ no: commentNo }),
-            });
-            setComments(comments.filter(comment => comment.no !== commentNo));
+            })
+            fetchComments() // 댓글 삭제 후 댓글 목록을 다시 가져옵니다.
         } catch (error) {
-            console.error('Error deleting comment:', error);
+            console.error('Error deleting comment:', error)
         }
-    };
+    }
 
     const handleEditComment = async (commentNo, newText) => {
         try {
@@ -84,17 +88,17 @@ const RecipeDetail = () => {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({ no: commentNo, comment: newText }),
-            });
-            const result = await response.json();
+            })
+            const result = await response.json()
             if (result.status === 'success') {
-                setComments(comments.map(comment => comment.no === commentNo ? { ...comment, comment: newText } : comment));
+                fetchComments() // 댓글 수정 후 댓글 목록을 다시 가져옵니다.
             } else {
-                console.error('Error editing comment:', result.message);
+                console.error('Error editing comment:', result.message)
             }
         } catch (error) {
-            console.error('Error editing comment:', error);
+            console.error('Error editing comment:', error)
         }
-    };
+    }
 
     if (!recipe) return <div>Loading...</div>;
 
@@ -131,8 +135,6 @@ const RecipeDetail = () => {
     );
 };
 
-
-
 export default RecipeDetail;
 
 const RecipeDetailContainer = styled.div`
@@ -143,31 +145,32 @@ const RecipeDetailContainer = styled.div`
     background: #fff;
     padding: 20px;
     box-shadow: 0 0 15px gray;
-`
+`;
 
 const RecipeHeader = styled.div`
     text-align: center;
     margin-bottom: 20px;
-`
+`;
 
 const RecipeContent = styled.div`
     margin-bottom: 20px;
-`
+`;
 
 const RecipeDescription = styled.div`
     margin-bottom: 20px;
-`
+`;
+
 const RecipeIngredients = styled.div`
     margin-bottom: 20px;
-`
+`;
 
 const RecipeRecipe = styled.div`
     margin-bottom: 20px;
-`
+`;
 
 const RecipeImage = styled.img`
     width: 100%;
     height: auto;
     border-radius: 8px;
     margin-top: 10px;
-`
+`;
