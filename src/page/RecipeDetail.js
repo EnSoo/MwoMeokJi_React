@@ -11,10 +11,10 @@ const RecipeDetail = () => {
     useEffect(() => {
         if (location.state && location.state.recipe) {
             setRecipe(location.state.recipe);
-            if(recipe.email!=''){
+            if(location.state.recipe.email!=''){
                 const sendData = new FormData()
-                sendData.append('email', recipe.email);
-                sendData.append('myrecipe_id', recipe.no);
+                sendData.append('email', location.state.recipe.email);
+                sendData.append('myrecipe_id', location.state.recipe.no);
                 fetch(`${process.env.PUBLIC_URL}/backend/recipe_view.php`, {
                     method: 'POST',
                     body: sendData,
