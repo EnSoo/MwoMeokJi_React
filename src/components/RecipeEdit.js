@@ -78,11 +78,11 @@ const RecipeEdit = () => {
             .then(text=>{
                 if(text=="200") {
                     // 글 작성 성공 시
-                    alert("글 작성에 성공 하였습니다.")
+                    alert(`레시피 ${comment}에 성공 하였습니다.`)
                     navigate('/recipe', { state: { refresh: true } })
                 } else if(text=="201") {
                     // 글 작성 실패 시
-                    alert('레시피 작성에 실패하였습니다.')
+                    alert(`레시피 ${comment}에 실패하였습니다.`)
                 }
             }).catch(error => console.error('Error:', error));
         }

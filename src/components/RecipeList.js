@@ -2,12 +2,17 @@ import styled from "styled-components"
 import Card from "./Card"
 import { Link } from "react-router-dom"
 
-const RecipeList = ({recipes}) => {
+const RecipeList = ({recipes, setRecipes}) => {
+    // 삭제 처리 함수
+    const handleDeleteRecipe = (recipeNo) => {
+        setRecipes(recipes.filter(recipe => recipe.no !== recipeNo));
+      };
+
     return(
         <List>
             {
                 recipes.map((recipe, index) => (
-                    <Card recipe={recipe} key={index}/>
+                    <Card recipe={recipe} key={index} onDelete={handleDeleteRecipe}/>
                 ))
             }
             

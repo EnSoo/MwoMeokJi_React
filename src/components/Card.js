@@ -2,11 +2,16 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { FaEllipsisV } from "react-icons/fa";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
-const Card = ({ recipe }) => {
+const Card = ({ recipe, onDelete }) => {
   const navigate = useNavigate();
   const location = useLocation()
   const [showMenu, setShowMenu] = useState(false);
+
+  const userAccount = useSelector(state => state.userAccountReducer.userAccount);
+
+  const email = userAccount.email;
 
   const toggleMenu = (e) => {
     e.stopPropagation(); // Prevent the card click event
@@ -20,7 +25,29 @@ const Card = ({ recipe }) => {
 
   const handleDelete = (e) => {
     e.stopPropagation(); // Prevent the card click event
-    alert("Delete");
+    const userConfirmed = window.confirm("해당 레시피를 삭제하시겠습니까?");
+    if (userConfirmed) {
+      const sendData = new FormData()
+      sendData.append('email', email)
+      sendData.append('no', recipe.no)
+      fetch(`${process.env.PUBLIC_URL}/backend/recipe_delete.php`,{
+        method:'POST',
+        body:sendData,
+      })
+      .then(res=>res.text())
+      .then(text=>{
+          if(text=="200") {
+              // 레시피 삭제 성공 시
+              alert(`레시피를 삭제 하였습니다.`)
+              onDelete(recipe.no)
+          } else if(text=="201") {
+              // 레시피 삭제 실패 시
+              alert(`레시피 삭제를 실패하였습니다.`)
+          }
+      }).catch(error => console.error('Error:', error));
+    } else {
+      // 레시피 삭제 취소
+    }
   };
 
   return (
@@ -40,7 +67,7 @@ const Card = ({ recipe }) => {
           </>
         )}
       </CardHeader>
-      <CardImage src={`${process.env.PUBLIC_URL}/imgs/${recipe.imgurl}`} alt={recipe.title} />
+      {recipe.imgurl !== '' && <CardImage src={`${process.env.PUBLIC_URL}/imgs/${recipe.imgurl}`} alt={recipe.title} />}
       <CardContent>
         <CardTitle>{recipe.title}</CardTitle>
       </CardContent>

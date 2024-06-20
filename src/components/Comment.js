@@ -1,15 +1,37 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
+import React, { useState, useEffect } from 'react'
+import styled from 'styled-components'
 
-const Comment = ({ onAddComment, email }) => {
-    const [text, setText] = useState('');
+const Comment = ({ onAddComment, email, recipeNo }) => {
+    const [text, setText] = useState('')
+    const [nickname, setNickname] = useState('')
+
+    useEffect(() => {
+        // 식별값을 통해 닉네임 가져오기
+        const fetchNickname = async () => {
+            try {
+                const response = await fetch('/backend/comment.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email })
+                })
+                const data = await response.json()
+                setNickname(data.nickname)
+            } catch (error) {
+                console.error('Error fetching nickname:', error)
+            }
+        }
+
+        fetchNickname()
+    }, [email])
 
     const handleSubmit = (e) => {
-        e.preventDefault();
-        const newComment = { id: Date.now(), email, comment: text};
-        onAddComment(newComment);
-        setText('');
-    };
+        e.preventDefault()
+        const newComment = { no: recipeNo, email, nickname, comment: text }
+        onAddComment(newComment)
+        setText('')
+    }
 
     return (
         <Form onSubmit={handleSubmit}>
@@ -20,17 +42,17 @@ const Comment = ({ onAddComment, email }) => {
             />
             <Button type="submit">댓글 추가</Button>
         </Form>
-    );
-};
+    )
+}
 
-export default Comment;
+export default Comment
 
 const Form = styled.form`
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     width: 100%;
-`;
+`
 
 const Textarea = styled.textarea`
     width: 100%;
@@ -40,8 +62,8 @@ const Textarea = styled.textarea`
     border: 1px solid #ccc;
     border-radius: 4px;
     font-size: 16px;
-    resize: none; /* 크기 조절 기능을 없앰 */
-`;
+    resize: none;
+`
 
 const Button = styled.button`
     align-self: flex-end;
