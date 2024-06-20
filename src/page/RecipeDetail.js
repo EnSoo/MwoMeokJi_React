@@ -13,20 +13,20 @@ const RecipeDetail = () => {
             setRecipe(location.state.recipe);
         } else {
         }
+        const sendData = new FormData()
+        sendData.append('email', recipe.email);
+        sendData.append('myrecipe_id', recipe.no);
+        fetch(`${process.env.PUBLIC_URL}/backend/recipe_view.php`, {
+            method: 'POST',
+            body: sendData,
+        })
+            .then(res => res.text())
+            .then(text => {
+                if (text == "200") {
+                } else if (text == "201") {
+                }
+            }).catch(error => console.error('Error:', error));
     }, [id]);
-    const sendData = new FormData()
-    sendData.append('email', recipe.email);
-    sendData.append('myrecipe_id', recipe.no);
-    fetch(`${process.env.PUBLIC_URL}/backend/recipe_view.php`, {
-        method: 'POST',
-        body: sendData,
-    })
-        .then(res => res.text())
-        .then(text => {
-            if (text == "200") {
-            } else if (text == "201") {
-            }
-        }).catch(error => console.error('Error:', error));
 
 
     if (!recipe) return <div>Loading...</div>;
