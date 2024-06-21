@@ -1,0 +1,16 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "pwa-chrome",
+            "request": "launch",
+            "name": "Launch Chrome against remote server",
+            "url": "http://52.79.148.132",
+            "webRoot": "${workspaceFolder}/src",
+            "breakOnLoad": true,
+            "sourceMaps": true,
+            "smartStep": true,
+            "skipFiles": ["<node_internals>/**"]
+        }
+    ]
+}
