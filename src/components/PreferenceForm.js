@@ -195,12 +195,14 @@ const PreferenceForm = ({ saveStep, openSelect, closeSelect }) => {
   };
 
   const handleSubmit = (e) => {
+    console.log("Button clicked"); // 여기에서 브레이크포인트를 설정합니다.
     e.preventDefault();
     saveStep(userSelectData);
     closeSelect();
   };
 
   const steps = [
+    
     {
       label: "어디 음식을 좋아하세요?",
       content: (
@@ -299,6 +301,7 @@ const PreferenceForm = ({ saveStep, openSelect, closeSelect }) => {
       content: (
         <LikeFormGroup>
           <LikeDiv>
+            
             <LikeRadio type="radio" id="lowCal" name="calories" value="낮음"
               checked={userSelectData.calories === "low"} onChange={handleChange}
             />

@@ -31,7 +31,7 @@ const RecipeContainer = styled.div`
   padding: 15px;
   border: 1px solid #ddd;
   border-radius: 8px;
-  background-color: #f9f9f9';
+  background-color: #f9f9f9;
 `;
 
 const RecipeTitle = styled.h3`
@@ -55,7 +55,8 @@ const PreferenceFormWrapper = styled.div`
   margin-top: 20px;
 `;
 
-function RecipeRecommender() {
+function RecipeRecommender({data}) {
+  const [originaljson, setOriginaljson] = useState(data); // 원본 json파일
  const [originalRecipes, setOriginalRecipes] = useState(recipes); // 원본 레시피 저장
   const [recommendedRecipes, setRecommendedRecipes] = useState([]);
    const [userPreferences, setUserPreferences] = useState(null); // 초기값 null로 변경

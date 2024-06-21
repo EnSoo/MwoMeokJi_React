@@ -6,22 +6,24 @@ import RecipeDetail from './page/RecipeDetail'
 import RecipeEdit from './components/RecipeEdit'
 import AlertDialog from './components/AlertDialog'
 import RecipeRecommender from './page/RecipeRecommender'
+import {useState} from 'react'
 
 const MainRouter = () => {
+    const [recipes, setRecipes] = useState() 
     fetch(`${process.env.PUBLIC_URL}/backend/recipe_list2.php`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({ email: "admin" })
-    }).then(response => response.json()).then(json => console.log(json)).catch(error => console.error('Error fetching recipes:', error))
+    }).then(response => response.json()).then(json =>setRecipes(json) ).catch(error => console.error('Error fetching recipes:', error))
     return(
         <div>
             <BrowserRouter basename={process.env.PUBLIC_URL}>
                 <Routes>
                     <Route path='/' element={<Home/>}/>
                     <Route path='/alert' element={<AlertDialog/>}/>
-                    <Route path='/recipe_recommender' element={<RecipeRecommender/>}/>
+                    <Route path='/recipe_recommender' element={<RecipeRecommender data={recipes}/>}/>
                     <Route path='/map' element={<KakaoMap/>}></Route>
                     <Route path='/recipe' element={<Recipe/>}></Route>
                     <Route path='/my_recipe' element={<Recipe/>}></Route>
