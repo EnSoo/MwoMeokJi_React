@@ -4,17 +4,7 @@ import Comment from './Comment';
 import { useSelector } from 'react-redux';
 
 const CommentList = ({ recipeId }) => {
-    const [commentList, setCommentList] = useState([
-        {
-            "no": "9",
-            "nickname": null,
-            "imgfile": null,
-            "comment": "3",
-            "my_comment": "1",
-            "createdate": "2024-06-21 14:13:12",
-            "modifydate": "2024-06-21 14:13:12"
-        }
-    ]);
+    const [commentList, setCommentList] = useState([]);
     const [newComment, setNewComment] = useState('');
     const userAccount = useSelector(state => state.userAccountReducer.userAccount)
     const email = userAccount.email
