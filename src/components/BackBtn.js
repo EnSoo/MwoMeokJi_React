@@ -1,23 +1,67 @@
 import React from "react";
-import { useHistory }  from 'react-router-dom'
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { MdOutlineArrowBackIos } from "react-icons/md";
 
-const BackBtn= ()=> {
-    const history = useHistory()
-    return(
-        <Button onClick={ () => history.goBack() }>&larr; Back</Button>
-    )
-}
+const IconWrapper = styled.div`
+  display: inline-block;
+  position: relative;
+  overflow: hidden;
+  border-radius: 50%;  // 추가: 부모 요소를 원형으로 만듦
 
-export default BackBtn
+  &::after {
+    content: "";
+    display: block;
+    position: absolute;
+    border-radius: 50%;
+    width: 200%;    // 변경: 100% -> 200%
+    height: 200%;   // 변경: 100% -> 200%
+    top: 50%;       // 변경: 0 -> 50%
+    left: 50%;      // 변경: 0 -> 50%
+    transform: translate(-50%, -50%);  // 추가: 중앙으로 이동
+    background: rgba(85, 164, 22, 0.3); /* rgba(#55A416, 0.3) */
+    opacity: 0;
+    pointer-events: none;
+  }
+  
+  &.ripple-active::after {
+    animation: ripple-animation 0.6s linear;
+    opacity: 1;
+  }
 
-const Button= styled.button`
-background: none;
-border: none;
-font-size: 1.2rem;
-cursor: pointer;
-&:hover{
-    text-decoration: underline;
-}
+  @keyframes ripple-animation {
+    from {
+      transform: scale(0);
+      opacity: 1;
+    }
+    to {
+      transform: scale(4);
+      opacity: 0;
+    }
+  }
+`;
 
-`
+const BackBtn = () => {
+  const navigate = useNavigate();
+
+  const handleClick = (e) => {
+    const target = e.currentTarget;
+    target.classList.add('ripple-active');
+
+    setTimeout(() => {
+      target.classList.remove('ripple-active');
+    }, 600); // Match the duration of the ripple effect
+
+    setTimeout(() => {
+      navigate(-1);
+    }, 600); // Short delay to allow ripple effect to be visible
+  };
+
+  return (
+    <IconWrapper onClick={handleClick}>
+      <MdOutlineArrowBackIos style={{ fontWeight: 'bold', fontSize: '2rem' }} />
+    </IconWrapper>
+  );
+};
+
+export default BackBtn;

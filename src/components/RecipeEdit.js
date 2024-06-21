@@ -3,6 +3,7 @@ import { useParams, useLocation, useNavigate } from 'react-router-dom'
 import Navigation from "../components/Navigation"
 import styled from 'styled-components'
 import { useSelector } from 'react-redux';
+import BackBtn from './BackBtn';
 
 const RecipeEdit = () => {
     const [recipe, setRecipe] = useState({})
@@ -91,6 +92,7 @@ const RecipeEdit = () => {
     return (
         <RecipeEditContainer>
             <Navigation />
+            <BackBtn/>
             <RecipeForm onSubmit={Submit}>
                 <h1>나만의 레시피 {comment}</h1>
                 <RecipeLabel>

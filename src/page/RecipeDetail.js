@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 import Navigation from "../components/Navigation";
 import styled from 'styled-components';
+import BackBtn from '../components/BackBtn';
 
 const RecipeDetail = () => {
     const { id } = useParams();
@@ -38,6 +39,7 @@ const RecipeDetail = () => {
     return (
         <RecipeDetailContainer>
             <Navigation />
+            <BackBtn/>
             <RecipeHeader>
                 <h2>{recipe.title}</h2>
             </RecipeHeader>
