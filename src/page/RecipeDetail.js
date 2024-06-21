@@ -3,6 +3,7 @@ import { useLocation, useParams } from 'react-router-dom';
 import Navigation from "../components/Navigation";
 import styled from 'styled-components';
 import BackBtn from '../components/BackBtn';
+import CommentList from '../components/CommentList';
 
 const RecipeDetail = () => {
     const { id } = useParams();
@@ -57,6 +58,9 @@ const RecipeDetail = () => {
                     <p>{recipe.recipe}</p>
                     <p>총 조리시간: {recipe.times}<span>분</span></p>
                 </RecipeRecipe>
+                <CommentSection>
+                    <CommentList recipeId={recipe.no}/>
+                </CommentSection>
             </RecipeContent>
         </RecipeDetailContainer>
     );
@@ -67,7 +71,7 @@ export default RecipeDetail
 const RecipeDetailContainer = styled.div`
     font-family: 'Arial', sans-serif;
     max-width: 600px;
-    height: 100vh;
+    height: 100%;
     margin: auto;
     background: #fff;
     padding: 20px;
@@ -89,10 +93,12 @@ const RecipeDescription = styled.div`
 
 const RecipeIngredients = styled.div`
     margin-bottom: 20px;
+    padding-bottom: 10px;
 `
 
 const RecipeRecipe = styled.div`
     margin-bottom: 20px;
+    padding-bottom: 10px;
 `
 
 const RecipeImage = styled.img`
@@ -101,3 +107,10 @@ const RecipeImage = styled.img`
     border-radius: 8px;
     margin-top: 10px;
 `
+
+const CommentSection = styled.div`
+    margin-top: 20px;
+    padding: 10px 0;
+    border-top: 2px solid gray;
+    padding-bottom: 20px;
+`;
