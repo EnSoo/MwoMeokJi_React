@@ -18,7 +18,7 @@ const Card = ({ recipe, onDelete }) => {
   const favoriteRequest =(e) => {
     e.preventDefault(); // Prevent default behavior
     e.stopPropagation(); // Prevent the card click event
-    // if(email!='') {
+    if(email!='') {
       const sendData = new FormData()
       sendData.append('email', recipe.email);
       sendData.append('myrecipe_id', recipe.no);
@@ -35,9 +35,9 @@ const Card = ({ recipe, onDelete }) => {
               // favor 동작 실패 시
           }
       }).catch(error => console.error('Error:', error));
-    // } else {
-    //   alert('앱에서만 가능한 기능입니다')
-    // }
+    } else {
+      alert('앱에서만 가능한 기능입니다')
+    }
   }
 
   const toggleMenu = (e) => {
