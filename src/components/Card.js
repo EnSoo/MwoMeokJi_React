@@ -10,14 +10,15 @@ const Card = ({ recipe, onDelete }) => {
   const navigate = useNavigate();
   const location = useLocation()
   const [showMenu, setShowMenu] = useState(false);
-  const [my_like, setMyLike]=useState(recipe.my_like)
+  const [my_like, setMyLike]=useState(recipe.my_like == '1')
   const userAccount = useSelector(state => state.userAccountReducer.userAccount);
 
   const email = userAccount.email;
 
   const favoriteRequest =(e) => {
+    e.preventDefault(); // Prevent default behavior
     e.stopPropagation(); // Prevent the card click event
-    if(email!='') {
+    // if(email!='') {
       const sendData = new FormData()
       sendData.append('email', recipe.email);
       sendData.append('myrecipe_id', recipe.no);
@@ -29,14 +30,14 @@ const Card = ({ recipe, onDelete }) => {
       .then(text=>{
           if(text=="200") {
               // favor 동작 성공 시
-              setMyLike(!my_like)
+              setMyLike(my_like => !my_like)
           } else if(text=="201") {
               // favor 동작 실패 시
           }
       }).catch(error => console.error('Error:', error));
-    } else {
-      alert('앱에서만 가능한 기능입니다')
-    }
+    // } else {
+    //   alert('앱에서만 가능한 기능입니다')
+    // }
   }
 
   const toggleMenu = (e) => {
@@ -101,10 +102,14 @@ const Card = ({ recipe, onDelete }) => {
         <CardFooter>
         <LikesViews>
           <div>
-            {my_like == '1' ? <MdFavorite onClick={favoriteRequest}/> : <MdFavoriteBorder onClick={favoriteRequest}/> }
+            {my_like ? (
+              <MdFavorite onClick={(e) => favoriteRequest(e)} style={{ fontSize: '1.5rem' }} />
+            ) : (
+              <MdFavoriteBorder onClick={(e) => favoriteRequest(e)} style={{ fontSize: '1.5rem' }} />
+            )}
           </div>
           <div>
-            <GrView /> {recipe.view}
+            <GrView style={{fontSize:'1.5rem', marginRight:'0.5rem'}}/> {recipe.view}
           </div>
         </LikesViews>
       </CardFooter>
