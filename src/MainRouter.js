@@ -8,6 +8,13 @@ import AlertDialog from './components/AlertDialog'
 import RecipeRecommender from './page/RecipeRecommender'
 
 const MainRouter = () => {
+    fetch(`${process.env.PUBLIC_URL}/backend/recipe_list2.php`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ email: "admin" })
+    }).then(response => response.json()).then(json => console.log(json)).catch(error => console.error('Error fetching recipes:', error))
     return(
         <div>
             <BrowserRouter basename={process.env.PUBLIC_URL}>
