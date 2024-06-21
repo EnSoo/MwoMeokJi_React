@@ -32,11 +32,12 @@ const Recipe = () => {
                         body: data
                     });
                     const json = await response.json();
-                    setRecipes(json);
+                    const myRecipes = json.filter(recipe => recipe.email !== "admin");
+                    setRecipes(myRecipes);
 
                     // Update the currentList based on the tab
                     if (tab === "all") {
-                        setCurrentList(json);
+                        setCurrentList(myRecipes);
                     } else {
                         const myRecipes = json.filter(recipe => recipe.my_recipe === "1");
                         setCurrentList(myRecipes);
@@ -56,7 +57,7 @@ const Recipe = () => {
                 setCurrentList(myRecipes);
             }
         }
-  }, [email, tab]);
+  }, [recipes, email, tab]);
     return (
         <div style={{display:"flex", flexDirection:"column"}}>
             <Navigation />

@@ -3,15 +3,41 @@ import styled from "styled-components";
 import { FaEllipsisV } from "react-icons/fa";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { MdFavorite, MdFavoriteBorder } from "react-icons/md";
+import { GrView } from "react-icons/gr";
 
 const Card = ({ recipe, onDelete }) => {
   const navigate = useNavigate();
   const location = useLocation()
   const [showMenu, setShowMenu] = useState(false);
-
+  const [my_like, setMyLike]=useState(recipe.my_like)
   const userAccount = useSelector(state => state.userAccountReducer.userAccount);
 
   const email = userAccount.email;
+
+  const favoriteRequest =(e) => {
+    e.stopPropagation(); // Prevent the card click event
+    if(email!='') {
+      const sendData = new FormData()
+      sendData.append('email', recipe.email);
+      sendData.append('myrecipe_id', recipe.no);
+      fetch(`${process.env.PUBLIC_URL}/backend/recipe_favor.php`,{
+        method:'POST',
+        body:sendData,
+      })
+      .then(res=>res.text())
+      .then(text=>{
+          if(text=="200") {
+              // favor 동작 성공 시
+              setMyLike(!my_like)
+          } else if(text=="201") {
+              // favor 동작 실패 시
+          }
+      }).catch(error => console.error('Error:', error));
+    } else {
+      alert('앱에서만 가능한 기능입니다')
+    }
+  }
 
   const toggleMenu = (e) => {
     e.stopPropagation(); // Prevent the card click event
@@ -71,6 +97,18 @@ const Card = ({ recipe, onDelete }) => {
       <CardContent>
         <CardTitle>{recipe.title}</CardTitle>
       </CardContent>
+      {location.pathname === '/recipe' && (
+        <CardFooter>
+        <LikesViews>
+          <div>
+            {my_like == '1' ? <MdFavorite onClick={favoriteRequest}/> : <MdFavoriteBorder onClick={favoriteRequest}/> }
+          </div>
+          <div>
+            <GrView /> {recipe.view}
+          </div>
+        </LikesViews>
+      </CardFooter>
+      )}
     </Item>
   );
 };
@@ -146,4 +184,27 @@ const CardDescription = styled.span`
   margin: 0;
   color: #777;
   margin-right: 10px;
+`;
+
+const CardFooter = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  padding: 8px 16px 0 0;
+`;
+
+const LikesViews = styled.div`
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  color: #777;
+  
+  & > div {
+    display: flex;
+    align-items: center;
+    margin-left: 10px;
+    
+    & > svg {
+      margin-right: 4px;
+    }
+  }
 `;
