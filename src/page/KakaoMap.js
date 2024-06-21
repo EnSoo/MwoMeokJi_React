@@ -19,6 +19,8 @@ import Navigation from "../components/Navigation";
 import Tooltip from "../components/Tooltip";
 import GeolocationExample from "../components/GeolocationExmple";
 import InfoWindow from "../components/InfoWindow";
+import Loading from "../components/Loading";
+
 
 // kakao map
 const { kakao } = window;
@@ -34,15 +36,16 @@ const KakaoMap = () => {
     // - 카카오 검색 REST API 요청 결과인 장소들을 저장
     const [Places, setPlaces] = useState([]); // keyword로 검색한 장소 목록
     // - 선택한 키워드 정보
-    const [currentKeyword, setCurrentKeyword] = useState('대형마트'); 
+    const [currentKeyword, setCurrentKeyword] = useState('대형마트');
 
     // 3) useRef
     // - kakaomap 참조변수
-    const mapRef = useRef(null); 
+    const mapRef = useRef(null);
     // - marker 목록 참조변수
     const markersRef = useRef([]);
     // - infowindow 목록
     const infoWindowsRef = useRef([]); // 마커 윈도우창
+    const [loading, setLoading] = useState(true)
 
     // map의 중심 좌표(위경도) 처리 메소드(코틀린과 연동)
     const resLocation = (latitude, longitude) => {
@@ -94,8 +97,8 @@ const KakaoMap = () => {
                 position: latlng,
                 title: place.place_name
             });
-            
-            const iwContent= renderToString(<InfoWindow place={place} onClick={() => handleInfoWindowClick(place)}/>)
+
+            const iwContent = renderToString(<InfoWindow place={place} onClick={() => handleInfoWindowClick(place)} />)
 
             // infowindow 생성
             const infowindow = new kakao.maps.InfoWindow({
@@ -109,7 +112,7 @@ const KakaoMap = () => {
             markersRef.current.push(marker);
             // infowindow 참조변수 목록에 infowindow 추가
             infoWindowsRef.current.push(infowindow);
-            
+
             // 마커 클릭 시 infowindow가 열려있을 경우 close, 닫혀있을 경우 open
             kakao.maps.event.addListener(marker, 'click', () => {
                 const isOpen = infowindow.getMap() // infowindow가 맵상에 존재할 경우 true, 존재하지 않을 경우 false
@@ -144,6 +147,7 @@ const KakaoMap = () => {
                         level: 7,
                     };
                     mapRef.current = new kakao.maps.Map(container, options);
+                    setLoading(false)
                     fetchNearbyPlaces();
                 }
             } else {
@@ -183,42 +187,45 @@ const KakaoMap = () => {
 
     // 화면 랜더링 부분
     return (
-        <MapContent>
-            <GeolocationExample onLocation={setLocation} />
-            <Navigation />
-            <header>
-                지도<IoMdMenu onClick={menuOpen} className="menu" />
-            </header>
-            <div className="keywordList">
-                <Tooltip text="대형마트" imgSrc="market.png">
-                    <KeywordIconWrapper className="keyword" isActive={currentKeyword === '대형마트'} onClick={() => setCurrentKeyword('대형마트')}>
-                        <FaStore className="icon" />
-                    </KeywordIconWrapper>
-                </Tooltip>
-                <Tooltip text="음식점" imgSrc="market.png">
-                    <KeywordIconWrapper className="keyword" isActive={currentKeyword === '음식점'} onClick={() => setCurrentKeyword('음식점')}>
-                        <MdRestaurant className="icon" />
-                    </KeywordIconWrapper>
-                </Tooltip>
-                <Tooltip text="식자재마트" imgSrc="market.png">
-                    <KeywordIconWrapper className="keyword" isActive={currentKeyword === '식자재마트'} onClick={() => setCurrentKeyword('식자재마트')}>
-                        <FaShoppingCart className="icon" />
-                    </KeywordIconWrapper>
-                </Tooltip>
-                <Tooltip text="시장" imgSrc="market.png">
-                    <KeywordIconWrapper className="keyword" isActive={currentKeyword === '시장'} onClick={() => setCurrentKeyword('시장')}>
-                        <FaStoreAlt className="icon"/>
-                    </KeywordIconWrapper>
-                </Tooltip>
-            </div>
-
-            <div id="content">
-                <div id='map' ref={mapRef}></div>
-                <div className="refresh" onClick={refreshSearch}>
-                    <div><IoIosRefresh style={{ marginRight: '1rem' }} id='iorefresh' />이 근처 장소 탐색</div>
+        <>
+            {loading && <Loading />}
+            <MapContent>
+                <GeolocationExample onLocation={setLocation} />
+                <Navigation />
+                <header>
+                    지도<IoMdMenu onClick={menuOpen} className="menu" />
+                </header>
+                <div className="keywordList">
+                    <Tooltip text="대형마트" imgSrc="market.png">
+                        <KeywordIconWrapper className="keyword" isActive={currentKeyword === '대형마트'} onClick={() => setCurrentKeyword('대형마트')}>
+                            <FaStore className="icon" />
+                        </KeywordIconWrapper>
+                    </Tooltip>
+                    <Tooltip text="음식점" imgSrc="market.png">
+                        <KeywordIconWrapper className="keyword" isActive={currentKeyword === '음식점'} onClick={() => setCurrentKeyword('음식점')}>
+                            <MdRestaurant className="icon" />
+                        </KeywordIconWrapper>
+                    </Tooltip>
+                    <Tooltip text="식자재마트" imgSrc="market.png">
+                        <KeywordIconWrapper className="keyword" isActive={currentKeyword === '식자재마트'} onClick={() => setCurrentKeyword('식자재마트')}>
+                            <FaShoppingCart className="icon" />
+                        </KeywordIconWrapper>
+                    </Tooltip>
+                    <Tooltip text="시장" imgSrc="market.png">
+                        <KeywordIconWrapper className="keyword" isActive={currentKeyword === '시장'} onClick={() => setCurrentKeyword('시장')}>
+                            <FaStoreAlt className="icon" />
+                        </KeywordIconWrapper>
+                    </Tooltip>
                 </div>
-            </div>
-        </MapContent>
+
+                <div id="content">
+                    <div id='map' ref={mapRef}></div>
+                    <div className="refresh" onClick={refreshSearch}>
+                        <div><IoIosRefresh style={{ marginRight: '1rem' }} id='iorefresh' />이 근처 장소 탐색</div>
+                    </div>
+                </div>
+            </MapContent>
+        </>
     );
 };
 
