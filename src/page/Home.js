@@ -3,6 +3,9 @@ import Navigation from "../components/Navigation"
 import HomeLayout from "../components/HomeLayout"
 import styled from 'styled-components'
 import ai from "../components/img/AIRecommendm.png"
+import changerecipe from "../utils/changerecipe"
+import { setRecipes } from '../redux/recipeReducer'
+
 
 //redux
 import { useDispatch, useSelector } from "react-redux"
@@ -27,12 +30,18 @@ const Home = () => {
     // 이 코드를 추가하여 setUser 함수를 전역으로 사용할 수 있게 합니다.
     useEffect(()=> {
         window.setUser = setUser;
-    })
-    const recipes=[{no:1, title:"가츠돈", ingredients:"돼지고기", recipe:"돼지고기를 튀긴다", imgurl:"가츠돈.jpg",times:"3",favor:"좋아요"},{no:1, title:"가츠돈", ingredients:"돼지고기", recipe:"돼지고기를 튀긴다", imgurl:"가츠돈.jpg",times:"3",favor:"좋아요"},{no:1, title:"가츠돈", ingredients:"돼지고기", recipe:"돼지고기를 튀긴다", imgurl:"가츠돈.jpg",times:"3",favor:"좋아요"},{no:1, title:"가츠돈", ingredients:"돼지고기", recipe:"돼지고기를 튀긴다", imgurl:"가츠돈.jpg",times:"3",favor:"좋아요"}]
-    const res=[{no:1, title:"가츠돈", ingredients:"돼지고기", recipe:"돼지고기를 튀긴다", imgurl:"가츠돈.jpg",times:"3",favor:"좋아요"}, 
-        {no:1, title:"가츠돈", ingredients:"돼지고기", recipe:"돼지고기를 튀긴다", imgurl:"가츠돈.jpg",times:"3",favor:"좋아요"},
-        {no:1, title:"가츠돈", ingredients:"돼지고기", recipe:"돼지고기를 튀긴다", imgurl:"가츠돈.jpg",times:"3",favor:"좋아요"}, 
-        {no:1, title:"가츠돈", ingredients:"돼지고기", recipe:"돼지고기를 튀긴다", imgurl:"가츠돈.jpg",times:"3",favor:"좋아요"}] 
+        fetch(`${process.env.PUBLIC_URL}/backend/recipe_list2.php`)
+      .then(response => response.json())
+      .then(data => {
+        // 데이터를 changerecipe 함수로 변환
+        const transformedData = changerecipe(data);
+        // Redux 상태 업데이트
+        dispatch(setRecipes(transformedData));
+        console.log('Data fetched:', transformedData);
+      })
+      .catch(error => console.error('Error fetching data:', error));
+  }, []);
+    const recipes= useSelector(state=>state.recipeReducer.recipes)
     const r=[{no:1, title:"가츠돈", ingredients:"돼지고기", recipe:"돼지고기를 튀긴다", imgurl:"가츠돈.jpg",times:"3",favor:"좋아요"}, 
         {no:1, title:"가츠돈", ingredients:"돼지고기", recipe:"돼지고기를 튀긴다", imgurl:"가츠돈.jpg",times:"3",favor:"좋아요"},
         {no:1, title:"가츠돈", ingredients:"돼지고기", recipe:"돼지고기를 튀긴다", imgurl:"가츠돈.jpg",times:"3",favor:"좋아요"}, 
@@ -50,7 +59,7 @@ const Home = () => {
                 <Title>여름철 간편음식</Title>
                 <RecipeList recipes={recipes} />
                 <Title>좋아하는 음식</Title>
-                <RecipeList recipes={res} />
+                <RecipeList recipes={recipes} />
                 <Title>간편 음식</Title>
                 <RecipeList recipes={r}/>
                 <Navigation />
