@@ -158,12 +158,10 @@ const PreferenceForm = ({ saveStep, openSelect, closeSelect }) => {
     cookingTime: "medium",
     categories: [],
     dishType: [],
-    weatherFeatures: {
-      warm: false,
-      cold: true,
-      soup: true,
-      spicy: true
-    }
+    warm: false,
+    cold: true,
+    soup: true, 
+    
   });
 
   const [step, setStep] = useState(0);
@@ -330,31 +328,31 @@ const PreferenceForm = ({ saveStep, openSelect, closeSelect }) => {
             <LikeRadio type="radio" id="veryShort" name="cookingTime" value="veryShort"
               checked={userSelectData.cookingTime === "veryShort"} onChange={handleChange}
             />
-            <StyledLabel htmlFor="veryShort">아주 짧음</StyledLabel>
+            <StyledLabel htmlFor="veryShort">15분이하</StyledLabel>
           </LikeDiv>
           <LikeDiv>
             <LikeRadio type="radio" id="short" name="cookingTime" value="short"
               checked={userSelectData.cookingTime === "short"} onChange={handleChange}
             />
-            <StyledLabel htmlFor="short">짧음</StyledLabel>
+            <StyledLabel htmlFor="short">15~30분</StyledLabel>
           </LikeDiv>
           <LikeDiv>
             <LikeRadio type="radio" id="medium" name="cookingTime" value="medium"
               checked={userSelectData.cookingTime === "medium"} onChange={handleChange}
             />
-            <StyledLabel htmlFor="medium">보통</StyledLabel>
+            <StyledLabel htmlFor="medium">30~60분</StyledLabel>
           </LikeDiv>
           <LikeDiv>
             <LikeRadio type="radio" id="long" name="cookingTime" value="long"
               checked={userSelectData.cookingTime === "long"} onChange={handleChange}
             />
-            <StyledLabel htmlFor="long">길음</StyledLabel>
+            <StyledLabel htmlFor="long">60~120분</StyledLabel>
           </LikeDiv>
           <LikeDiv>
             <LikeRadio type="radio" id="veryLong" name="cookingTime" value="veryLong"
               checked={userSelectData.cookingTime === "veryLong"} onChange={handleChange}
             />
-            <StyledLabel htmlFor="veryLong">아주 길음</StyledLabel>
+            <StyledLabel htmlFor="veryLong">120분이상</StyledLabel>
           </LikeDiv>
         </LikeFormGroup>
       )

@@ -3,7 +3,9 @@ import { cosineSimilarity } from './utils';
 
 export function recommendRecipes(userPreferences, recipes) {
   const originalRecipes = [...recipes]; // 레시피 데이터 깊은 복사
+  console.log('원본 레시피:', originalRecipes);
   const uniqueIngredients = generateUniqueIngredients(recipes, userPreferences.ingredients);
+  console.log('유니크한 재료:', uniqueIngredients);
 
   const weights = {
     spiciness: 1,
@@ -83,7 +85,7 @@ export function recommendRecipes(userPreferences, recipes) {
     const dietTypeMatch = userPreferences.dietType === "상관없음" || (userPreferences.dietType === "채식(비건)" && !recipe.meat) || (userPreferences.dietType === "육식" && recipe.meat);
     const ingredientsMatch = userPreferences.ingredients.every(ingredient => recipe.ingredients.includes(ingredient));
 
-    console.log(`레시피: ${recipe.name}, categoryMatch: ${categoryMatch}, otherCategoriesMatch: ${otherCategoriesMatch}, dietTypeMatch: ${dietTypeMatch}, ingredientsMatch: ${ingredientsMatch}`);
+    console.log(`레시피: ${recipe.title}, categoryMatch: ${categoryMatch}, otherCategoriesMatch: ${otherCategoriesMatch}, dietTypeMatch: ${dietTypeMatch}, ingredientsMatch: ${ingredientsMatch}`);
 
     return categoryMatch && otherCategoriesMatch && dietTypeMatch && ingredientsMatch;
   });
@@ -91,7 +93,7 @@ export function recommendRecipes(userPreferences, recipes) {
   if (userPreferences.searchQuery) { // 검색어 필터링 추가
     const query = userPreferences.searchQuery.toLowerCase();
     filteredRecipes = filteredRecipes.filter(recipe => { // filteredRecipes 재할당
-      return recipe.name.toLowerCase().includes(query) ||
+      return recipe.title.toLowerCase().includes(query) ||
              recipe.ingredients.some(ingredient => ingredient.toLowerCase().includes(query));
     });
   }
@@ -106,7 +108,7 @@ export function recommendRecipes(userPreferences, recipes) {
   recipeVectors.forEach(recipe => {
     const similarity = cosineSimilarity(userVector, recipe.vector);
     recipe.similarity = similarity;
-    console.log(`레시피: ${recipe.name}, 유사도: ${similarity}`);
+    console.log(`레시피: ${recipe.title}, 유사도: ${similarity}`);
   });
 
   recipeVectors.sort((a, b) => b.similarity - a.similarity);

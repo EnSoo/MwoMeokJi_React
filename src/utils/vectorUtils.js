@@ -1,5 +1,6 @@
 export function generateUniqueIngredients(recipes, userIngredients) {// 원래 레시피들의 재료들과, 유저가 입력한 레시피 재료 비교
   const allIngredients = recipes.flatMap(recipe => recipe.ingredients);
+  console.log("모든 성분:", allIngredients);
   const uniqueIngredients = Array.from(new Set([...allIngredients, ...userIngredients]));
   console.log("고유 성분:", uniqueIngredients);
   return uniqueIngredients;

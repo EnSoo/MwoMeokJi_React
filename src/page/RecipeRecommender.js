@@ -57,7 +57,9 @@ const PreferenceFormWrapper = styled.div`
 
 function RecipeRecommender({data}) {
   const [originaljson, setOriginaljson] = useState(data); // 원본 json파일
- const [originalRecipes, setOriginalRecipes] = useState(recipes); // 원본 레시피 저장
+  //data의 email값이 admin인 경우에만 recipes에 data를 넣어줌
+ const [originalRecipes, setOriginalRecipes] = useState(data.filter((item) => item.email === "admin")); // 원본 레시피 저장
+ console.log('원본 레시피:', originalRecipes);
   const [recommendedRecipes, setRecommendedRecipes] = useState([]);
    const [userPreferences, setUserPreferences] = useState(null); // 초기값 null로 변경
   useEffect(() => {
@@ -121,6 +123,7 @@ function RecipeRecommender({data}) {
     const indexOfLastRecipe = currentPage * recipesPerPage;
     const indexOfFirstRecipe = indexOfLastRecipe - recipesPerPage;
     setCurrentRecipes(recommendedRecipes.slice(indexOfFirstRecipe, indexOfLastRecipe));
+    console.log('현재 페이지 레시피:', recommendedRecipes.slice(indexOfFirstRecipe, indexOfLastRecipe));
   }, [currentPage, recommendedRecipes]); 
 
   const handlePreferenceChange = (newPreferences) => {
@@ -166,7 +169,7 @@ function RecipeRecommender({data}) {
           ) : (
             currentRecipes.map((recipe, index) => (
               <RecipeContainer key={index}>
-                <RecipeTitle>추천 레시피: {recipe.name || '레시피 이름 없음'}</RecipeTitle>
+                <RecipeTitle>추천 레시피: {recipe.title || '레시피 이름 없음'}</RecipeTitle>
                 <RecipeList>
                   {recipe.ingredients.map((ingredient, index) => (
                     <RecipeItem key={index}>{ingredient}</RecipeItem>
@@ -174,8 +177,8 @@ function RecipeRecommender({data}) {
                 </RecipeList>
                 <RecipeDetail>칼로리: {recipe.calories}</RecipeDetail>
                 <RecipeDetail>매운 정도: {recipe.spiciness}</RecipeDetail>
-                <RecipeDetail>조리 시간: {recipe.cookingTime}</RecipeDetail>
-                <RecipeDetail>카테고리: {recipe.categories.join(', ')}</RecipeDetail>
+                <RecipeDetail>조리 시간: {recipe.times}</RecipeDetail>
+                <RecipeDetail>카테고리: {recipe.categories}</RecipeDetail>
               </RecipeContainer>
             ))
           )}

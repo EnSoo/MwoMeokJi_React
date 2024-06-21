@@ -37,6 +37,9 @@ const Home = () => {
         {no:1, title:"가츠돈", ingredients:"돼지고기", recipe:"돼지고기를 튀긴다", imgurl:"가츠돈.jpg",times:"3",favor:"좋아요"},
         {no:1, title:"가츠돈", ingredients:"돼지고기", recipe:"돼지고기를 튀긴다", imgurl:"가츠돈.jpg",times:"3",favor:"좋아요"}, 
         {no:1, title:"가츠돈", ingredients:"돼지고기", recipe:"돼지고기를 튀긴다", imgurl:"가츠돈.jpg",times:"3",favor:"좋아요"}] 
+
+
+       
     return(
         <>
             <HomeLayout />

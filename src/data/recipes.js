@@ -9591,3 +9591,4 @@ const recipes=[
         "view": "1"
     }
 ]
+export default recipes;

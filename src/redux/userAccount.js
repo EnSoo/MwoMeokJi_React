@@ -5,6 +5,7 @@ const initState={
         nickname:'',
         imgfile:''
     }
+    
 }
 
 //(2) action : 어떻게 변경하고 싶은지.. 동작명(액션 타입)을 지정
