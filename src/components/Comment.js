@@ -175,20 +175,17 @@ const MenuIconWrapper = styled.div`
 
 const DropdownMenu = styled.div`
   position: absolute;
-  top: 20px;
-  right: 10px;
+  top: 24px;
+  right: 0;
   background: #fff;
-  border: 1px solid #55a400;
+  border: 1px solid #55A400;
   border-radius: 4px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   z-index: 1000;
-  display: flex;
-  flex-direction: column; /* Ensure items are stacked vertically */
 `;
 
 const MenuItem = styled.div`
-  padding: 12px 24px; /* Increased padding for larger click area */
-  font-size: 16px; /* Increased font size */
+  padding: 8px 16px;
   cursor: pointer;
   &:hover {
     background: #55DD16;
@@ -198,6 +195,7 @@ const MenuItem = styled.div`
 const MenuIcon = styled.div`
   cursor: pointer;
   font-size: 1em;
+  margin-bottom: 5px;
 `;
 
 const EditTextarea = styled.textarea`
