@@ -76,9 +76,23 @@ const Card = ({ recipe, onDelete }) => {
       // 레시피 삭제 취소
     }
   };
-
+  const itemClick = (e) =>{
+    e.stopPropagation(); // Prevent the card click event
+    if(location.pathname=='/recipe_recommender') {
+      const userConfirmed = window.confirm("해당 레시피를 삭제하시겠습니까?");
+      if (userConfirmed) {
+        navigate(`/detail/${recipe.no}`, { state: { recipe } })
+      } else{
+        alert('ddd')
+      }
+      
+    } else {
+      navigate(`/detail/${recipe.no}`, { state: { recipe } })
+    }
+    
+ }
   return (
-    <Item onClick={() => navigate(`/detail/${recipe.no}`, { state: { recipe } })}>
+    <Item onClick={(e) => itemClick(e)}>
       <CardHeader>
         {location.pathname === '/recipe' && recipe.my_recipe === "1" && (
           <>
