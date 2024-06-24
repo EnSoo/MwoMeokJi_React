@@ -5,6 +5,7 @@ import IngredientSearch from '../components/IngredientSearch';
 import Card from '../components/Card';
 import { recommendRecipes } from '../utils/recipeUtils';
 import { useSelector } from 'react-redux';
+import BackBtn from '../components/BackBtn';
 
 const Container = styled.div`
   padding: 20px;
@@ -83,6 +84,7 @@ const RecipeRecommender = () => {
 
   return (
     <Container>
+      <BackBtn title="뒤로가기"/>
       <Title>레시피 추천</Title>
       {error ? (
         <ErrorMessage>{error}</ErrorMessage>
