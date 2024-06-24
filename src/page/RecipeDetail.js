@@ -42,7 +42,10 @@ const RecipeDetail = () => {
     return (
         <RecipeDetailContainer>
             <Navigation />
-            <BackBtn />
+            <BackBtn title="레시피 보기" />
+            <ProfileImage src={`${process.env.PUBLIC_URL}/backend/`+recipe.imgfile} alt='프로필'/>
+            <CommentAuthor>{recipe.nickname}</CommentAuthor>
+            
             <RecipeHeader>
                 <h2>{recipe.title}</h2>
             </RecipeHeader>
@@ -78,6 +81,18 @@ const RecipeDetailContainer = styled.div`
     padding: 20px;
     box-shadow: 0 0 15px gray;
 `;
+
+const ProfileImage = styled.img`
+    width: 30px; /* 프로필 이미지 너비 */
+    height: 30px; /* 프로필 이미지 높이 */
+    border-radius: 50%; /* 원형 모양으로 만들기 */
+    margin-right: 10px; /* 이미지와 내용 사이의 간격 */
+`
+const CommentAuthor = styled.div`
+    font-weight: bold;
+    margin-bottom: 5px;
+    display: inline-block;
+`
 
 const RecipeHeader = styled.div`
     text-align: center;
