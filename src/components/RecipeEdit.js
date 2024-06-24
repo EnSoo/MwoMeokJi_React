@@ -101,6 +101,7 @@ const RecipeEdit = () => {
                         type="text"
                         placeholder="제목을 입력해주세요 (20자 이내)"
                         value={recipe.title}
+                        maxLength={20}
                         onChange={(e)=>setRecipe({...recipe, title:e.target.value})}
                     />
                 </RecipeLabel>

@@ -1,4 +1,4 @@
-const recipes=[
+[
     {
         "no": "2",
         "email": "s@s",
@@ -9591,4 +9591,3 @@ const recipes=[
         "view": "1"
     }
 ]
-export default recipes;

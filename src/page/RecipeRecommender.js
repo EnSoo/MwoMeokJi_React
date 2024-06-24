@@ -82,8 +82,10 @@ const RecipeRecommender = () => {
   }, []);
 
   return (
+
     <Container>
       <Title>레시피 추천</Title>
+     
       {error ? (
         <ErrorMessage>{error}</ErrorMessage>
       ) : (

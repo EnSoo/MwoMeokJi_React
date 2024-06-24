@@ -52,10 +52,10 @@ const transformItem = (item) => {
         calories: item.calories,
         times: timeCategory,
         categories: categoriesArray,
-        dishType: ["메인요리"], // assuming '메인요리' is fixed for all items
+        dishType: [""], // assuming '메인요리' is fixed for all items
         warm: item["weather(Warm)"] === "1",
         cold: item["weather(Cold)"] === "1",
-         soup: item.soup === "1",
+        soup: item.soup === "1",
         recipe: item.recipe,
         imgurl: item.imgurl,
         createdate: item.createdate,
