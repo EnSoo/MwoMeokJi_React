@@ -62,13 +62,16 @@ const CommentList = ({ recipeId }) => {
     return (
         <CommentSection>
             <h3>댓글</h3>
-            <CommentInput
-                type="text"
-                value={newComment}
-                onChange={(e) => setNewComment(e.target.value)}
-                placeholder="댓글을 작성하세요"
-            />
-            <CommentButton onClick={(e) =>handleAddComment(e)}>댓글 추가</CommentButton>
+            {email != '' && (
+                <>
+                    <CommentInput
+                    type="text"
+                    value={newComment}
+                    onChange={(e) => setNewComment(e.target.value)}
+                    placeholder="댓글을 작성하세요"/>
+                    <CommentButton onClick={(e) =>handleAddComment(e)}>댓글 추가</CommentButton>
+                </>
+            )}
             {commentList.map((comment, index) => (
                 <Comment key={index} comment={comment} onModify={handleModifyComment} onDelete={handleDeleteComment} />
             ))}
