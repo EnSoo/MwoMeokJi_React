@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import styled from 'styled-components';
 import Modal from 'react-modal';
 import { motion, AnimatePresence } from 'framer-motion';
+import Typist from 'react-typist'
 
 Modal.setAppElement('#root');
 
@@ -160,7 +161,7 @@ const PreferenceForm = ({ saveStep, openSelect, closeSelect, weatherData }) => {
     dishType: [],
     warm: false,
     cold: false,
-    soup: false, 
+    soup: false,
   });
 
   useEffect(() => {
@@ -179,15 +180,18 @@ const PreferenceForm = ({ saveStep, openSelect, closeSelect, weatherData }) => {
 
   const [step, setStep] = useState(0);
   const [direction, setDirection] = useState(1);
+  const [typingDone, setTypingDone] = useState(false)
 
   const nextStep = useCallback(() => {
     setDirection(1);
     setStep((prevStep) => prevStep + 1);
+    setTypingDone(false)
   }, []);
 
   const prevStep = useCallback(() => {
     setDirection(-1);
     setStep((prevStep) => prevStep - 1);
+    setTypingDone(false)
   }, []);
 
   const handleChange = useCallback((e) => {
@@ -215,181 +219,241 @@ const PreferenceForm = ({ saveStep, openSelect, closeSelect, weatherData }) => {
     {
       label: "어디 음식을 좋아하세요?",
       content: (
-        <LikeFormGroup>
-          <LikeDiv>
-            <LikeCheck type="checkbox" id="korean" name="categories" value="한식"
-              checked={userSelectData.categories.includes("한식")} onChange={handleChange}
-            />
-            <StyledLabel htmlFor="korean">한식</StyledLabel>
-          </LikeDiv>
-          <LikeDiv>
-            <LikeCheck type="checkbox" id="chinese" name="categories" value="중식"
-              checked={userSelectData.categories.includes("중식")} onChange={handleChange}
-            />
-            <StyledLabel htmlFor="chinese">중식</StyledLabel>
-          </LikeDiv>
-          <LikeDiv>
-            <LikeCheck type="checkbox" id="japanese" name="categories" value="일식"
-              checked={userSelectData.categories.includes("일식")} onChange={handleChange}
-            />
-            <StyledLabel htmlFor="japanese">일식</StyledLabel>
-          </LikeDiv>
-          <LikeDiv>
-            <LikeCheck type="checkbox" id="other" name="categories" value="기타"
-              checked={userSelectData.categories.includes("기타")} onChange={handleChange}
-            />
-            <StyledLabel htmlFor="other">기타</StyledLabel>
-          </LikeDiv>
-        </LikeFormGroup>
+        typingDone && (
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1 }}
+          >
+            <LikeFormGroup>
+              <LikeDiv>
+                <LikeCheck type="checkbox" id="korean" name="categories" value="한식"
+                  checked={userSelectData.categories.includes("한식")} onChange={handleChange}
+                />
+                <StyledLabel htmlFor="korean">한식</StyledLabel>
+              </LikeDiv>
+              <LikeDiv>
+                <LikeCheck type="checkbox" id="chinese" name="categories" value="중식"
+                  checked={userSelectData.categories.includes("중식")} onChange={handleChange}
+                />
+                <StyledLabel htmlFor="chinese">중식</StyledLabel>
+              </LikeDiv>
+              <LikeDiv>
+                <LikeCheck type="checkbox" id="japanese" name="categories" value="일식"
+                  checked={userSelectData.categories.includes("일식")} onChange={handleChange}
+                />
+                <StyledLabel htmlFor="japanese">일식</StyledLabel>
+              </LikeDiv>
+              <LikeDiv>
+                <LikeCheck type="checkbox" id="other" name="categories" value="기타"
+                  checked={userSelectData.categories.includes("기타")} onChange={handleChange}
+                />
+                <StyledLabel htmlFor="other">기타</StyledLabel>
+              </LikeDiv>
+            </LikeFormGroup>
+          </motion.div>
+        )
       )
     },
     {
       label: "매운 음식은 잘드시나요?",
       content: (
-        <LikeFormGroup>
-          <LikeDiv>
-            <LikeRadio type="radio" id="notSpicy" name="spiciness" value="안 매움"
-              checked={userSelectData.spiciness === "안 매움"} onChange={handleChange}
-            />
-            <StyledLabel htmlFor="notSpicy">안 매움</StyledLabel>
-          </LikeDiv>
-          <LikeDiv>
-            <LikeRadio type="radio" id="lightSpicy" name="spiciness" value="약간 매움"
-              checked={userSelectData.spiciness === "약간 매움"} onChange={handleChange}
-            />
-            <StyledLabel htmlFor="lightSpicy">약간 매움</StyledLabel>
-          </LikeDiv>
-          <LikeDiv>
-            <LikeRadio type="radio" id="mediumSpicy" name="spiciness" value="보통"
-              checked={userSelectData.spiciness === "보통"} onChange={handleChange}
-            />
-            <StyledLabel htmlFor="mediumSpicy">평범해요</StyledLabel>
-          </LikeDiv>
-          <LikeDiv>
-            <LikeRadio type="radio" id="spicy" name="spiciness" value="매움"
-              checked={userSelectData.spiciness === "매움"} onChange={handleChange}
-            />
-            <StyledLabel htmlFor="spicy">매운거 좋아해요</StyledLabel>
-          </LikeDiv>
-          <LikeDiv>
-            <LikeRadio type="radio" id="verySpicy" name="spiciness" value="엄청 매움"
-              checked={userSelectData.spiciness === "엄청 매움"} onChange={handleChange}
-            />
-            <StyledLabel htmlFor="verySpicy">매운거 먹는게 취미에요</StyledLabel>
-          </LikeDiv>
-        </LikeFormGroup>
+        typingDone && (
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1 }}
+          >
+            <LikeFormGroup>
+              <LikeDiv>
+                <LikeRadio type="radio" id="notSpicy" name="spiciness" value="안 매움"
+                  checked={userSelectData.spiciness === "안 매움"} onChange={handleChange}
+                />
+                <StyledLabel htmlFor="notSpicy">전혀 못 먹어요</StyledLabel>
+              </LikeDiv>
+              <LikeDiv>
+                <LikeRadio type="radio" id="lightSpicy" name="spiciness" value="약간 매움"
+                  checked={userSelectData.spiciness === "약간 매움"} onChange={handleChange}
+                />
+                <StyledLabel htmlFor="lightSpicy">거의 못 먹어요</StyledLabel>
+              </LikeDiv>
+              <LikeDiv>
+                <LikeRadio type="radio" id="mediumSpicy" name="spiciness" value="보통"
+                  checked={userSelectData.spiciness === "보통"} onChange={handleChange}
+                />
+                <StyledLabel htmlFor="mediumSpicy">평범해요</StyledLabel>
+              </LikeDiv>
+              <LikeDiv>
+                <LikeRadio type="radio" id="spicy" name="spiciness" value="매움"
+                  checked={userSelectData.spiciness === "매움"} onChange={handleChange}
+                />
+                <StyledLabel htmlFor="spicy">매운거 잘 먹어요</StyledLabel>
+              </LikeDiv>
+              <LikeDiv>
+                <LikeRadio type="radio" id="verySpicy" name="spiciness" value="엄청 매움"
+                  checked={userSelectData.spiciness === "엄청 매움"} onChange={handleChange}
+                />
+                <StyledLabel htmlFor="verySpicy">매운거 먹는게 취미에요</StyledLabel>
+              </LikeDiv>
+            </LikeFormGroup>
+          </motion.div>
+        )
       )
     },
     {
       label: "식습관 유형을 알려주세요",
       content: (
-        <LikeFormGroup>
-          <LikeDiv>
-            <LikeRadio type="radio" id="meat" name="dietType" value="육식"
-              checked={userSelectData.dietType === "육식"} onChange={handleChange}
-            />
-            <StyledLabel htmlFor="meat">육식</StyledLabel>
-          </LikeDiv>
-          <LikeDiv>
-            <LikeRadio type="radio" id="vegetarian" name="dietType" value="채식(비건)"
-              checked={userSelectData.dietType === "채식(비건)"} onChange={handleChange}
-            />
-            <StyledLabel htmlFor="vegetarian">채식(비건)</StyledLabel>
-          </LikeDiv>
-          <LikeDiv>
-            <LikeRadio type="radio" id="noPreference" name="dietType" value="상관없음"
-              checked={userSelectData.dietType === "상관없음"} onChange={handleChange}
-            />
-            <StyledLabel htmlFor="noPreference">상관없음</StyledLabel>
-          </LikeDiv>
-        </LikeFormGroup>
+        typingDone && (
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1 }}
+          >
+            <LikeFormGroup>
+              <LikeDiv>
+                <LikeRadio type="radio" id="meat" name="dietType" value="육식"
+                  checked={userSelectData.dietType === "육식"} onChange={handleChange}
+                />
+                <StyledLabel htmlFor="meat">육식</StyledLabel>
+              </LikeDiv>
+              <LikeDiv>
+                <LikeRadio type="radio" id="vegetarian" name="dietType" value="채식(비건)"
+                  checked={userSelectData.dietType === "채식(비건)"} onChange={handleChange}
+                />
+                <StyledLabel htmlFor="vegetarian">채식(비건)</StyledLabel>
+              </LikeDiv>
+              <LikeDiv>
+                <LikeRadio type="radio" id="noPreference" name="dietType" value="상관없음"
+                  checked={userSelectData.dietType === "상관없음"} onChange={handleChange}
+                />
+                <StyledLabel htmlFor="noPreference">상관없음</StyledLabel>
+              </LikeDiv>
+            </LikeFormGroup>
+          </motion.div>
+        )
       )
     },
     {
       label: "칼로리는 신경쓰시나요?",
       content: (
-        <LikeFormGroup>
-          <LikeDiv>
-            <LikeRadio type="radio" id="lowCal" name="calories" value="low"
-              checked={userSelectData.calories === "low"} onChange={handleChange}
-            />
-            <StyledLabel htmlFor="lowCal">낮은 칼로리를 선호해요</StyledLabel>
-          </LikeDiv>
-          <LikeDiv>
-            <LikeRadio type="radio" id="mediumCal" name="calories" value="medium"
-              checked={userSelectData.calories === "medium"} onChange={handleChange}
-            />
-            <StyledLabel htmlFor="mediumCal">평범한게 좋아요</StyledLabel>
-          </LikeDiv>
-          <LikeDiv>
-            <LikeRadio type="radio" id="highCal" name="calories" value="high"
-              checked={userSelectData.calories === "high"} onChange={handleChange}
-            />
-            <StyledLabel htmlFor="highCal">높은 칼로리를 선호해요</StyledLabel>
-          </LikeDiv>
-        </LikeFormGroup>
+        typingDone && (
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1 }}
+          >
+            <LikeFormGroup>
+              <LikeDiv>
+                <LikeRadio type="radio" id="lowCal" name="calories" value="low"
+                  checked={userSelectData.calories === "low"} onChange={handleChange}
+                />
+                <StyledLabel htmlFor="lowCal">낮은 칼로리를 선호해요</StyledLabel>
+              </LikeDiv>
+              <LikeDiv>
+                <LikeRadio type="radio" id="mediumCal" name="calories" value="medium"
+                  checked={userSelectData.calories === "medium"} onChange={handleChange}
+                />
+                <StyledLabel htmlFor="mediumCal">평범한게 좋아요</StyledLabel>
+              </LikeDiv>
+              <LikeDiv>
+                <LikeRadio type="radio" id="highCal" name="calories" value="high"
+                  checked={userSelectData.calories === "high"} onChange={handleChange}
+                />
+                <StyledLabel htmlFor="highCal">높은 칼로리를 선호해요</StyledLabel>
+              </LikeDiv>
+            </LikeFormGroup>
+          </motion.div>
+        )
       )
     },
     {
       label: "조리시간을 어느정도 생각하세요?",
       content: (
-        <LikeFormGroup>
-          <LikeDiv>
-            <LikeRadio type="radio" id="veryShort" name="cookingTime" value="veryShort"
-              checked={userSelectData.cookingTime === "veryShort"} onChange={handleChange}
-            />
-            <StyledLabel htmlFor="veryShort">15분이하</StyledLabel>
-          </LikeDiv>
-          <LikeDiv>
-            <LikeRadio type="radio" id="short" name="cookingTime" value="short"
-              checked={userSelectData.cookingTime === "short"} onChange={handleChange}
-            />
-            <StyledLabel htmlFor="short">15~30분</StyledLabel>
-          </LikeDiv>
-          <LikeDiv>
-            <LikeRadio type="radio" id="medium" name="cookingTime" value="medium"
-              checked={userSelectData.cookingTime === "medium"} onChange={handleChange}
-            />
-            <StyledLabel htmlFor="medium">30~60분</StyledLabel>
-          </LikeDiv>
-          <LikeDiv>
-            <LikeRadio type="radio" id="long" name="cookingTime" value="long"
-              checked={userSelectData.cookingTime === "long"} onChange={handleChange}
-            />
-            <StyledLabel htmlFor="long">60~120분</StyledLabel>
-          </LikeDiv>
-          <LikeDiv>
-            <LikeRadio type="radio" id="veryLong" name="cookingTime" value="veryLong"
-              checked={userSelectData.cookingTime === "veryLong"} onChange={handleChange}
-            />
-            <StyledLabel htmlFor="veryLong">120분이상</StyledLabel>
-          </LikeDiv>
-        </LikeFormGroup>
+        typingDone && (
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1 }}
+          >
+            <LikeFormGroup>
+              <LikeDiv>
+                <LikeRadio type="radio" id="veryShort" name="cookingTime" value="veryShort"
+                  checked={userSelectData.cookingTime === "veryShort"} onChange={handleChange}
+                />
+                <StyledLabel htmlFor="veryShort">15분이하</StyledLabel>
+              </LikeDiv>
+              <LikeDiv>
+                <LikeRadio type="radio" id="short" name="cookingTime" value="short"
+                  checked={userSelectData.cookingTime === "short"} onChange={handleChange}
+                />
+                <StyledLabel htmlFor="short">15~30분</StyledLabel>
+              </LikeDiv>
+              <LikeDiv>
+                <LikeRadio type="radio" id="medium" name="cookingTime" value="medium"
+                  checked={userSelectData.cookingTime === "medium"} onChange={handleChange}
+                />
+                <StyledLabel htmlFor="medium">30~60분</StyledLabel>
+              </LikeDiv>
+              <LikeDiv>
+                <LikeRadio type="radio" id="long" name="cookingTime" value="long"
+                  checked={userSelectData.cookingTime === "long"} onChange={handleChange}
+                />
+                <StyledLabel htmlFor="long">60~120분</StyledLabel>
+              </LikeDiv>
+              <LikeDiv>
+                <LikeRadio type="radio" id="veryLong" name="cookingTime" value="veryLong"
+                  checked={userSelectData.cookingTime === "veryLong"} onChange={handleChange}
+                />
+                <StyledLabel htmlFor="veryLong">120분이상</StyledLabel>
+              </LikeDiv>
+            </LikeFormGroup>
+          </motion.div>
+        )
       )
     },
     {
       label: "레시피로 만들 음식은 어떤종류인가요?",
       content: (
-        <LikeFormGroup>
-          <LikeDiv>
-            <LikeCheck type="checkbox" id="mainDish" name="dishType" value="메인요리류"
-              checked={userSelectData.dishType.includes("메인요리류")} onChange={handleChange}
-            />
-            <StyledLabel htmlFor="mainDish">메인요리류</StyledLabel>
-          </LikeDiv>
-          <LikeDiv>
-            <LikeCheck type="checkbox" id="sideDish" name="dishType" value="반찬류"
-              checked={userSelectData.dishType.includes("반찬류")} onChange={handleChange}
-            />
-            <StyledLabel htmlFor="sideDish">반찬류</StyledLabel>
-          </LikeDiv>
-          <LikeDiv>
-            <LikeCheck type="checkbox" id="dessert" name="dishType" value="디저트류"
-              checked={userSelectData.dishType.includes("디저트류")} onChange={handleChange}
-            />
-            <StyledLabel htmlFor="dessert">디저트류</StyledLabel>
-          </LikeDiv>
-        </LikeFormGroup>
+        typingDone && (
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1 }}
+          >
+            <LikeFormGroup>
+              <LikeDiv>
+                <LikeCheck type="checkbox" id="mainDish" name="dishType" value="메인요리"
+                  checked={userSelectData.dishType.includes("메인요리")} onChange={handleChange}
+                />
+                <StyledLabel htmlFor="mainDish">메인요리</StyledLabel>
+              </LikeDiv>
+              <LikeDiv>
+                <LikeCheck type="checkbox" id="sideDish" name="dishType" value="반찬"
+                  checked={userSelectData.dishType.includes("반찬")} onChange={handleChange}
+                />
+                <StyledLabel htmlFor="sideDish">반찬</StyledLabel>
+              </LikeDiv>
+              <LikeDiv>
+                <LikeCheck type="checkbox" id="dessert" name="dishType" value="간식"
+                  checked={userSelectData.dishType.includes("간식")} onChange={handleChange}
+                />
+                <StyledLabel htmlFor="dessert">간식</StyledLabel>
+              </LikeDiv>
+              <LikeDiv>
+                <LikeCheck type="checkbox" id="soup" name="dishType" value="국물요리"
+                  checked={userSelectData.dishType.includes("국물요리")} onChange={handleChange}
+                />
+                <StyledLabel htmlFor="soup">국물요리</StyledLabel>
+              </LikeDiv>
+              <LikeDiv>
+                <LikeCheck type="checkbox" id="sauce" name="dishType" value="소스"
+                  checked={userSelectData.dishType.includes("소스")} onChange={handleChange}
+                />
+                <StyledLabel htmlFor="sauce">소스</StyledLabel>
+              </LikeDiv>
+            </LikeFormGroup>
+          </motion.div>
+        )
       )
     }
   ];
@@ -410,8 +474,10 @@ const PreferenceForm = ({ saveStep, openSelect, closeSelect, weatherData }) => {
             exit="exit"
             variants={variants}
           >
-            <h2>{steps[step].label}</h2>
-            {steps[step].content}
+            <Typist cursor={{ show: false }} onTypingDone={() => setTypingDone(true)}>
+              <h2>{steps[step].label}</h2>
+            </Typist>
+            {typingDone && steps[step].content}
             <ButtonContainer>
               {step > 0 && <Button onClick={prevStep}>이전</Button>}
               {step < steps.length - 1 ? (

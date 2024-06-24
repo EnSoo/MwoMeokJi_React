@@ -6,37 +6,37 @@ import { useSelector } from "react-redux";
 import { MdFavorite, MdFavoriteBorder } from "react-icons/md";
 import { GrView } from "react-icons/gr";
 
-const Card = ({ recipe, onDelete }) => {
+const Card = ({ recipe, onDelete, onClick, fromRecommender }) => {
   const navigate = useNavigate();
-  const location = useLocation()
+  const location = useLocation();
   const [showMenu, setShowMenu] = useState(false);
-  const [my_like, setMyLike]=useState(recipe.my_like == '1')
+  const [my_like, setMyLike] = useState(recipe.my_like == '1');
   const userAccount = useSelector(state => state.userAccountReducer.userAccount);
 
   const email = userAccount.email;
 
-  const favoriteRequest =(e) => {
+  const favoriteRequest = (e) => {
     e.preventDefault(); // Prevent default behavior
     e.stopPropagation(); // Prevent the card click event
-    if(email!='') {
-      const sendData = new FormData()
+    if (email != '') {
+      const sendData = new FormData();
       sendData.append('email', recipe.email);
       sendData.append('myrecipe_id', recipe.no);
-      fetch(`${process.env.PUBLIC_URL}/backend/recipe_favor.php`,{
-        method:'POST',
-        body:sendData,
+      fetch(`${process.env.PUBLIC_URL}/backend/recipe_favor.php`, {
+        method: 'POST',
+        body: sendData,
       })
-      .then(res=>res.text())
-      .then(text=>{
-          if(text=="200") {
-              // favor 동작 성공 시
-              setMyLike(my_like => !my_like)
-          } else if(text=="201") {
-              // favor 동작 실패 시
+        .then(res => res.text())
+        .then(text => {
+          if (text == "200") {
+            // favor 동작 성공 시
+            setMyLike(my_like => !my_like);
+          } else if (text == "201") {
+            // favor 동작 실패 시
           }
-      }).catch(error => console.error('Error:', error));
+        }).catch(error => console.error('Error:', error));
     } else {
-      alert('앱에서만 가능한 기능입니다')
+      alert('앱에서만 가능한 기능입니다');
     }
   }
 
@@ -47,40 +47,49 @@ const Card = ({ recipe, onDelete }) => {
 
   const handleEdit = (e) => {
     e.stopPropagation(); // Prevent the card click event
-    navigate(`${process.env.PUBLIC_URL}/recipe/modify/${recipe.no}`, { state: { recipe } })
+    navigate(`${process.env.PUBLIC_URL}/recipe/modify/${recipe.no}`, { state: { recipe } });
   };
 
   const handleDelete = (e) => {
     e.stopPropagation(); // Prevent the card click event
     const userConfirmed = window.confirm("해당 레시피를 삭제하시겠습니까?");
     if (userConfirmed) {
-      const sendData = new FormData()
-      sendData.append('email', email)
-      sendData.append('no', recipe.no)
-      fetch(`${process.env.PUBLIC_URL}/backend/recipe_delete.php`,{
-        method:'POST',
-        body:sendData,
+      const sendData = new FormData();
+      sendData.append('email', email);
+      sendData.append('no', recipe.no);
+      fetch(`${process.env.PUBLIC_URL}/backend/recipe_delete.php`, {
+        method: 'POST',
+        body: sendData,
       })
-      .then(res=>res.text())
-      .then(text=>{
-          if(text=="200") {
-              // 레시피 삭제 성공 시
-              alert(`레시피를 삭제 하였습니다.`)
-              onDelete(recipe.no)
-          } else if(text=="201") {
-              // 레시피 삭제 실패 시
-              alert(`레시피 삭제를 실패하였습니다.`)
+        .then(res => res.text())
+        .then(text => {
+          if (text == "200") {
+            // 레시피 삭제 성공 시
+            alert(`레시피를 삭제 하였습니다.`);
+            onDelete(recipe.no);
+          } else if (text == "201") {
+            // 레시피 삭제 실패 시
+            alert(`레시피 삭제를 실패하였습니다.`);
           }
-      }).catch(error => console.error('Error:', error));
+        }).catch(error => console.error('Error:', error));
     } else {
       // 레시피 삭제 취소
     }
   };
+  
+  const itemClick = (e) => {
+    e.stopPropagation(); // Prevent the card click event
+    if (fromRecommender) {
+      onClick(recipe);
+    } else {
+      navigate(`/detail/${recipe.no}`, { state: { recipe } });
+    }
+  }
 
   return (
-    <Item onClick={() => navigate(`/detail/${recipe.no}`, { state: { recipe } })}>
+    <Item onClick={(e) => itemClick(e)}>
       <CardHeader>
-      {location.pathname === '/recipe' && recipe.my_recipe === "1" && (
+        {location.pathname === '/recipe' && recipe.my_recipe === "1" && (
           <>
             <MenuIcon onClick={toggleMenu}>
               <FaEllipsisV />
@@ -100,19 +109,19 @@ const Card = ({ recipe, onDelete }) => {
       </CardContent>
       {location.pathname === '/recipe' && (
         <CardFooter>
-        <LikesViews>
-          <div>
-            {my_like ? (
-              <MdFavorite onClick={(e) => favoriteRequest(e)} style={{ fontSize: '1.5rem' }} />
-            ) : (
-              <MdFavoriteBorder onClick={(e) => favoriteRequest(e)} style={{ fontSize: '1.5rem' }} />
-            )}
-          </div>
-          <div>
-            <GrView style={{fontSize:'1.5rem', marginRight:'0.5rem'}}/> {recipe.view}
-          </div>
-        </LikesViews>
-      </CardFooter>
+          <LikesViews>
+            <div>
+              {my_like ? (
+                <MdFavorite className="cardFonts" onClick={(e) => favoriteRequest(e)} />
+              ) : (
+                <MdFavoriteBorder className="cardFonts" onClick={(e) => favoriteRequest(e)} />
+              )}
+            </div>
+            <div className="cardFonts" style={{ display: 'flex', alignItems: 'center' }}>
+              <GrView className="cardFonts" style={{ marginRight: '0.5rem' }} /> {recipe.view}
+            </div>
+          </LikesViews>
+        </CardFooter>
       )}
     </Item>
   );
@@ -126,78 +135,44 @@ const Item = styled.div`
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   margin: 16px;
   padding: 16px;
-  width: 300px;
+  flex: 1 1 calc(33.333% - 32px); /* Flex-grow, flex-shrink, and flex-basis */
+  max-width: 300px;
   transition: 0.3s;
   overflow: hidden;
   border: 1px solid #55A416;
   position: relative;
+  display: flex;
+  flex-direction: column;
   &:hover {
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
     background: #55A416;
   }
-  &:active{
+  &:active {
     background: #55A416;
   }
-  @media (max-width: 1590px) {
-    width: 250px;
+
+  .cardFonts {
+    font-size: 1.7rem;
+    @media (max-width: 808px) {
+      font-size: 1.5rem;
+    }
+    @media (max-width: 768px) {
+      font-size: 1.3rem;
+    }
+    @media (max-width: 480px) {
+      font-size: 1.1rem;
+    }
   }
-  @media (max-width: 1390px) {
-    width: 200px;
-    height: 190px;
-    margin: 15px;
+
+  @media (max-width: 1024px) {
+    flex: 1 1 calc(50% - 32px); /* 2 items per row */
   }
-  @media (max-width: 1182px) {
-    width: 160px;
-    height: 140px;
-    margin: 12px;
+  @media (max-width: 808px) {
+    flex: 1 1 calc(50% - 32px); /* 2 items per row */
   }
-  @media (max-width: 998px) {
-    width: 130px;
-    height: 100px;
-    margin: 10px;
-    padding: 14px;
-  }
-  @media (max-width: 862px) {
-    width: 100px;
-    height: 80px;
-    margin: 7px;
-    padding: 14px;
-  }
-  @media (max-width: 702px) {
-    width: 80px;
-    height: 60px;
-    margin: 5px;
-    padding: 10px;
-  }
-  @media (max-width: 574px) {
-    width: 70px;
-    height: 50px;
-    margin: 3px;
-    padding: 8px;
-  }
-  @media (max-width: 502px) {
-    width: 65px;
-    height: 45px;
-    margin: 2.5px;
-    padding: 7px;
-  }
-  @media (max-width: 470px) {
-    width: 60px;
-    height: 40px;
-    margin: 1.3px;
-    padding: 7px;
-  }
-  @media (max-width: 441px) {
-    width: 55px;
-    height: 35px;
-    margin: 1px;
-    padding: 7px;
-  }
-  @media (max-width: 390px) {
-    width: 45px;
-    height: 30px;
-    margin: .4px;
-    padding: 5px;
+  @media (max-width: 480px) {
+    flex: 1 1 calc(100% - 32px); /* 1 item per row */
+    max-width: 100%;
   }
 `;
 
@@ -235,110 +210,34 @@ const MenuItem = styled.div`
 const CardImage = styled.img`
   border-radius: 10px 10px 0 0;
   width: 100%;
-  height: 200px;
+  height: auto;
+  aspect-ratio: 3 / 2; /* Ensures the image maintains a 3:2 aspect ratio */
   user-select: none;
-  @media (max-width: 1590px) {
-
-  }
-  @media (max-width: 1390px) {
-    height: 150px;
-  }
-  @media (max-width: 1182px) {
-    height: 110px;
-  }
-  @media (max-width: 998px) {
-    height: 75px;
-  }
-  @media (max-width: 862px) {
-    height: 55px;
-  }
-  @media (max-width: 702px) {
-    height: 40px;
-  }
-  @media (max-width: 574px) {
-    height: 30px;
-  }
-  @media (max-width: 502px) {
-    height: 30px;
-  }
-  @media (max-width: 441px) {
-    height: 25px;
-  }
-  @media (max-width: 375px) {
-    height: 20px;
-  }
 `;
 
 const CardContent = styled.div`
-  padding: 16px;
-  @media (max-width: 1182px) {
-    padding: 12px;
-  }
-  @media (max-width: 998px) {
-    padding: 10px;
-  }
-  @media (max-width: 862px) {
-    padding: 10px;
-  }
-  @media (max-width: 702px) {
-    padding: 4.5px;
-  }
-  @media (max-width: 502px) {
-    padding: 2.5px;
-  }
-  @media (max-width: 470px) {
-    padding: 1.5px;
-  }
-  @media (max-width: 441px) {
-    padding: 1px;
-  }
-  @media (max-width: 375px) {
-    padding: .3px;
-  }
+  padding: 4px;
+  flex: 1; /* Ensures the content area expands to fill available space */
 `;
 
 const CardTitle = styled.h3`
-  margin: 0 0 8px 0;
-  font-size: 1.25em;
-  @media (max-width: 1590px) {
-    font-size: 1.2em;
+  margin: 0 0 5px 0;
+  font-size: 1em;
+  @media (max-width: 808px) {
+    font-size: 0.9em;
   }
-  @media (max-width: 1390px) {
-    font-size: 1.1em;
+  @media (max-width: 768px) {
+    font-size: 0.8em;
   }
-  @media (max-width: 1182px) {
-    font-size: 1em;
+  @media (max-width: 480px) {
+    font-size: 0.7em;
   }
-  @media (max-width: 998px) {
-    font-size: .8em;
-  }
-  @media (max-width: 862px) {
-    font-size: .7em;
-  }
-  @media (max-width: 502px) {
-    font-size: .5em;
-  }
-  @media (max-width: 470px) {
-    font-size: .34em;
-  }
-  @media (max-width: 441px) {
-    font-size: .2em;
-  }
-  @media (max-width: 375px) {
-    font-size: .1em;
-  }
-`;
-
-const CardDescription = styled.span`
-  margin: 0;
-  color: #777;
-  margin-right: 10px;
 `;
 
 const CardFooter = styled.div`
   display: flex;
   justify-content: flex-end;
-  padding: 8px 16px 0 0;
+  padding: 0px 16px 0 0;
 `;
 
 const LikesViews = styled.div`
@@ -354,6 +253,16 @@ const LikesViews = styled.div`
     
     & > svg {
       margin-right: 4px;
+      font-size: 1.5rem; /* Adjust icon size */
+      @media (max-width: 808px) {
+        font-size: 1.3rem;
+      }
+      @media (max-width: 768px) {
+        font-size: 1.1rem;
+      }
+      @media (max-width: 480px) {
+        font-size: 1rem;
+      }
     }
   }
 `;
