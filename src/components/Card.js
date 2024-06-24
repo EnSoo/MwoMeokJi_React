@@ -133,7 +133,7 @@ const Item = styled.div`
   background-color: #fff;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  margin: 16px;
+  margin: 0px;
   padding: 16px;
   flex: 1 1 calc(33.333% - 32px); /* Flex-grow, flex-shrink, and flex-basis */
   max-width: 300px;
@@ -150,29 +150,23 @@ const Item = styled.div`
   &:active {
     background: #55A416;
   }
-
   .cardFonts {
-    font-size: 1.7rem;
-    @media (max-width: 808px) {
-      font-size: 1.5rem;
-    }
-    @media (max-width: 768px) {
-      font-size: 1.3rem;
-    }
-    @media (max-width: 480px) {
-      font-size: 1.1rem;
+    font-size: calc(.8rem + 0.2vw);
+  }
+  @media (min-width: 375px) {
+    flex: 1 1 calc(100% - (15rem+1vw)); /* 1 item per row */
+    max-width: 40%;
+    margin: 0px;
+    .cardFonts {
+      font-size: calc(1rem + 0.2vw);
     }
   }
-
-  @media (max-width: 1024px) {
-    flex: 1 1 calc(50% - 32px); /* 2 items per row */
-  }
-  @media (max-width: 808px) {
-    flex: 1 1 calc(50% - 32px); /* 2 items per row */
-  }
-  @media (max-width: 480px) {
-    flex: 1 1 calc(100% - 32px); /* 1 item per row */
-    max-width: 100%;
+  @media (min-width: 729px) {
+    max-width: 300px;
+    margin: 2px;
+    .cardFonts {
+      font-size: 2rem;
+    }
   }
 `;
 
@@ -218,20 +212,18 @@ const CardImage = styled.img`
 const CardContent = styled.div`
   padding: 4px;
   flex: 1; /* Ensures the content area expands to fill available space */
+  font-size: calc(.5rem + 0.2vw);
+  @media (min-width: 375px) {
+    font-size: calc(.8rem + 0.2vw);
+  }
+  @media (min-width: 729px) {
+    font-size: 1.2rem;
+  }
 `;
 
 const CardTitle = styled.h3`
   margin: 0 0 5px 0;
   font-size: 1em;
-  @media (max-width: 808px) {
-    font-size: 0.9em;
-  }
-  @media (max-width: 768px) {
-    font-size: 0.8em;
-  }
-  @media (max-width: 480px) {
-    font-size: 0.7em;
-  }
 `;
 
 const CardFooter = styled.div`
@@ -254,15 +246,6 @@ const LikesViews = styled.div`
     & > svg {
       margin-right: 4px;
       font-size: 1.5rem; /* Adjust icon size */
-      @media (max-width: 808px) {
-        font-size: 1.3rem;
-      }
-      @media (max-width: 768px) {
-        font-size: 1.1rem;
-      }
-      @media (max-width: 480px) {
-        font-size: 1rem;
-      }
     }
   }
 `;

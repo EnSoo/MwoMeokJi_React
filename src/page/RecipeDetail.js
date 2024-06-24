@@ -108,9 +108,12 @@ const RecipeDetail = () => {
                     </>
                 )}
             </MyModify>
-            
-            <ProfileImage src={`${process.env.PUBLIC_URL}/backend/` + recipe.imgfile} alt='프로필' />
-            <CommentAuthor>{recipe.nickname}</CommentAuthor>
+            {recipe.email !== "admin" && (
+                <>
+                    <ProfileImage src={`${process.env.PUBLIC_URL}/backend/` + recipe.imgfile} alt='프로필' />
+                    <CommentAuthor>{recipe.nickname}</CommentAuthor>
+                </>
+            )}
             <RecipeHeader>
                 <h2>{recipe.title}</h2>
             </RecipeHeader>
