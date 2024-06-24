@@ -91,8 +91,7 @@ const RecipeRecommender = () => {
   return (
     <Container>
       {showAlertDialog && <AlertDialog />}
-      <BackBtn title="뒤로가기" />
-      <Title>레시피 추천</Title>
+      <StyledBackBtn title="AI 레시피 추천"/>
       {error ? (
         <ErrorMessage>{error}</ErrorMessage>
       ) : (
@@ -123,4 +122,9 @@ const RecipeRecommender = () => {
   );
 }
 
-export default RecipeRecommender;
+export default RecipeRecommender
+
+const StyledBackBtn = styled(BackBtn)`
+    font-size: 30px; // 원하는 폰트 크기
+    font-weight: bold; // 폰트 굵기
+`
