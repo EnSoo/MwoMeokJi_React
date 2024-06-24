@@ -105,12 +105,12 @@ const Comment = ({ comment, onModify, onDelete }) => {
                     </>
                 )}
             </CommentDetails>
-            {comment.my_comment === "1" && !isEditing && (
+            {comment.my_comment === "1" && !isEditing && email != '' && (
                 <MenuIconWrapper>
                     <MenuIcon onClick={toggleMenu}>
                         <FaEllipsisV />
                     </MenuIcon>
-                    {showMenu && (
+                    {showMenu &&  (
                         <DropdownMenu>
                             <MenuItem onClick={handleEdit}>수정</MenuItem>
                             <MenuItem onClick={handleDelete}>삭제</MenuItem>
