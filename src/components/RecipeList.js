@@ -22,12 +22,22 @@ const RecipeList = ({recipes, setRecipes}) => {
 
 export default RecipeList
 
-const List=styled.div`
-    display: flex;
-    flex-wrap: wrap;
+const List = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;  /* Adjusted to space-around for better distribution */
+  gap: 1rem;
+  padding: 2rem;
+  margin-top: 40px;
+  margin-bottom: 20px;
+
+  @media (max-width: 1200px) {
+    justify-content: space-evenly;
+  }
+  @media (max-width: 808px) {
+    justify-content: space-between;
+  }
+  @media (max-width: 768px) {
     justify-content: center;
-    gap: 1rem;
-    padding: 2rem;
-    margin-top: 40px;
-    margin-bottom: 20px;
-`
+  }
+`;
