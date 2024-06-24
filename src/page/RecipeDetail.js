@@ -13,8 +13,8 @@ const RecipeDetail = () => {
     useEffect(() => {
         if (location.state && location.state.recipe) {
             setRecipe(location.state.recipe);
-            if(location.state.recipe.email!=''){
-                const sendData = new FormData()
+            if(location.state.recipe.email !== ''){
+                const sendData = new FormData();
                 sendData.append('email', location.state.recipe.email);
                 sendData.append('myrecipe_id', location.state.recipe.no);
                 fetch(`${process.env.PUBLIC_URL}/backend/recipe_view.php`, {
@@ -23,30 +23,31 @@ const RecipeDetail = () => {
                 })
                     .then(res => res.text())
                     .then(text => {
-                        if (text == "200") {
-                        } else if (text == "201") {
+                        if (text === "200") {
+                            // 조회수 증가 성공
+                        } else if (text === "201") {
+                            // 조회수 증가 실패
                         }
                     }).catch(error => console.error('Error:', error));
             } else {
                 // 앱이 아닌 브라우저에서 볼 경우 조회수가 증가되지 않음
             }   
         } else {
+            // handle case when recipe is not available in location.state
         }
-    }, [id]);
+    }, [id, location.state]);
 
-
-    if (!recipe) return <div>Loading...</div>;
+    if (!recipe || !Object.keys(recipe).length) return <div>Loading...</div>;
 
     return (
         <RecipeDetailContainer>
             <Navigation />
-            <BackBtn/>
+            <BackBtn />
             <RecipeHeader>
                 <h2>{recipe.title}</h2>
             </RecipeHeader>
             <RecipeContent>
                 <RecipeDescription>
-                    <p>{recipe.recipe}</p>
                     <RecipeImage src={`${process.env.PUBLIC_URL}/imgs/${recipe.imgurl}`} alt={recipe.title} />
                 </RecipeDescription>
                 <RecipeIngredients>
@@ -56,17 +57,17 @@ const RecipeDetail = () => {
                 <RecipeRecipe>
                     <h3>조리법</h3>
                     <p>{recipe.recipe}</p>
-                    <p>총 조리시간: {recipe.times}<span>분</span></p>
+                    <p>총 조리시간: {recipe.times} <span>분</span></p>
                 </RecipeRecipe>
                 <CommentSection>
-                    <CommentList recipeId={recipe.no}/>
+                    <CommentList recipeId={recipe.no} />
                 </CommentSection>
             </RecipeContent>
         </RecipeDetailContainer>
     );
 }
 
-export default RecipeDetail
+export default RecipeDetail;
 
 const RecipeDetailContainer = styled.div`
     font-family: 'Arial', sans-serif;
@@ -76,37 +77,37 @@ const RecipeDetailContainer = styled.div`
     background: #fff;
     padding: 20px;
     box-shadow: 0 0 15px gray;
-`
+`;
 
 const RecipeHeader = styled.div`
     text-align: center;
     margin-bottom: 20px;
-`
+`;
 
 const RecipeContent = styled.div`
     margin-bottom: 20px;
-`
+`;
 
 const RecipeDescription = styled.div`
     margin-bottom: 20px;
-`
+`;
 
 const RecipeIngredients = styled.div`
     margin-bottom: 20px;
     padding-bottom: 10px;
-`
+`;
 
 const RecipeRecipe = styled.div`
     margin-bottom: 20px;
     padding-bottom: 10px;
-`
+`;
 
 const RecipeImage = styled.img`
     width: 100%;
     height: auto;
     border-radius: 8px;
     margin-top: 10px;
-`
+`;
 
 const CommentSection = styled.div`
     margin-top: 20px;

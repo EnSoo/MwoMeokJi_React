@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import styled from 'styled-components';
 import Modal from 'react-modal';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -148,7 +148,7 @@ const variants = {
   },
 };
 
-const PreferenceForm = ({ saveStep, openSelect, closeSelect }) => {
+const PreferenceForm = ({ saveStep, openSelect, closeSelect, weatherData }) => {
   const [userSelectData, setUserSelectData] = useState({
     ingredients: [],
     spiciness: "medium",
@@ -159,15 +159,38 @@ const PreferenceForm = ({ saveStep, openSelect, closeSelect }) => {
     categories: [],
     dishType: [],
     warm: false,
-    cold: true,
-    soup: true, 
-    
+    cold: false,
+    soup: false, 
   });
+
+  useEffect(() => {
+    if (weatherData && weatherData.temperature) {
+      const tempCelsius = weatherData.temperature.current - 273.15;
+      const newWarm = tempCelsius <= 5;
+      const newCold = tempCelsius >= 25;
+
+      setUserSelectData(prevState => ({
+        ...prevState,
+        warm: newWarm,
+        cold: newCold
+      }));
+    }
+  }, [weatherData]);
 
   const [step, setStep] = useState(0);
   const [direction, setDirection] = useState(1);
 
-  const handleChange = (e) => {
+  const nextStep = useCallback(() => {
+    setDirection(1);
+    setStep((prevStep) => prevStep + 1);
+  }, []);
+
+  const prevStep = useCallback(() => {
+    setDirection(-1);
+    setStep((prevStep) => prevStep - 1);
+  }, []);
+
+  const handleChange = useCallback((e) => {
     const { name, value, type, checked } = e.target;
     setUserSelectData((state) => {
       if (type === "checkbox") {
@@ -180,27 +203,15 @@ const PreferenceForm = ({ saveStep, openSelect, closeSelect }) => {
         return { ...state, [name]: value };
       }
     });
-  };
+  }, []);
 
-  const nextStep = () => {
-    setDirection(1);
-    setStep((prevStep) => prevStep + 1);
-  };
-
-  const prevStep = () => {
-    setDirection(-1);
-    setStep((prevStep) => prevStep - 1);
-  };
-
-  const handleSubmit = (e) => {
-    console.log("Button clicked"); // 여기에서 브레이크포인트를 설정합니다.
+  const handleSubmit = useCallback((e) => {
     e.preventDefault();
     saveStep(userSelectData);
     closeSelect();
-  };
+  }, [saveStep, closeSelect, userSelectData]);
 
   const steps = [
-    
     {
       label: "어디 음식을 좋아하세요?",
       content: (
@@ -299,20 +310,19 @@ const PreferenceForm = ({ saveStep, openSelect, closeSelect }) => {
       content: (
         <LikeFormGroup>
           <LikeDiv>
-            
-            <LikeRadio type="radio" id="lowCal" name="calories" value="낮음"
+            <LikeRadio type="radio" id="lowCal" name="calories" value="low"
               checked={userSelectData.calories === "low"} onChange={handleChange}
             />
             <StyledLabel htmlFor="lowCal">낮은 칼로리를 선호해요</StyledLabel>
           </LikeDiv>
           <LikeDiv>
-            <LikeRadio type="radio" id="mediumCal" name="calories" value="중간"
+            <LikeRadio type="radio" id="mediumCal" name="calories" value="medium"
               checked={userSelectData.calories === "medium"} onChange={handleChange}
             />
             <StyledLabel htmlFor="mediumCal">평범한게 좋아요</StyledLabel>
           </LikeDiv>
           <LikeDiv>
-            <LikeRadio type="radio" id="highCal" name="calories" value="높음"
+            <LikeRadio type="radio" id="highCal" name="calories" value="high"
               checked={userSelectData.calories === "high"} onChange={handleChange}
             />
             <StyledLabel htmlFor="highCal">높은 칼로리를 선호해요</StyledLabel>

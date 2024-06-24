@@ -78,7 +78,7 @@ const Card = ({ recipe, onDelete }) => {
   };
 
   return (
-    <Item onClick={() => navigate(`detail/${recipe.no}`, { state: { recipe } })}>
+    <Item onClick={() => navigate(`/detail/${recipe.no}`, { state: { recipe } })}>
       <CardHeader>
       {location.pathname === '/recipe' && recipe.my_recipe === "1" && (
           <>

@@ -12,8 +12,11 @@ import { useDispatch, useSelector } from "react-redux"
 import { setUserAccount } from "../redux/userAccount"
 import { useEffect, useState } from "react"
 import RecipeList from "../components/RecipeList"
+import { setWeather } from "../redux/weatherReducer"
 
 const Home = () => {
+    const [originaljson, setOriginaljson] = useState([])
+   
 
     const navigate = useNavigate()
     const handleNavigate = (path) => {
@@ -28,11 +31,12 @@ const Home = () => {
         dispatch( setUserAccount(user))
     }
     // 이 코드를 추가하여 setUser 함수를 전역으로 사용할 수 있게 합니다.
-    useEffect(()=> {
+    useEffect(()=> {// 추후에 사용자 id이용해서 요청하는 php로 수정해야함. 안그러면 자기 좋아요나 수정 삭제 버튼 값 안옴.
         window.setUser = setUser;
         fetch(`${process.env.PUBLIC_URL}/backend/recipe_list2.php`)
       .then(response => response.json())
       .then(data => {
+        setOriginaljson(data);
         // 데이터를 changerecipe 함수로 변환
         const transformedData = changerecipe(data);
         // Redux 상태 업데이트
@@ -40,12 +44,30 @@ const Home = () => {
         console.log('Data fetched:', transformedData);
       })
       .catch(error => console.error('Error fetching data:', error));
+
+      fetch(`${process.env.PUBLIC_URL}/backend/proxy.php`).then(response => response.json()).then(data => {
+        console.log('날씨 데이터:', data);
+        const filtered = filterWeatherData(data);
+        console.log('날씨 데이터:', filtered);
+        dispatch(setWeather(filtered))
+      })
   }, []);
     const recipes= useSelector(state=>state.recipeReducer.recipes)
-    const r=[{no:1, title:"가츠돈", ingredients:"돼지고기", recipe:"돼지고기를 튀긴다", imgurl:"가츠돈.jpg",times:"3",favor:"좋아요"}, 
-        {no:1, title:"가츠돈", ingredients:"돼지고기", recipe:"돼지고기를 튀긴다", imgurl:"가츠돈.jpg",times:"3",favor:"좋아요"},
-        {no:1, title:"가츠돈", ingredients:"돼지고기", recipe:"돼지고기를 튀긴다", imgurl:"가츠돈.jpg",times:"3",favor:"좋아요"}, 
-        {no:1, title:"가츠돈", ingredients:"돼지고기", recipe:"돼지고기를 튀긴다", imgurl:"가츠돈.jpg",times:"3",favor:"좋아요"}] 
+    const summerRecipes = recipes.filter(recipe => recipe.cold === true); 
+    const favorateRecipes = originaljson.filter(recipe => recipe.favor !== null);
+    const simpleRecipes = recipes.filter(recipe => recipe.times === "very short");
+
+    const filterWeatherData = (data) => {
+        return {
+          weather: data.weather,
+          temperature: {
+            current: data.main.temp,
+            feels_like: data.main.feels_like,
+            min: data.main.temp_min,
+            max: data.main.temp_max
+          }
+        };
+      };
 
 
        
@@ -57,11 +79,11 @@ const Home = () => {
             </Image>
             <Content>
                 <Title>여름철 간편음식</Title>
-                <RecipeList recipes={recipes} />
+                <RecipeList recipes={summerRecipes} />
                 <Title>좋아하는 음식</Title>
-                <RecipeList recipes={recipes} />
+                <RecipeList recipes={favorateRecipes} />
                 <Title>간편 음식</Title>
-                <RecipeList recipes={r}/>
+                <RecipeList recipes={simpleRecipes}/>
                 <Navigation />
                 <h2>Home Page</h2>
                 <Link to='/map'>맵</Link><br />

@@ -3,9 +3,10 @@ import { cosineSimilarity } from './utils';
 
 export function recommendRecipes(userPreferences, recipes) {
   const originalRecipes = [...recipes]; // 레시피 데이터 깊은 복사
-  console.log('원본 레시피:', originalRecipes);
+
   const uniqueIngredients = generateUniqueIngredients(recipes, userPreferences.ingredients);
-  console.log('유니크한 재료:', uniqueIngredients);
+  
+  console.log('바뀐 유저선호도:', userPreferences);
 
   const weights = {
     spiciness: 1,
@@ -93,8 +94,8 @@ export function recommendRecipes(userPreferences, recipes) {
   if (userPreferences.searchQuery) { // 검색어 필터링 추가
     const query = userPreferences.searchQuery.toLowerCase();
     filteredRecipes = filteredRecipes.filter(recipe => { // filteredRecipes 재할당
-      return recipe.title.toLowerCase().includes(query) ||
-             recipe.ingredients.some(ingredient => ingredient.toLowerCase().includes(query));
+      return recipe.title.includes(query) ||
+             recipe.ingredients.some(ingredient => ingredient.includes(query));
     });
   }
 

@@ -3,9 +3,8 @@ const transformItem = (item) => {
     const categoriesArray = item.categories ? item.categories.split(',') : []; // 카테고리를 콤마로 구분하여 배열로 변환
     let timeCategory = ""; // 시간 카테고리 초기화
     if (item.times) {
-      const timeMatch = item.times.match(/(\d+)\s*분/);
-      if (timeMatch) {
-        const timeValue = parseInt(timeMatch[1], 10);
+     
+        const timeValue = parseInt(item.times, 10); // 문자열을 정수로 변환
         if (timeValue <= 15) {
           timeCategory = "very short";
         } else if (timeValue > 15 && timeValue <= 30) {
@@ -17,8 +16,10 @@ const transformItem = (item) => {
         } else {
           timeCategory = "very long";
         } // 시간 카테고리 설정
-      }
+      
     }
+
+    
     let spicinessValue = "";
     switch (item.spiciness) {
       case "0":
@@ -54,7 +55,15 @@ const transformItem = (item) => {
         dishType: ["메인요리"], // assuming '메인요리' is fixed for all items
         warm: item["weather(Warm)"] === "1",
         cold: item["weather(Cold)"] === "1",
-        soup: item.soup === "1"
+         soup: item.soup === "1",
+        recipe: item.recipe,
+        imgurl: item.imgurl,
+        createdate: item.createdate,
+        modifydate: item.modifydate,
+        favor: item.favor,
+        my_recipe: item.my_recipe,
+        my_like: item.my_like,
+        views: item.views,
     };
 };
 
