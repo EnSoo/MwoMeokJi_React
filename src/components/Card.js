@@ -128,6 +128,7 @@ const Item = styled.div`
   padding: 16px;
   width: 300px;
   transition: 0.3s;
+  overflow: hidden;
   border: 1px solid #55A416;
   position: relative;
   &:hover {
@@ -136,6 +137,67 @@ const Item = styled.div`
   }
   &:active{
     background: #55A416;
+  }
+  @media (max-width: 1590px) {
+    width: 250px;
+  }
+  @media (max-width: 1390px) {
+    width: 200px;
+    height: 190px;
+    margin: 15px;
+  }
+  @media (max-width: 1182px) {
+    width: 160px;
+    height: 140px;
+    margin: 12px;
+  }
+  @media (max-width: 998px) {
+    width: 130px;
+    height: 100px;
+    margin: 10px;
+    padding: 14px;
+  }
+  @media (max-width: 862px) {
+    width: 100px;
+    height: 80px;
+    margin: 7px;
+    padding: 14px;
+  }
+  @media (max-width: 702px) {
+    width: 80px;
+    height: 60px;
+    margin: 5px;
+    padding: 10px;
+  }
+  @media (max-width: 574px) {
+    width: 70px;
+    height: 50px;
+    margin: 3px;
+    padding: 8px;
+  }
+  @media (max-width: 502px) {
+    width: 65px;
+    height: 45px;
+    margin: 2.5px;
+    padding: 7px;
+  }
+  @media (max-width: 470px) {
+    width: 60px;
+    height: 40px;
+    margin: 1.3px;
+    padding: 7px;
+  }
+  @media (max-width: 441px) {
+    width: 55px;
+    height: 35px;
+    margin: 1px;
+    padding: 7px;
+  }
+  @media (max-width: 390px) {
+    width: 45px;
+    height: 30px;
+    margin: .4px;
+    padding: 5px;
   }
 `;
 
@@ -173,16 +235,98 @@ const MenuItem = styled.div`
 const CardImage = styled.img`
   border-radius: 10px 10px 0 0;
   width: 100%;
+  height: 200px;
   user-select: none;
+  @media (max-width: 1590px) {
+
+  }
+  @media (max-width: 1390px) {
+    height: 150px;
+  }
+  @media (max-width: 1182px) {
+    height: 110px;
+  }
+  @media (max-width: 998px) {
+    height: 75px;
+  }
+  @media (max-width: 862px) {
+    height: 55px;
+  }
+  @media (max-width: 702px) {
+    height: 40px;
+  }
+  @media (max-width: 574px) {
+    height: 30px;
+  }
+  @media (max-width: 502px) {
+    height: 30px;
+  }
+  @media (max-width: 441px) {
+    height: 25px;
+  }
+  @media (max-width: 375px) {
+    height: 20px;
+  }
 `;
 
 const CardContent = styled.div`
   padding: 16px;
+  @media (max-width: 1182px) {
+    padding: 12px;
+  }
+  @media (max-width: 998px) {
+    padding: 10px;
+  }
+  @media (max-width: 862px) {
+    padding: 10px;
+  }
+  @media (max-width: 702px) {
+    padding: 4.5px;
+  }
+  @media (max-width: 502px) {
+    padding: 2.5px;
+  }
+  @media (max-width: 470px) {
+    padding: 1.5px;
+  }
+  @media (max-width: 441px) {
+    padding: 1px;
+  }
+  @media (max-width: 375px) {
+    padding: .3px;
+  }
 `;
 
 const CardTitle = styled.h3`
   margin: 0 0 8px 0;
   font-size: 1.25em;
+  @media (max-width: 1590px) {
+    font-size: 1.2em;
+  }
+  @media (max-width: 1390px) {
+    font-size: 1.1em;
+  }
+  @media (max-width: 1182px) {
+    font-size: 1em;
+  }
+  @media (max-width: 998px) {
+    font-size: .8em;
+  }
+  @media (max-width: 862px) {
+    font-size: .7em;
+  }
+  @media (max-width: 502px) {
+    font-size: .5em;
+  }
+  @media (max-width: 470px) {
+    font-size: .34em;
+  }
+  @media (max-width: 441px) {
+    font-size: .2em;
+  }
+  @media (max-width: 375px) {
+    font-size: .1em;
+  }
 `;
 
 const CardDescription = styled.span`
