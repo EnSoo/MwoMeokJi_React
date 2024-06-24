@@ -39,6 +39,7 @@ const Home = () => {
         setOriginaljson(data);
         // 데이터를 changerecipe 함수로 변환
         const transformedData = changerecipe(data);
+        console.log("변환된 데이터:", transformedData )
         // Redux 상태 업데이트
         dispatch(setRecipes(transformedData));
         console.log('Data fetched:', transformedData);
