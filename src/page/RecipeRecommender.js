@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import styled from 'styled-components';
 import PreferenceForm from '../components/PreferenceForm';
-import IngredientSearch from '../components/IngredientSearch';
 import Card from '../components/Card';
+import Confirm from '../components/Confirm';
 import { recommendRecipes } from '../utils/recipeUtils';
 import { useSelector } from 'react-redux';
 
@@ -45,6 +45,8 @@ const RecipeRecommender = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [preferencesSubmitted, setPreferencesSubmitted] = useState(false);
+  const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+  const [selectedRecipe, setSelectedRecipe] = useState(null);
 
   const loadModelAndRecommend = useCallback(async () => {
     setIsLoading(true);
@@ -57,10 +59,7 @@ const RecipeRecommender = () => {
     }
 
     try {
-      // 코사인 유사도 기반으로 정렬된 레시피 목록 생성
       const recommended = recommendRecipes(userPreferences, jsondata);
-      console.log('추천 레시피:', recommended);
-
       setRecommendedRecipes(recommended);
     } catch (error) {
       setError('레시피 추천 중 오류가 발생했습니다.');
@@ -80,6 +79,16 @@ const RecipeRecommender = () => {
     localStorage.setItem('userPreferences', JSON.stringify(newPreferences));
     setPreferencesSubmitted(true);
   }, []);
+
+  const handleCardClick = (recipe) => {
+    setSelectedRecipe(recipe);
+    setIsConfirmOpen(true);
+  };
+
+  const closeConfirm = () => {
+    setIsConfirmOpen(false);
+    setSelectedRecipe(null);
+  };
 
   return (
     <Container>
@@ -102,11 +111,25 @@ const RecipeRecommender = () => {
           ) : (
             <RecipeContainer>
               {recommendedRecipes.map(recipe => (
-                <Card key={recipe.no} recipe={recipe} onDelete={(recipeNo) => {
-                  setRecommendedRecipes(recommendedRecipes.filter(r => r.no !== recipeNo));
-                }} />
+                <Card 
+                  key={recipe.no} 
+                  recipe={recipe} 
+                  onClick={() => handleCardClick(recipe)} 
+                  fromRecommender={true}
+                  onDelete={(recipeNo) => {
+                    setRecommendedRecipes(recommendedRecipes.filter(r => r.no !== recipeNo));
+                  }} 
+                />
               ))}
             </RecipeContainer>
+          )}
+          {isConfirmOpen && (
+            <Confirm
+              isOpen={isConfirmOpen}
+              onRequestClose={closeConfirm}
+              content={selectedRecipe && selectedRecipe.details}
+              recipe={selectedRecipe} // 전달된 recipe prop
+            />
           )}
         </>
       )}

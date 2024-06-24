@@ -6,7 +6,7 @@ import { useSelector } from "react-redux";
 import { MdFavorite, MdFavoriteBorder } from "react-icons/md";
 import { GrView } from "react-icons/gr";
 
-const Card = ({ recipe, onDelete }) => {
+const Card = ({ recipe, onDelete, onClick, fromRecommender }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const [showMenu, setShowMenu] = useState(false);
@@ -76,21 +76,16 @@ const Card = ({ recipe, onDelete }) => {
       // 레시피 삭제 취소
     }
   };
-  const itemClick = (e) =>{
+  
+  const itemClick = (e) => {
     e.stopPropagation(); // Prevent the card click event
-    if(location.pathname=='/recipe_recommender') {
-      const userConfirmed = window.confirm("해당 레시피를 삭제하시겠습니까?");
-      if (userConfirmed) {
-        navigate(`/detail/${recipe.no}`, { state: { recipe } })
-      } else{
-        alert('ddd')
-      }
-      
+    if (fromRecommender) {
+      onClick(recipe);
     } else {
-      navigate(`/detail/${recipe.no}`, { state: { recipe } })
+      navigate(`/detail/${recipe.no}`, { state: { recipe } });
     }
-    
- }
+  }
+
   return (
     <Item onClick={(e) => itemClick(e)}>
       <CardHeader>
