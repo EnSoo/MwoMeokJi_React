@@ -213,9 +213,13 @@ const PreferenceForm = ({ openSelect, closeSelect, weatherData }) => {
   const handleSubmit = useCallback((e) => {
     console.log("선호도 조사 결과:", userSelectData);
     e.preventDefault();
-    localStorage.setItem('userPreferences',JSON.stringify(userSelectData))
+    localStorage.setItem('userPreferences', JSON.stringify(userSelectData));
+    // 하이브리드 환경일 경우 안드로이드 Preferences에 저장을 하기 위한 함수
+    if(window.isAndroid){
+      window.Droid.setUserPreferences(JSON.stringify(userSelectData))
+    }
     closeSelect();
-  }, [closeSelect]);
+}, [userSelectData, closeSelect]);
 
   const steps = [
     {

@@ -1,6 +1,7 @@
 const transformItem = (item) => {
     const ingredientsArray = item.ingredients.split(','); // 재료를 콤마로 구분하여 배열로 변환
     const categoriesArray = item.categories ? item.categories.split(',') : []; // 카테고리를 콤마로 구분하여 배열로 변환
+    const dishTypeArray = item.dishType ? item.dishType.split(',') : []; // 요리 종류를 콤마로 구분하여 배열로 변환
     let timeCategory = ""; // 시간 카테고리 초기화
     if (item.times) {
      
@@ -52,7 +53,7 @@ const transformItem = (item) => {
         calories: item.calories,
         times: timeCategory,
         categories: categoriesArray,
-        dishType: [""], // assuming '메인요리' is fixed for all items
+        dishType: dishTypeArray,
         warm: item["weather(Warm)"] === "1",
         cold: item["weather(Cold)"] === "1",
         soup: item.soup === "1",

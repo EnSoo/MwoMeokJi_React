@@ -4,7 +4,7 @@ import { cosineSimilarity } from './utils';
 export function recommendRecipes(userPreferences, recipes) {
   const originalRecipes = [...recipes]; // 레시피 데이터 깊은 복사
 
-  const uniqueIngredients = generateUniqueIngredients(recipes, userPreferences.ingredients);
+  const uniqueIngredients = generateUniqueIngredients( userPreferences.ingredients,recipes);
   
   console.log('바뀐 유저선호도:', userPreferences);
 

@@ -73,6 +73,7 @@ const RecipeRecommender = () => {
   useEffect(() => {
     const savedPreferences = localStorage.getItem('userPreferences');
     if (savedPreferences) {
+      console.log('사용자 선호도 정보가 있습니다.');
       const parsedPreferences = JSON.parse(savedPreferences);
       setUserPreferences(parsedPreferences);
       setPreferencesSubmitted(true);
@@ -83,6 +84,7 @@ const RecipeRecommender = () => {
       setFilteredRecipes(recommended); // 필터된 레시피 초기화
       console.log("추천 완료된 레시피:", filteredRecipes);
     } else {
+      console.log('사용자 선호도 정보가 없습니다.');
       setPreferencesSubmitted(false);
     }
   }, [reload]);
