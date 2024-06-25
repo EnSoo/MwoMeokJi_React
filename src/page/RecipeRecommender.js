@@ -31,11 +31,12 @@ const LoadingMessage = styled.p`
 `;
 
 const RecipeContainer = styled.div`
-  padding: 32px;
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
-  margin-top: 20px;
+  justify-content: space-around;  /* Adjusted to space-around for better distribution */
+  gap: 1rem;
+  padding: 1rem;
+  margin-bottom: 20px;
 `;
 
 const RecipeRecommender = () => {
@@ -101,7 +102,6 @@ const RecipeRecommender = () => {
     <Container>
       {showAlertDialog && <AlertDialog />}
       <BackBtn title="AI 레시피 추천" />
-      <Title>레시피 추천</Title>
       <IngredientSearch 
         recommendedRecipes={recommendedRecipes} 
         setFilteredRecipes={setFilteredRecipes} // 필터된 레시피 설정을 위한 setter 전달
