@@ -150,8 +150,9 @@ const RecipeDetailContainer = styled.div`
     box-shadow: 0 0 15px gray;
 `
 const MyModify = styled.div`
-
-
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 `
 
 const ProfileImage = styled.img`
