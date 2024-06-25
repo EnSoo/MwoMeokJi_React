@@ -23,11 +23,22 @@ const Navigation = () => {
     const backPath = () => {
       navigate(-1)
     }
+
+    // 웹의 LocalStorage 세팅 함수
+    const setLocalStorage = (jsonString) => {
+      if(jsonString===undefined) {
+        // LocalStorage 초기화
+        localStorage.clear()
+      } else {
+        localStorage.setItem('userPreferences', jsonString);
+      }
+    }
     // 이 코드를 추가하여 bnvRoute 함수를 전역으로 사용할 수 있게 합니다.
     window.bnvRoute = bnvRoute;
     window.backPath= backPath
     window.setIsAndroid = setIsAndroid;
     window.isAndroid=useSelector(state => state.isAndroidReducer.isAndroid);
+    window.setLocalStorage=setLocalStorage
 }
 
 export default Navigation
