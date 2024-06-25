@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 
 Modal.setAppElement('#root');
 
-const Confirm = ({ isOpen, onRequestClose, content, recipe }) => { // recipe prop 추가
+const Confirm = ({ isOpen, onRequestClose, content, recipe, onNoClick }) => { // onNoClick prop 추가
     const [response, setResponse] = useState(null);
     const navigate = useNavigate(); // useNavigate 훅 추가
 
@@ -17,6 +17,7 @@ const Confirm = ({ isOpen, onRequestClose, content, recipe }) => { // recipe pro
 
     const handleNoClick = () => {
         setResponse('no');
+        onNoClick(recipe.no); // onNoClick 함수 호출
     };
 
     return (

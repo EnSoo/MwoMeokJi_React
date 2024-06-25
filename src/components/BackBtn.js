@@ -44,6 +44,12 @@ const ContainerBox = styled.div`
 display: flex;
 align-items: center;
 `
+const Title = styled.div`
+  text-align: center;
+  width: 100%;
+  font-size: 40px; /* 원하는 폰트 크기로 수정 */
+  font-weight: bold; /* 두껍게 설정 */
+`
 const BackBtn = ({title}) => {
   const navigate = useNavigate();
 
@@ -65,7 +71,7 @@ const BackBtn = ({title}) => {
         <IconWrapper onClick={handleClick}>
           <MdOutlineArrowBackIos style={{ fontWeight: 'bold', fontSize: '2rem' }}/>
         </IconWrapper>
-        <div style={{ textAlign: 'center', width:'100%' }}>{title}</div>
+        <Title style={{ textAlign: 'center', width:'100%' }}>{title}</Title>
     </ContainerBox>
   );
 };

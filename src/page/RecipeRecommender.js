@@ -98,10 +98,15 @@ const RecipeRecommender = () => {
     setSelectedRecipe(null);
   };
 
+  const handleNoClick = (recipeNo) => {
+    setRecommendedRecipes((prevRecipes) => prevRecipes.filter(r => r.no !== recipeNo));
+    closeConfirm();
+  };
+
   return (
     <Container>
       {showAlertDialog && <AlertDialog />}
-      <StyledBackBtn title="AI 레시피 추천"/>
+      <BackBtn title="AI 레시피 추천"/>
       {error ? (
         <ErrorMessage>{error}</ErrorMessage>
       ) : (
@@ -138,6 +143,7 @@ const RecipeRecommender = () => {
               onRequestClose={closeConfirm}
               content={selectedRecipe && selectedRecipe.details}
               recipe={selectedRecipe} // 전달된 recipe prop
+              onNoClick={handleNoClick} // onNoClick 함수 추가
             />
           )}
         </>
@@ -147,8 +153,3 @@ const RecipeRecommender = () => {
 }
 
 export default RecipeRecommender
-
-const StyledBackBtn = styled(BackBtn)`
-    font-size: 30px; // 원하는 폰트 크기
-    font-weight: bold; // 폰트 굵기
-`
