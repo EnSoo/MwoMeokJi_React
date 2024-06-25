@@ -91,7 +91,8 @@ const Search = styled.div`
         margin-right: 10px;
 
         @media (max-width: 768px) {
-        width: 150px;
+        width: 200px;
+        height: 25px;
         padding: 5px;
         }
     }
