@@ -28,12 +28,11 @@ const Wrapper = styled.div`
 `
 
 const Box  = styled.div`
-    width: 50vh;
+    
     max-width: 375px;
-    padding: 20px;
-    /* margin: 0 auto; */
+    padding: 10px;
+    margin: 0 auto;
     display: flex;
-    /* height: 80vh; */
     flex-direction: column;
     justify-content: center;
     align-items: center;
@@ -46,13 +45,12 @@ const Box  = styled.div`
     color: red;
     font-weight: bold;
     text-align: center;
-    font-size:32px;
-    margin-top: 20px;
+    font-size:1.4rem;
     }
 
     .img{
         width: 100%;
-        max-width: 150px; /* 이미지의 최대 너비를 박스 크기 내로 설정 */
+        max-width: 200px; /* 이미지의 최대 너비를 박스 크기 내로 설정 */
         height: auto; /* 이미지 비율을 유지하면서 크기 조정 */
     }
 ` 

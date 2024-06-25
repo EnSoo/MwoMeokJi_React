@@ -104,19 +104,33 @@ const ButtonContainer = styled.div`
 `;
 
 const customStyles = {
-  content: {
-    top: '50%',
-    left: '50%',
-    right: 'auto',
-    bottom: 'auto',
-    width: '500px',
-    height: '300px',
-    marginRight: '-50%',
-    transform: 'translate(-50%, -50%)',
+  overlay: {
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
     display: 'flex',
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'center'
   },
+  content: {
+    position: 'none',
+    width: '90%',
+    maxWidth: '400px',  // 모달의 최대 너비
+    height: 'auto',
+    maxHeight: '80vh',  // 모달의 최대 높이
+    margin: '20px',
+    overflow: 'auto',
+    border: '1px solid #ccc',
+    background: '#fff',
+    borderRadius: '10px',
+    boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+  }
 };
 
 const variants = {
