@@ -43,13 +43,14 @@ const IconWrapper = styled.div`
 const ContainerBox = styled.div`
 display: flex;
 align-items: center;
+justify-content: space-between;
+width: 100%;
 `
 const Title = styled.div`
   text-align: center;
-  width: 100%;
+  flex: 1;
   font-size: 40px; /* 원하는 폰트 크기로 수정 */
   font-weight: bold; /* 두껍게 설정 */
-  text-align: center;
 `
 const BackBtn = ({title}) => {
   const navigate = useNavigate();
