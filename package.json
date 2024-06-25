@@ -19,6 +19,7 @@
     "react-router-dom": "^6.23.1",
     "react-scripts": "^5.0.1",
     "react-spinners": "^0.13.8",
+    "react-typist": "^2.0.5",
     "redux": "^5.0.1",
     "sass": "^1.77.4",
     "styled-components": "^6.1.11",
@@ -49,5 +50,5 @@
     ]
   },
   "homepage": "http://52.79.148.132/",
-  "proxy" : "http://52.79.148.132/"
+  "proxy": "http://52.79.148.132/"
 }

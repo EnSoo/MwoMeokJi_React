@@ -5,6 +5,8 @@ import Card from '../components/Card';
 import Confirm from '../components/Confirm';
 import { recommendRecipes } from '../utils/recipeUtils';
 import { useSelector } from 'react-redux';
+import BackBtn from '../components/BackBtn';
+import AlertDialog from '../components/AlertDialog';
 
 const Container = styled.div`
   padding: 20px;
@@ -47,24 +49,30 @@ const RecipeRecommender = () => {
   const [preferencesSubmitted, setPreferencesSubmitted] = useState(false);
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
   const [selectedRecipe, setSelectedRecipe] = useState(null);
+  const [showAlertDialog, setShowAlertDialog] = useState(false);
 
   const loadModelAndRecommend = useCallback(async () => {
     setIsLoading(true);
     setError(null);
+    setShowAlertDialog(true)
 
     if (!userPreferences) {
       setError('선호도 조사가 필요합니다.');
       setIsLoading(false);
+      setShowAlertDialog(false)
       return;
     }
 
     try {
+      await new Promise(resolve => setTimeout(resolve, 5000));
+      // 코사인 유사도 기반으로 정렬된 레시피 목록 생성
       const recommended = recommendRecipes(userPreferences, jsondata);
       setRecommendedRecipes(recommended);
     } catch (error) {
       setError('레시피 추천 중 오류가 발생했습니다.');
     } finally {
       setIsLoading(false);
+      setShowAlertDialog(false);
     }
   }, [userPreferences, jsondata]);
 
@@ -97,7 +105,8 @@ const RecipeRecommender = () => {
 
   return (
     <Container>
-      <Title>레시피 추천</Title>
+      {showAlertDialog && <AlertDialog />}
+      <StyledBackBtn title="AI 레시피 추천"/>
       {error ? (
         <ErrorMessage>{error}</ErrorMessage>
       ) : (
@@ -143,4 +152,9 @@ const RecipeRecommender = () => {
   );
 }
 
-export default RecipeRecommender;
+export default RecipeRecommender
+
+const StyledBackBtn = styled(BackBtn)`
+    font-size: 30px; // 원하는 폰트 크기
+    font-weight: bold; // 폰트 굵기
+`

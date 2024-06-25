@@ -40,8 +40,11 @@ const IconWrapper = styled.div`
     }
   }
 `;
-
-const BackBtn = () => {
+const ContainerBox = styled.div`
+display: flex;
+align-items: center;
+`
+const BackBtn = ({title}) => {
   const navigate = useNavigate();
 
   const handleClick = (e) => {
@@ -58,9 +61,12 @@ const BackBtn = () => {
   };
 
   return (
-    <IconWrapper onClick={handleClick}>
-      <MdOutlineArrowBackIos style={{ fontWeight: 'bold', fontSize: '2rem' }} />
-    </IconWrapper>
+    <ContainerBox>
+        <IconWrapper onClick={handleClick}>
+          <MdOutlineArrowBackIos style={{ fontWeight: 'bold', fontSize: '2rem' }}/>
+        </IconWrapper>
+        <div style={{ textAlign: 'center', width:'100%' }}>{title}</div>
+    </ContainerBox>
   );
 };
 
