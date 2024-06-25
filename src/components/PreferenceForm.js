@@ -196,6 +196,7 @@ const PreferenceForm = ({ openSelect, closeSelect, weatherData }) => {
 
   const handleChange = useCallback((e) => {
     const { name, value, type, checked } = e.target;
+    console.log("Event Target:", e.target);  // 로깅 추가
     setUserSelectData((state) => {
       if (type === "checkbox") {
         if (checked) {
