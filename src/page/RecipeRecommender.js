@@ -68,25 +68,27 @@ const RecipeRecommender = () => {
     setFilteredRecipes((prevRecipes) => prevRecipes.filter(r => r.no !== recipeNo));
     closeConfirm();
   };
+  const filterRecipes = (ingredients) => {
+    const filtered = recommendedRecipes.filter(recipe =>
+      ingredients.every(ing => recipe.ingredients.toLowerCase().includes(ing))
+    );
+    setFilteredRecipes(filtered);
+  };
 
   useEffect(() => {
     const savedPreferences = localStorage.getItem('userPreferences');
     if (savedPreferences) {
-      console.log('사용자 선호도 정보가 있습니다.');
       const parsedPreferences = JSON.parse(savedPreferences);
       setUserPreferences(parsedPreferences);
       setPreferencesSubmitted(true);
       const recommended = recommendRecipes(parsedPreferences, jsondata);
       setRecommendedRecipes(recommended);
-      console.log("추천 완료된 레시피:", recommended);
-  
-      setFilteredRecipes(recommended); // 필터된 레시피 초기화
-      console.log("추천 완료된 레시피:", filteredRecipes);
+      setFilteredRecipes(recommended); // 초기 필터링된 레시피 목록을 설정
     } else {
-      console.log('사용자 선호도 정보가 없습니다.');
       setPreferencesSubmitted(false);
     }
-  }, [reload]);
+  }, [reload, jsondata]);
+  
 
   return (
     <Container>
