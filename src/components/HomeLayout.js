@@ -48,7 +48,7 @@ const Layout = styled.div`
 const Left = styled.div`
     .img{
         width: 100px;
-        cursor: pointer;
+        user-select: none;
 
         @media (max-width: 768px) {
         width: 150px;
