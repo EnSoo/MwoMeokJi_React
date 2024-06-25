@@ -87,7 +87,7 @@ const RecipeRecommender = () => {
       setFilteredRecipes(recommended); // 초기 필터링된 레시피 목록을 설정
       setTimeout(() => {
         setShowAlertDialog(false);
-    }, 3000);
+    }, 300000);
     } else {
       setShowAlertDialog(true)
       setPreferencesSubmitted(false);
