@@ -65,7 +65,7 @@ const Recipe = () => {
             <div>&nbsp;</div>
             <RecipeList recipes={currentList} setRecipes={setRecipes}/>
             {tab !== 'all' && (
-                <Button onClick={() => email == '' ? alert('앱에서만 가능한 기능입니다') : navigate('/recipe/add')}>
+                <Button onClick={() => !window.isAndroid ? alert('앱에서만 가능한 기능입니다') : navigate('/recipe/add')}>
                     <FaPlus />
                 </Button>
             )}

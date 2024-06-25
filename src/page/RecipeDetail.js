@@ -47,7 +47,7 @@ const RecipeDetail = () => {
     useEffect(() => {
         if (location.state && location.state.recipe) {
             setRecipe(location.state.recipe);
-            if (location.state.recipe.email !== '') {
+            if (window.isAndroid) {
                 const sendData = new FormData();
                 sendData.append('email', location.state.recipe.email);
                 sendData.append('myrecipe_id', location.state.recipe.no);

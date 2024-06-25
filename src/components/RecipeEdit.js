@@ -50,7 +50,7 @@ const RecipeEdit = () => {
         }
     }
     const Submit = (event) => {
-        if(email == '' ) {
+        if(!window.isAndroid) {
             alert('앱에서만 가능한 기능입니다')
             navigate('/', { state: { refresh: true } })
         } else {

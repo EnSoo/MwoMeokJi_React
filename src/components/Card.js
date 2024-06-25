@@ -41,7 +41,7 @@ const Card = ({ recipe, onDelete, onClick, fromRecommender, delay }) => {
   const favoriteRequest = (e) => {
     e.preventDefault(); // Prevent default behavior
     e.stopPropagation(); // Prevent the card click event
-    if (email !== '') {
+    if (window.isAndroid) {
       const sendData = new FormData();
       sendData.append('email', recipe.email);
       sendData.append('myrecipe_id', recipe.no);
