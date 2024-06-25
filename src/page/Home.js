@@ -104,7 +104,7 @@ const Image = styled.div`
     display: flex;
     justify-content: center;
     align-items : center;
-    cursor: none;
+    cursor: pointer;
     img {
         max-width: 100%;
         height: auto;

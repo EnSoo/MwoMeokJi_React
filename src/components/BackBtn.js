@@ -40,8 +40,19 @@ const IconWrapper = styled.div`
     }
   }
 `;
-
-const BackBtn = () => {
+const ContainerBox = styled.div`
+display: flex;
+align-items: center;
+justify-content: space-between;
+width: 100%;
+`
+const Title = styled.div`
+  text-align: center;
+  flex: 1;
+  font-size: 40px; /* 원하는 폰트 크기로 수정 */
+  font-weight: bold; /* 두껍게 설정 */
+`
+const BackBtn = ({title}) => {
   const navigate = useNavigate();
 
   const handleClick = (e) => {
@@ -58,9 +69,12 @@ const BackBtn = () => {
   };
 
   return (
-    <IconWrapper onClick={handleClick}>
-      <MdOutlineArrowBackIos style={{ fontWeight: 'bold', fontSize: '2rem' }} />
-    </IconWrapper>
+    <ContainerBox>
+        <IconWrapper onClick={handleClick}>
+          <MdOutlineArrowBackIos style={{ fontWeight: 'bold', fontSize: '2rem' }}/>
+        </IconWrapper>
+        <Title>{title}</Title>
+    </ContainerBox>
   );
 };
 
