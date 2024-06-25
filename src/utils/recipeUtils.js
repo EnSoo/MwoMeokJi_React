@@ -61,7 +61,7 @@ export function recommendRecipes(userPreferences, recipes) {
       weights.calories = 1;
       break;
     case "high":
-      weights.calories = 0.5;
+      weights.calories = 2;
       break;
     default:
       weights.calories = 1;
@@ -76,30 +76,34 @@ export function recommendRecipes(userPreferences, recipes) {
     '중식': 'chinese',
     '일식': 'japanese'
   };
+  const dishTypeMapping = {
+    "메인요리":"메인요리",
+    "반찬":"반찬",
+    "간식":"간식",
+    "국물요리":"국물요리",
+    "소스":"소스"
+  }
+
 
   const mappedCategories = userPreferences.categories.map(type => categoryMapping[type] || type);
+  const mappeddishType = userPreferences.dishType.map(type =>dishTypeMapping[type] || type);
   const includeOtherCategories = userPreferences.categories.includes('기타');
 
   const filteredRecipes = originalRecipes.filter(recipe => {
+    const dishTypeMatch = mappeddishType.length === 0 || mappeddishType.some(type => recipe.dishType.includes(type));
     const categoryMatch = mappedCategories.length === 0 || mappedCategories.some(type => recipe.categories.includes(type));
     const otherCategoriesMatch = includeOtherCategories ? !['korean', 'chinese', 'japanese'].some(type => recipe.categories.includes(type)) : true;
     const dietTypeMatch = userPreferences.dietType === "상관없음" || (userPreferences.dietType === "채식(비건)" && !recipe.meat) || (userPreferences.dietType === "육식" && recipe.meat);
     const ingredientsMatch = userPreferences.ingredients.every(ingredient => recipe.ingredients.includes(ingredient));
 
-    console.log(`레시피: ${recipe.title}, categoryMatch: ${categoryMatch}, otherCategoriesMatch: ${otherCategoriesMatch}, dietTypeMatch: ${dietTypeMatch}, ingredientsMatch: ${ingredientsMatch}`);
+    console.log(`레시피: ${recipe.title}, categoryMatch: ${categoryMatch}, otherCategoriesMatch: ${otherCategoriesMatch}, dietTypeMatch: ${dietTypeMatch}, ingredientsMatch: ${ingredientsMatch}, dishTypeMatch: ${dishTypeMatch}`);
 
-    return categoryMatch && otherCategoriesMatch && dietTypeMatch && ingredientsMatch;
+    return categoryMatch && otherCategoriesMatch && dietTypeMatch && ingredientsMatch && dishTypeMatch;
   });
 
-  if (userPreferences.searchQuery) { // 검색어 필터링 추가
-    const query = userPreferences.searchQuery.toLowerCase();
-    filteredRecipes = filteredRecipes.filter(recipe => { // filteredRecipes 재할당
-      return recipe.title.includes(query) ||
-             recipe.ingredients.some(ingredient => ingredient.includes(query));
-    });
-  }
+  
 
-  console.log("필터링된 레시피:", filteredRecipes);
+  
 
   const recipeVectors = filteredRecipes.map(recipe => ({
     ...recipe,

@@ -35,7 +35,6 @@ export function generateVectorFromPreferences(preferences, uniqueIngredients, we
   console.log("매운 정도 벡터:", weightedSpicinessVector);
   console.log("조리 시간 벡터:", weightedCookingTimeVector);
   console.log("칼로리 벡터:", weightedCaloriesVector);
-  console.log("사용자 선호도만의 벡터:", ingredientVector+ weightedSpicinessVector+ weightedCookingTimeVector+ weightedCaloriesVector)
   console.log("최종 사용자 선호도 벡터:", finalVector);
 
   return finalVector;

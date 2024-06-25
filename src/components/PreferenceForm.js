@@ -149,7 +149,7 @@ const variants = {
   },
 };
 
-const PreferenceForm = ({ saveStep, openSelect, closeSelect, weatherData }) => {
+const PreferenceForm = ({ openSelect, closeSelect, weatherData }) => {
   const [userSelectData, setUserSelectData] = useState({
     ingredients: [],
     spiciness: "medium",
@@ -207,13 +207,14 @@ const PreferenceForm = ({ saveStep, openSelect, closeSelect, weatherData }) => {
         return { ...state, [name]: value };
       }
     });
-  }, []);
+  }, [setUserSelectData]);
 
   const handleSubmit = useCallback((e) => {
+    console.log("선호도 조사 결과:", userSelectData);
     e.preventDefault();
-    saveStep(userSelectData);
+    localStorage.setItem('userPreferences',JSON.stringify(userSelectData))
     closeSelect();
-  }, [saveStep, closeSelect, userSelectData]);
+  }, [closeSelect]);
 
   const steps = [
     {

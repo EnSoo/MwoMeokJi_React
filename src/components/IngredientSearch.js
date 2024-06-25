@@ -1,41 +1,45 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 
+const SearchContainer = styled.div`
+  text-align: center;
+  margin-bottom: 20px;
+`;
+
+const Label = styled.label`
+  font-weight: bold;
+`;
+
 const Input = styled.input`
-  margin-bottom: 10px;
   padding: 10px;
-  width: 80%;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+  margin: 10px;
+  width: 60%;
+  max-width: 400px;
+  font-size: 16px;
 `;
 
 const Button = styled.button`
   padding: 10px 20px;
-  background-color: #28a745;
-  color: white;
-  border: none;
-  border-radius: 4px;
+  margin: 10px;
+  font-size: 16px;
   cursor: pointer;
-  margin: 5px;
 `;
 
 const IngredientsList = styled.ul`
   list-style-type: none;
   padding: 0;
-  margin: 0;
 `;
 
 const IngredientItem = styled.li`
-  margin-bottom: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 5px 0;
 `;
 
-const Label = styled.label`
-  margin-bottom: 5px;
-  font-weight: bold;
-`;
-
-function IngredientSearch({ selectedIngredients, setSelectedIngredients, setUserPreferences, userPreferences }) {
-  const [ingredient, setIngredient] = useState("");
+const IngredientSearch = ({ recommendedRecipes, setFilteredRecipes }) => {
+  const [ingredient, setIngredient] = useState('');
+  const [selectedIngredients, setSelectedIngredients] = useState([]);
 
   const handleIngredientChange = (e) => {
     setIngredient(e.target.value);
@@ -43,23 +47,28 @@ function IngredientSearch({ selectedIngredients, setSelectedIngredients, setUser
 
   const handleAddIngredient = () => {
     if (ingredient && !selectedIngredients.includes(ingredient)) {
-      const updatedIngredients = [...selectedIngredients, ingredient];
-      setSelectedIngredients(updatedIngredients); // 부모 컴포넌트의 상태 업데이트
-      setIngredient("");
+      const newIngredients = [...selectedIngredients, ingredient];
+      setSelectedIngredients(newIngredients);
+      filterRecipes(newIngredients);
+      setIngredient('');
     }
   };
 
   const handleRemoveIngredient = (ingredientToRemove) => {
-    const updatedIngredients = selectedIngredients.filter((ing) => ing !== ingredientToRemove);
-    setUserPreferences({ ...userPreferences, ingredients: updatedIngredients }); // userPreferences 상태 업데이트
-     // 로컬 스토리지 업데이트
-  localStorage.setItem('userPreferences', JSON.stringify({ ...userPreferences, ingredients: updatedIngredients }));
+    const newIngredients = selectedIngredients.filter(ing => ing !== ingredientToRemove);
+    setSelectedIngredients(newIngredients);
+    filterRecipes(newIngredients);
   };
 
-  
+  const filterRecipes = (ingredients) => {
+    const filtered = recommendedRecipes.filter(recipe =>
+      ingredients.every(ing => recipe.ingredients.includes(ing))
+    );
+    setFilteredRecipes(filtered);
+  };
 
   return (
-    <>
+    <SearchContainer>
       <Label>재료 검색:</Label>
       <Input
         type="text"
@@ -80,8 +89,8 @@ function IngredientSearch({ selectedIngredients, setSelectedIngredients, setUser
           </IngredientItem>
         ))}
       </IngredientsList>
-    </>
+    </SearchContainer>
   );
-}
+};
 
 export default IngredientSearch;
