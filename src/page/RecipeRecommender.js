@@ -127,15 +127,15 @@ const RecipeRecommender = () => {
             </RecipeContainer>
           )}
         </>
-          )}
-          {isConfirmOpen && (
-            <Confirm
-              isOpen={isConfirmOpen}
-              onRequestClose={closeConfirm}
-              content={selectedRecipe && selectedRecipe.details}
-              recipe={selectedRecipe} // 전달된 recipe prop
+      )}
+      {isConfirmOpen && (
+        <Confirm
+          isOpen={isConfirmOpen}
+          onRequestClose={closeConfirm}
+          content={selectedRecipe && selectedRecipe.details}
+          recipe={selectedRecipe} // 전달된 recipe prop
           onNoClick={() => handleNoClick(selectedRecipe.no)} // onNoClick 함수 추가
-            />
+        />
       )}
     </Container>
   );
