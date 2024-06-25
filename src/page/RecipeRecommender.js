@@ -78,15 +78,22 @@ const RecipeRecommender = () => {
   useEffect(() => {
     const savedPreferences = localStorage.getItem('userPreferences');
     if (savedPreferences) {
+      setShowAlertDialog(true)
       const parsedPreferences = JSON.parse(savedPreferences);
       setUserPreferences(parsedPreferences);
       setPreferencesSubmitted(true);
       const recommended = recommendRecipes(parsedPreferences, jsondata);
       setRecommendedRecipes(recommended);
       setFilteredRecipes(recommended); // 초기 필터링된 레시피 목록을 설정
+      setTimeout(() => {
+        setShowAlertDialog(false);
+    }, 3000);
     } else {
+      setShowAlertDialog(true)
       setPreferencesSubmitted(false);
     }
+
+    
   }, [reload, jsondata]);
   
 
@@ -145,3 +152,8 @@ const RecipeRecommender = () => {
 };
 
 export default RecipeRecommender;
+
+const StyledBackBtn = styled(BackBtn)`
+font-size: 30px; // 원하는 폰트 크기
+font-weight: bold; // 폰트 굵기
+`
