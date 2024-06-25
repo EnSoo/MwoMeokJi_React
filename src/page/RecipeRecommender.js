@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import PreferenceForm from '../components/PreferenceForm';
 import IngredientSearch from '../components/IngredientSearch';
