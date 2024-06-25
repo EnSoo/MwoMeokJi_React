@@ -59,7 +59,7 @@ const Recipe = () => {
         }
   }, [recipes, email, tab]);
     return (
-        <div style={{display:"flex", flexDirection:"column"}}>
+        <div style={{display:"flex", flexDirection:"column", marginBottom:"1rem"}}>
             <Navigation />
             <RecipeTab tab={tab} setTab={setTab}/>
             <div>&nbsp;</div>
