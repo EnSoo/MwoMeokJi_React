@@ -62,6 +62,7 @@ const Recipe = () => {
         <div style={{display:"flex", flexDirection:"column"}}>
             <Navigation />
             <RecipeTab tab={tab} setTab={setTab}/>
+            <div>&nbsp;</div>
             <RecipeList recipes={currentList} setRecipes={setRecipes}/>
             {tab !== 'all' && (
                 <Button onClick={() => email == '' ? alert('앱에서만 가능한 기능입니다') : navigate('/recipe/add')}>
