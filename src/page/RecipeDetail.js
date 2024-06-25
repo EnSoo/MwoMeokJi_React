@@ -151,8 +151,10 @@ const RecipeDetailContainer = styled.div`
 `
 const MyModify = styled.div`
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    justify-content: space-between;
+    position: relative;
+    width: 100%;
 `
 
 const ProfileImage = styled.img`
@@ -170,12 +172,15 @@ const CommentAuthor = styled.div`
 const MenuIcon = styled.div`
   cursor: pointer;
   font-size: 1em;
-  margin-bottom: 5px;
+  position: absolute;
+  right: 0;
+  top: 0;
+  margin: 5px; /* 원하는 여백 설정 */
 `
 
 const DropdownMenu = styled.div`
   position: absolute;
-  top: 24px;
+  top: 30px;
   right: 0;
   background: #fff;
   border: 1px solid #55a400;
