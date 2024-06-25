@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import styled from 'styled-components';
+import click from './img/image.png'
 
 const IngredientSearch = ({ recommendedRecipes, setFilteredRecipes }) => { // setFilteredRecipes를 props로 받음
   const [query, setQuery] = useState('');
@@ -36,21 +38,23 @@ const IngredientSearch = ({ recommendedRecipes, setFilteredRecipes }) => { // se
   };
 
   return (
-    <div>
-      <input
-        type="text"
-        placeholder="재료를 입력하세요"
-        value={query}
-        onChange={handleInputChange}
-        onKeyDown={event => {
-          if (event.key === 'Enter') {
-            handleAddIngredient();
-            event.preventDefault();
-          }
-        }}
-      />
-      <button onClick={handleAddIngredient}>추가</button>
-
+    <Search>
+      <div className='p'>
+        <input
+          type="text"
+          className='search'
+          placeholder="재료를 입력하세요"
+          value={query}
+          onChange={handleInputChange}
+          onKeyDown={event => {
+            if (event.key === 'Enter') {
+              handleAddIngredient();
+              event.preventDefault();
+            }
+          }}
+        />
+        <button className='button' onClick={handleAddIngredient}><img src={click} alt='click'></img></button>
+      </div>
       <ul>
         {Object.entries(history).map(([ingredient, _], index) => (
           <li key={index}>
@@ -60,8 +64,48 @@ const IngredientSearch = ({ recommendedRecipes, setFilteredRecipes }) => { // se
         ))}
       </ul>
 
-    </div>
+    </Search>
   );
 };
 
 export default IngredientSearch;
+
+const Search = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+   
+    .p{
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .search{
+        width: 350px;
+        border: 2px solid #55A416;
+        margin-right: 10px;
+
+        @media (max-width: 768px) {
+        width: 150px;
+        padding: 5px;
+        }
+    }
+    .button{
+        padding: 10px;
+        border: 2px solid #55A416;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #55A416;
+        cursor: pointer;
+
+        @media (max-width: 768px) {
+      padding: 5px;
+    }
+
+    }
+
+`
