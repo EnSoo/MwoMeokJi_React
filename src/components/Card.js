@@ -1,24 +1,47 @@
-import React, { useState } from "react";
-import styled from "styled-components";
+import React, { useState, useEffect, useRef } from "react";
+import styled, { keyframes, css } from "styled-components";
 import { FaEllipsisV } from "react-icons/fa";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { MdFavorite, MdFavoriteBorder } from "react-icons/md";
 import { GrView } from "react-icons/gr";
 
-const Card = ({ recipe, onDelete, onClick, fromRecommender }) => {
+const Card = ({ recipe, onDelete, onClick, fromRecommender, delay }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const [showMenu, setShowMenu] = useState(false);
-  const [my_like, setMyLike] = useState(recipe.my_like == '1');
+  const [my_like, setMyLike] = useState(recipe.my_like === '1');
   const userAccount = useSelector(state => state.userAccountReducer.userAccount);
-
   const email = userAccount.email;
+  const [isVisible, setIsVisible] = useState(false);
+  const cardRef = useRef(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          observer.unobserve(entry.target);
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    if (cardRef.current) {
+      observer.observe(cardRef.current);
+    }
+
+    return () => {
+      if (cardRef.current) {
+        observer.unobserve(cardRef.current);
+      }
+    };
+  }, []);
 
   const favoriteRequest = (e) => {
     e.preventDefault(); // Prevent default behavior
     e.stopPropagation(); // Prevent the card click event
-    if (email != '') {
+    if (email !== '') {
       const sendData = new FormData();
       sendData.append('email', recipe.email);
       sendData.append('myrecipe_id', recipe.no);
@@ -28,10 +51,10 @@ const Card = ({ recipe, onDelete, onClick, fromRecommender }) => {
       })
         .then(res => res.text())
         .then(text => {
-          if (text == "200") {
+          if (text === "200") {
             // favor 동작 성공 시
             setMyLike(my_like => !my_like);
-          } else if (text == "201") {
+          } else if (text === "201") {
             // favor 동작 실패 시
           }
         }).catch(error => console.error('Error:', error));
@@ -63,11 +86,11 @@ const Card = ({ recipe, onDelete, onClick, fromRecommender }) => {
       })
         .then(res => res.text())
         .then(text => {
-          if (text == "200") {
+          if (text === "200") {
             // 레시피 삭제 성공 시
             alert(`레시피를 삭제 하였습니다.`);
             onDelete(recipe.no);
-          } else if (text == "201") {
+          } else if (text === "201") {
             // 레시피 삭제 실패 시
             alert(`레시피 삭제를 실패하였습니다.`);
           }
@@ -87,7 +110,12 @@ const Card = ({ recipe, onDelete, onClick, fromRecommender }) => {
   }
 
   return (
-    <Item onClick={(e) => itemClick(e)}>
+    <Item 
+      onClick={(e) => itemClick(e)} 
+      delay={delay} 
+      isVisible={isVisible} 
+      ref={cardRef}
+    >
       <CardHeader>
         {location.pathname === '/recipe' && recipe.my_recipe === "1" && (
           <>
@@ -129,6 +157,17 @@ const Card = ({ recipe, onDelete, onClick, fromRecommender }) => {
 
 export default Card;
 
+const fadeIn = keyframes`
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+`;
+
 const Item = styled.div`
   background-color: #fff;
   border-radius: 10px;
@@ -143,9 +182,17 @@ const Item = styled.div`
   position: relative;
   display: flex;
   flex-direction: column;
+  opacity: 0; /* 초기 상태에서 투명하게 설정 */
+  ${({ isVisible, delay }) => 
+    isVisible && css`
+      animation: ${fadeIn} 0.5s forwards;
+      animation-delay: ${delay}s;
+    `
+  }
   &:hover {
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
     background: #55A416;
+    cursor: pointer;
   }
   &:active {
     background: #55A416;
