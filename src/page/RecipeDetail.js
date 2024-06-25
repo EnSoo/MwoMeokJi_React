@@ -109,10 +109,10 @@ const RecipeDetail = () => {
                 )}
             </MyModify>
             {recipe.email !== "admin" && (
-                <>
+                <ProfileContainer>
                     <ProfileImage src={`${process.env.PUBLIC_URL}/backend/` + recipe.imgfile} alt='프로필' />
                     <CommentAuthor>{recipe.nickname}</CommentAuthor>
-                </>
+                </ProfileContainer>
             )}
             <RecipeHeader>
                 <h2>{recipe.title}</h2>
@@ -151,7 +151,13 @@ const RecipeDetailContainer = styled.div`
 `
 const MyModify = styled.div`
     display: flex;
+    align-items: center;
     justify-content: space-between;
+    position: relative;
+    width: 100%;
+`
+const ProfileContainer = styled.div`
+    display: flex;
     align-items: center;
 `
 
@@ -160,22 +166,29 @@ const ProfileImage = styled.img`
     height: 30px; /* 프로필 이미지 높이 */
     border-radius: 50%; /* 원형 모양으로 만들기 */
     margin-right: 10px; /* 이미지와 내용 사이의 간격 */
+    margin-left: 7px;
+    margin-top: 7px;
 `
 const CommentAuthor = styled.div`
     font-weight: bold;
     margin-bottom: 5px;
     display: inline-block;
+    font-size: 20px;
 `
 
 const MenuIcon = styled.div`
   cursor: pointer;
-  font-size: 1em;
-  margin-bottom: 5px;
+  font-size: 1.5rem;
+  position: absolute;
+  right: 0;
+  top: 0;
+  margin: 5px; /* 원하는 여백 설정 */
+  margin-top: 20px;
 `
 
 const DropdownMenu = styled.div`
   position: absolute;
-  top: 24px;
+  top: 30px;
   right: 0;
   background: #fff;
   border: 1px solid #55a400;
