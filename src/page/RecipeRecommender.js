@@ -98,6 +98,11 @@ const RecipeRecommender = () => {
     setSelectedRecipe(null);
   };
 
+  const handleNoClick = (recipeNo) => {
+    setRecommendedRecipes((prevRecipes) => prevRecipes.filter(r => r.no !== recipeNo));
+    closeConfirm();
+  };
+
   return (
     <Container>
       {showAlertDialog && <AlertDialog />}
@@ -138,6 +143,7 @@ const RecipeRecommender = () => {
               onRequestClose={closeConfirm}
               content={selectedRecipe && selectedRecipe.details}
               recipe={selectedRecipe} // 전달된 recipe prop
+              onNoClick={handleNoClick} // onNoClick 함수 추가
             />
           )}
         </>
