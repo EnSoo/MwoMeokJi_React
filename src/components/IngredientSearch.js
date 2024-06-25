@@ -81,10 +81,12 @@ const Search = styled.div`
       display: flex;
       align-items: center;
       justify-content: space-between;
+      padding: 10px;
     }
 
     .search{
-        width: 350px;
+        width: 300px;
+        height: 40px;
         border: 2px solid #55A416;
         margin-right: 10px;
 
