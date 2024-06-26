@@ -134,6 +134,8 @@ const RecipeRecommender = () => {
                   }} 
                 />
               ))}
+              {!window.isAndroid && <StyledButton  onClick={()=>localStorage.clear()}>선호도 초기화</StyledButton> }
+              
             </RecipeContainer>
           )}
         </>
@@ -157,3 +159,21 @@ const StyledBackBtn = styled(BackBtn)`
 font-size: 30px; // 원하는 폰트 크기
 font-weight: bold; // 폰트 굵기
 `
+const StyledButton = styled.button`
+  background-color: #55A416;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+
+  &:hover {
+    background-color: #45910e;
+  }
+
+  &:active {
+    background-color: #366d0b;
+  }
+`;
