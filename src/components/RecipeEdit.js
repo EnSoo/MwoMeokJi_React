@@ -1,76 +1,140 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
+import Navigation from "../components/Navigation";
 import styled from 'styled-components';
 import { useSelector } from 'react-redux';
-import Navigation from '../components/Navigation';
 import BackBtn from './BackBtn';
 
 const RecipeEdit = () => {
-  const [recipe, setRecipe] = useState({
-    title: '',
-    ingredients: '',
-    recipeText: '',
-    time: '',
-    calories: '',
-    spiciness: '',
-    weatherConditions: { Cold: 0, Warm: 0 },
-    soup: 0,
-    vegan: 0,
-    meat: 0,
-    categories: '',
-    customCategory: '',
-    dishType: []
-  });
-  const navigate = useNavigate();
-  const location = useLocation();
+    const [recipe, setRecipe] = useState({
+        title: '',
+        ingredients: '',
+        recipeText: '',
+        time: '',
+        calories: '',
+        spiciness: '',
+        weatherConditions: { Cold: 0, Warm: 0 },
+        soup: 0,
+        vegan: 0,
+        meat: 0,
+        categories: '',
+        customCategory: '',
+        dishType: []
+    });
+    const [ingredients, setIngredients] = useState([]);
+    const location = useLocation();
+    const navigate = useNavigate();
+    const [image, setImage] = useState(null);
+    const [imagePreview, setImagePreview] = useState(null);
+    const [comment, setComment] = useState(null);
+    const userAccount = useSelector(state => state.userAccountReducer.userAccount);
+    const email = userAccount.email;
 
-  useEffect(() => {
-    if (location.state && location.state.recipe) {
-      setRecipe(location.state.recipe);
-    }
-  }, [location.state]);
-
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    if (type === 'checkbox') {
-      if (name in recipe.weatherConditions) {
-        setRecipe(prev => ({
-          ...prev,
-          weatherConditions: {
-            ...prev.weatherConditions,
-            [value]: checked ? 1 : 0
-          }
-        }));
-      } else if (name === 'dishType') {
-        if (checked) {
-          setRecipe(prev => ({ ...prev, [name]: [...prev[name], value] }));
-        } else {
-          setRecipe(prev => ({ ...prev, [name]: prev[name].filter(item => item !== value) }));
+    useEffect(() => {
+        if (location.pathname.startsWith('/recipe/modify')) {
+            setComment('수정');
+            setRecipe(location.state.recipe);
+            setImagePreview(`${process.env.PUBLIC_URL}/imgs/${location.state.recipe.imgurl}`);
+        } else if (location.pathname === '/recipe/add') {
+            setComment('작성');
         }
-      } else {
-        setRecipe(prev => ({
-          ...prev,
-          [name]: checked ? 1 : 0
-        }));
-      }
-    } else if (name === 'categories') {
-      setRecipe(prev => ({
-        ...prev,
-        categories: value,
-        customCategory: value === 'other' ? '' : prev.customCategory
-      }));
-    } else {
-      setRecipe(prev => ({ ...prev, [name]: value }));
-    }
-  };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-   
-    console.log('제출된 레시피 형태:', recipe);
-    navigate('/recipes');
-  };
+        if (location.state && location.state.recipe) {
+            setRecipe(location.state.recipe);
+        }
+    }, [location.pathname, location.state]);
 
+    const handleChange = (e) => {
+        const { name, value, type, checked } = e.target;
+        if (type === 'checkbox') {
+            if (name === 'weatherConditions') {
+                setRecipe(prev => ({
+                    ...prev,
+                    weatherConditions: {
+                        ...prev.weatherConditions,
+                        [value]: checked ? 1 : 0
+                    }
+                }));
+            } else if (name === 'dishType') {
+                setRecipe(prev => ({
+                    ...prev,
+                    dishType: checked
+                        ? [...prev.dishType, value]
+                        : prev.dishType.filter(item => item !== value)
+                }));
+            } else {
+                setRecipe(prev => ({
+                    ...prev,
+                    [name]: checked ? 1 : 0
+                }));
+            }
+        } else if (name === 'categories') {
+            setRecipe(prev => ({
+                ...prev,
+                categories: value,
+                customCategory: value === 'other' ? '' : prev.customCategory
+            }));
+        } else {
+            setRecipe(prev => ({ ...prev, [name]: value }));
+        }
+    };
+
+    const handleFileChange = (event) => {
+        const file = event.target.files[0];
+        if (file && file.type.startsWith('image/')) {
+            setImage(file);
+            setImagePreview(URL.createObjectURL(file));
+        } else {
+            console.error('Invalid image file');
+            setImage(null);
+            setImagePreview(null);
+        }
+    };
+
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        if (!window.isAndroid) {
+            alert('앱에서만 가능한 기능입니다');
+            navigate('/', { state: { refresh: true } });
+        } else {
+            const sendData = new FormData();
+            for (const key in recipe) {
+                if (recipe.hasOwnProperty(key)) {
+                    sendData.append(key, recipe[key]);
+                }
+            }
+            if (image) {
+                sendData.append('imgs[]', image);
+            }
+            let requestUrl = '';
+            if (comment === '작성') {
+                requestUrl = `${process.env.PUBLIC_URL}/backend/recipe_add.php`;
+                sendData.append('email', email);
+            } else if (comment === '수정') {
+                requestUrl = `${process.env.PUBLIC_URL}/backend/recipe_modify.php`;
+            }
+            fetch(requestUrl, {
+                method: 'POST',
+                body: sendData,
+            })
+            .then(res => res.text())
+            .then(text => {
+                if (text === "200") {
+                    alert(`레시피 ${comment}에 성공 하였습니다.`);
+                    navigate('/recipe', { state: { refresh: true } });
+                } else if (text === "201") {
+                    alert(`레시피 ${comment}에 실패하였습니다.`);
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        }
+    };
+
+    const filterIngredients = (input) => {
+        const filtered = input.split(',').filter(item => item.trim() !== '');
+        setIngredients(filtered);
+        setRecipe({ ...recipe, ingredients: filtered.join(',') });
+    };
   return (
     <RecipeEditContainer>
       <Navigation />
@@ -94,7 +158,7 @@ const RecipeEdit = () => {
             name="ingredients"
             placeholder="재료를 쉼표로 구분해서 입력하세요 (예: 양파, 대파, 쪽파)"
             value={recipe.ingredients}
-            onChange={handleChange}
+            onChange={(e)=>filterIngredients(e.target.value)}
           />
         </RecipeLabel>
         <RecipeLabel>
@@ -161,7 +225,7 @@ const RecipeEdit = () => {
               <StyledInput
                 name="customCategory"
                 type="text"
-                placeholder="Enter custom category"
+                placeholder="예시: 이탈리아, 멕시코, 태국"
                 value={recipe.customCategory}
                 onChange={handleChange}
               />
