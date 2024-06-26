@@ -65,6 +65,7 @@ const transformItem = (item) => {
         my_recipe: item.my_recipe,
         my_like: item.my_like,
         views: item.views,
+        ai_my_like: item.ai_my_like,
     };
 };
 

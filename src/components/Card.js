@@ -5,12 +5,14 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { MdFavorite, MdFavoriteBorder } from "react-icons/md";
 import { GrView } from "react-icons/gr";
+import { RiRobot2Fill, RiRobot2Line } from "react-icons/ri";
 
 const Card = ({ recipe, onDelete, onClick, fromRecommender, delay }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const [showMenu, setShowMenu] = useState(false);
-  const [my_like, setMyLike] = useState(recipe.my_like === '1');
+  const [my_like, setMyLike] = useState(recipe.my_like === '1')
+  const [ai_my_like, setAiMyLike] = useState(recipe.ai_my_like === '1')
   const userAccount = useSelector(state => state.userAccountReducer.userAccount);
   const email = userAccount.email;
   const [isVisible, setIsVisible] = useState(false);
@@ -61,6 +63,32 @@ const Card = ({ recipe, onDelete, onClick, fromRecommender, delay }) => {
     } else {
       alert('앱에서만 가능한 기능입니다');
     }
+  }
+
+  const aiFavoriteRequest = (e) => {
+    e.preventDefault(); // Prevent default behavior
+    e.stopPropagation(); // Prevent the card click event
+    if (window.isAndroid) {
+      const sendData = new FormData();
+      sendData.append('email', email);
+      sendData.append('myrecipe_id', recipe.no);
+      fetch(`${process.env.PUBLIC_URL}/backend/recipe_aifavor.php`, {
+        method: 'POST',
+        body: sendData,
+      })
+      .then(res => res.text())
+      .then(text => {
+        if (text === "200") {
+          // favor 동작 성공 시
+          setAiMyLike(ai_my_like => !ai_my_like);
+        } else if (text === "201") {
+          // favor 동작 실패 시
+        }
+      }).catch(error => console.error('Error:', error))
+    } else {
+      alert('앱에서만 가능한 기능입니다')
+    }
+    
   }
 
   const toggleMenu = (e) => {
@@ -147,6 +175,19 @@ const Card = ({ recipe, onDelete, onClick, fromRecommender, delay }) => {
             </div>
             <div className="cardFonts" style={{ display: 'flex', alignItems: 'center' }}>
               <GrView className="cardFonts" style={{ marginRight: '0.5rem' }} /> {recipe.view}
+            </div>
+          </LikesViews>
+        </CardFooter>
+      )}
+      {location.pathname === '/recipe_recommender' && (
+        <CardFooter>
+          <LikesViews>
+            <div>
+              {ai_my_like ? (
+                <RiRobot2Fill className="cardFonts" onClick={(e) => aiFavoriteRequest(e)} />
+              ) : (
+                <RiRobot2Line className="cardFonts" onClick={(e) => aiFavoriteRequest(e)} />
+              )}
             </div>
           </LikesViews>
         </CardFooter>
