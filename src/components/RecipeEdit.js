@@ -75,10 +75,29 @@ const RecipeEdit = () => {
                 }));
             }
         } else if (type === 'radio') {
-            setRecipe(prev => ({
-                ...prev,
-                [name]: value
-            }));
+            if (name === 'vegan') {
+                setRecipe(prev => ({
+                    ...prev,
+                    vegan: value === 'vegan' ? 1 : 0,
+                    meat: value === 'vegan' ? 0 : 1
+                }));
+            } else if (name === 'meat') {
+                setRecipe(prev => ({
+                    ...prev,
+                    meat: value === 'meat' ? 1 : 0,
+                    vegan: value === 'meat' ? 0 : 1
+                }));
+            } else if (name === 'soup') {
+                setRecipe(prev => ({
+                    ...prev,
+                    soup: value === '1' ? 1 : 0
+                }));
+            } else {
+                setRecipe(prev => ({
+                    ...prev,
+                    [name]: value
+                }));
+            }
         } else if (name === 'categories') {
             setRecipe(prev => ({
                 ...prev,
@@ -150,7 +169,7 @@ const RecipeEdit = () => {
         setIngredients(filtered);
         setRecipe({ ...recipe, ingredients: filtered.join(',') });
     };
-    
+
     return (
         <RecipeEditContainer>
             <Navigation />
@@ -216,10 +235,10 @@ const RecipeEdit = () => {
                 <Fieldset>
                     <legend>채식주의자용 요리인가요?</legend>
                     <Label>
-                        <input type="radio" name="vegan" value="1" onChange={handleChange} checked={recipe.vegan === 1} /> 네
+                        <input type="radio" name="vegan" value="vegan" onChange={handleChange} checked={recipe.vegan === 1} /> 네
                     </Label>
                     <Label>
-                        <input type="radio" name="vegan" value="0" onChange={handleChange} checked={recipe.vegan === 0} /> 아니요
+                        <input type="radio" name="vegan" value="meat" onChange={handleChange} checked={recipe.vegan === 0} /> 아니요
                     </Label>
                 </Fieldset>
                 <Fieldset>
