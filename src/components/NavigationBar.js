@@ -3,22 +3,22 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { FaHome, FaMap, FaUtensils } from 'react-icons/fa';
 
-const NavigationBar = () => {
+const NavigationBar = ({ activeTab }) => {
     return (
         <Nav>
-            <NavItem>
+            <NavItem isActive={activeTab === 'home'}>
                 <Link to="/">
                     <FaHome />
                     <span>Home</span>
                 </Link>
             </NavItem>
-            <NavItem>
+            <NavItem isActive={activeTab === 'map'}>
                 <Link to="/map">
                     <FaMap />
                     <span>Map</span>
                 </Link>
             </NavItem>
-            <NavItem>
+            <NavItem isActive={activeTab === 'recipe'}>
                 <Link to="/recipe">
                     <FaUtensils />
                     <span>Recipe</span>
@@ -46,7 +46,7 @@ const NavItem = styled.div`
     text-align: center;
 
     a {
-        color: #FFFFFF;
+        color: ${props => (props.isActive ? '#007bff' : '#FFFFFF')};    // 클릭됬을 때 색상 변경할꺼면 여기 수정하면 됨
         text-decoration: none;
         display: flex;
         flex-direction: column;
@@ -63,7 +63,7 @@ const NavItem = styled.div`
     }
 
     a:hover {
-        color: #007bff;
+        color: #007bff;     // 마우스 올렸을 때 색상 변경은 여기
     }
 `;
 

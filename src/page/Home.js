@@ -17,6 +17,7 @@ import { setWeather } from "../redux/weatherReducer"
 const Home = () => {
     const [originaljson, setOriginaljson] = useState([])
     const isAndroid = useSelector(state => state.isAndroidReducer.isAndroid)
+    const [activeTab, setActiveTab] = useState('home')
 
     const navigate = useNavigate()
     const handleNavigate = (path) => {
@@ -69,6 +70,10 @@ const Home = () => {
         };
     };
 
+    useEffect(() => {
+        setActiveTab('home');
+    }, []);
+
     return (
         <>
             <HomeLayout />
@@ -88,7 +93,7 @@ const Home = () => {
                 <Link to='/recipe'>레시피</Link>
                 <Link to='/alert'>다이얼로그</Link>
             </Content>
-            {!isAndroid && <NavigationBar />}
+            {!isAndroid && <NavigationBar activeTab={activeTab} />}
         </>
     )
 }

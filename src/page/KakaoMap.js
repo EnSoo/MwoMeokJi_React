@@ -32,6 +32,8 @@ const KakaoMap = () => {
     // 1) Link 태그 없이 페이지 라우팅이 가능한 Hook
     const navigate = useNavigate();
 
+    const [activeTab, setActiveTab] = useState('map')
+
     // 2) useState
     // - 위 경도 정보
     const [location, setLocation] = useState({ latitude: null, longitude: null }); // 현재 위치(위경도)
@@ -135,6 +137,10 @@ const KakaoMap = () => {
         });
     };
 
+    useEffect(() => {
+        setActiveTab('map');
+    }, []);
+
     // kakaomap 라이브러리를 index.html에서 불러와도, kakaomap 불러오는 것은 비동기로 동작하므로 useEffect로 다시 라이브러리를 불러옴
     useEffect(() => {
         const script = document.createElement('script');
@@ -229,7 +235,7 @@ const KakaoMap = () => {
                 </div>
             </MapContent>
             {/* 조건부로 네비게이션 바 렌더링 */}
-            {!isAndroid && <NavigationBar />}
+            {!isAndroid && <NavigationBar activeTab={activeTab} />}
         </MapContainer>
     );
 };

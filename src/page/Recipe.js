@@ -17,6 +17,7 @@ const Recipe = () => {
     const [init, setInit] = useState(1);
     const userAccount = useSelector(state => state.userAccountReducer.userAccount);
     const isAndroid = useSelector(state => state.isAndroidReducer.isAndroid);
+    const [activeTab, setActiveTab] = useState('recipe')
 
     const email = userAccount.email;
     useEffect(() => {
@@ -59,6 +60,10 @@ const Recipe = () => {
         }
     }, [recipes, email, tab]);
 
+    useEffect(() => {
+        setActiveTab('recipe');
+    }, []);
+
     return (
         <div style={{ display: "flex", flexDirection: "column", marginBottom: "1rem" }}>
             <Navigation />
@@ -70,7 +75,7 @@ const Recipe = () => {
                     <FaPlus />
                 </Button>
             )}
-            {!isAndroid && <NavigationBar />}
+            {!isAndroid && <NavigationBar activeTab={activeTab} />}
         </div>
     );
 };
