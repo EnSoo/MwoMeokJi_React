@@ -9,17 +9,19 @@ const RecipeEdit = () => {
     const [recipe, setRecipe] = useState({
         title: '',
         ingredients: '',
-        recipeText: '',
-        time: '',
+        recipe: '',
+        times: '',
         calories: '',
         spiciness: '',
-        weatherConditions: { Cold: 0, Warm: 0 },
+        Cold: 0,
+        Warm: 0,
         soup: 0,
         vegan: 0,
         meat: 0,
         categories: '',
         customCategory: '',
         dishType: []
+        
     });
     const [ingredients, setIngredients] = useState([]);
     const location = useLocation();
@@ -46,26 +48,38 @@ const RecipeEdit = () => {
 
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
+
         if (type === 'checkbox') {
-            if (name === 'weatherConditions') {
+            if (name === 'Cold' || name === 'Warm') {
                 setRecipe(prev => ({
                     ...prev,
-                    weatherConditions: {
-                        ...prev.weatherConditions,
-                        [value]: checked ? 1 : 0
-                    }
+                    [name]: checked ? 1 : 0
                 }));
             } else if (name === 'dishType') {
-                setRecipe(prev => ({
-                    ...prev,
-                    dishType: checked
-                        ? [...prev.dishType, value]
-                        : prev.dishType.filter(item => item !== value)
-                }));
+                const dishTypes = recipe.dishType.split(',').filter(item => item.trim() !== '');
+                    if (checked) {
+                        dishTypes.push(value);
+                    } else {
+                        const index = dishTypes.indexOf(value);
+                        if (index > -1) {
+                            dishTypes.splice(index, 1);
+                        }
+                    }
+                    setRecipe(prev => ({
+                        ...prev,
+                        dishType: dishTypes.join(',')
+                 }));
             } else {
                 setRecipe(prev => ({
                     ...prev,
                     [name]: checked ? 1 : 0
+                }));
+            }
+        } else if (type === 'radio') {
+            if (name === 'vegan' || name === 'meat' || name === 'soup') {
+                setRecipe(prev => ({
+                    ...prev,
+                    [name]: value === name ? 1 : 0
                 }));
             }
         } else if (name === 'categories') {
@@ -93,11 +107,15 @@ const RecipeEdit = () => {
 
     const handleSubmit = (event) => {
         event.preventDefault();
+        
         if (!window.isAndroid) {
             alert('앱에서만 가능한 기능입니다');
             navigate('/', { state: { refresh: true } });
         } else {
             const sendData = new FormData();
+            recipe.dishType.forEach(type => {
+                sendData.append('dishType[]', type); 
+              });
             for (const key in recipe) {
                 if (recipe.hasOwnProperty(key)) {
                     sendData.append(key, recipe[key]);
@@ -178,25 +196,44 @@ const RecipeEdit = () => {
             min="0"
             max="999"
             placeholder='조리시간을 입력해주세요 (분)'
-            value={recipe.time}
+            value={recipe.times}
             onChange={handleChange}
           />
         </RecipeLabel>
         <hr />
         <RecipeLabel>
           <LabelText>사진 첨부:</LabelText>
-          <RecipeFileInput type="file" accept="image/*" name="imgs[]" onChange={handleChange}/>
+          <RecipeFileInput type="file" accept="image/*" name="imgs[]" onChange={handleFileChange}/>
           {recipe.imagePreview && <ImagePreview src={recipe.imagePreview} alt="Preview"/>}
         </RecipeLabel>
         <Fieldset>
           <legend>언제 먹기 좋은 음식인가요?</legend>
           <Label>
-            <input type="checkbox" name="weatherConditions" value="Cold" onChange={handleChange} checked={recipe.weatherConditions.Cold === 1} /> 더울때
+            <input type="checkbox" name="Cold" value="Cold" onChange={handleChange} checked={recipe.Cold === 1} /> 더울때
           </Label>
           <Label>
-            <input type="checkbox" name="weatherConditions" value="Warm" onChange={handleChange} checked={recipe.weatherConditions.Warm === 1} /> 추울때
+            <input type="checkbox" name="Warm" value="Warm" onChange={handleChange} checked={recipe.Warm === 1} /> 추울때
           </Label>
         </Fieldset>
+        <Fieldset>
+          <legend>채식주의자용 요리인가요?</legend>
+          <Label>
+            <input type="radio" name=" vegan" value=" vegan" onChange={handleChange} checked={recipe.vegan === 1} /> 네
+          </Label>
+          <Label>
+            <input type="radio" name="meat" value="meat" onChange={handleChange} checked={recipe.meat === 1} /> 아니요
+          </Label>
+        </Fieldset>
+        <Fieldset>
+            <legend>국물 요리인가요?</legend>
+            <Label>
+                <input type="radio" name="soup" value="soup" onChange={handleChange} checked={recipe.soup === 1} /> 네
+            </Label>
+            <Label>
+                <input type="radio" name="soup" value="nosoup" onChange={handleChange} checked={recipe.soup !== 1} /> 아니요 
+            </Label>
+        </Fieldset>
+
         <Fieldset>
           <legend>열량이 어느정도 되나요?</legend>
           <div>
