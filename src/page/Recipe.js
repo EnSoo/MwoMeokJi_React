@@ -5,21 +5,22 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from "react-redux";
 import RecipeTab from "../components/RecipeTab";
 import RecipeList from "../components/RecipeList";
+import NavigationBar from "../components/NavigationBar";
 
 import { FaPlus } from 'react-icons/fa';
 
 const Recipe = () => {
     const [recipes, setRecipes] = useState([]);
-    const [currentList, setCurrentList ]= useState([])
+    const [currentList, setCurrentList] = useState([]);
     const [tab, setTab] = useState('all');
-    const navigate=useNavigate()
+    const navigate = useNavigate();
     const [init, setInit] = useState(1);
     const userAccount = useSelector(state => state.userAccountReducer.userAccount);
-    // const dispatch = useDispatch();
+    const isAndroid = useSelector(state => state.isAndroidReducer.isAndroid);
 
     const email = userAccount.email;
     useEffect(() => {
-      const data = JSON.stringify({ email });
+        const data = JSON.stringify({ email });
         if (init === 1) {
             const fetchAndFilterRecipes = async () => {
                 try {
@@ -35,7 +36,6 @@ const Recipe = () => {
                     const myRecipes = json.filter(recipe => recipe.email !== "admin");
                     setRecipes(myRecipes);
 
-                    // Update the currentList based on the tab
                     if (tab === "all") {
                         setCurrentList(myRecipes);
                     } else {
@@ -48,7 +48,7 @@ const Recipe = () => {
             };
 
             fetchAndFilterRecipes();
-            setInit(0); // Set init to 0 to prevent future calls
+            setInit(0);
         } else {
             if (tab === "all") {
                 setCurrentList(recipes);
@@ -57,18 +57,20 @@ const Recipe = () => {
                 setCurrentList(myRecipes);
             }
         }
-  }, [recipes, email, tab]);
+    }, [recipes, email, tab]);
+
     return (
-        <div style={{display:"flex", flexDirection:"column", marginBottom:"1rem"}}>
+        <div style={{ display: "flex", flexDirection: "column", marginBottom: "1rem" }}>
             <Navigation />
-            <RecipeTab tab={tab} setTab={setTab}/>
+            <RecipeTab tab={tab} setTab={setTab} />
             <div>&nbsp;</div>
-            <RecipeList recipes={currentList} setRecipes={setRecipes}/>
+            <RecipeList recipes={currentList} setRecipes={setRecipes} />
             {tab !== 'all' && (
-                <Button onClick={() => !window.isAndroid ? alert('앱에서만 가능한 기능입니다') : navigate('/recipe/add')}>
+                <Button onClick={() => email == '' ? alert('앱에서만 가능한 기능입니다') : navigate('/recipe/add')}>
                     <FaPlus />
                 </Button>
             )}
+            {!isAndroid && <NavigationBar />}
         </div>
     );
 };

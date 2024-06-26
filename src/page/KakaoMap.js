@@ -20,6 +20,8 @@ import Tooltip from "../components/Tooltip";
 import GeolocationExample from "../components/GeolocationExmple";
 import InfoWindow from "../components/InfoWindow";
 import Loading from "../components/Loading";
+import { useSelector } from "react-redux";
+import NavigationBar from "../components/NavigationBar";
 
 
 // kakao map
@@ -51,6 +53,7 @@ const KakaoMap = () => {
     const resLocation = (latitude, longitude) => {
         setLocation({ latitude, longitude });
     };
+    const isAndroid = useSelector(state => state.isAndroidReducer.isAndroid);
 
     window.resLocation = resLocation;
 
@@ -187,7 +190,7 @@ const KakaoMap = () => {
 
     // 화면 랜더링 부분
     return (
-        <>
+        <MapContainer>
             {loading && <Loading />}
             <MapContent>
                 <GeolocationExample onLocation={setLocation} />
@@ -225,21 +228,31 @@ const KakaoMap = () => {
                     </div>
                 </div>
             </MapContent>
-        </>
+            {/* 조건부로 네비게이션 바 렌더링 */}
+            {!isAndroid && <NavigationBar />}
+        </MapContainer>
     );
 };
 
 export default KakaoMap;
+
+const MapContainer = styled.div`
+    height: calc(100vh - 70px); /* 전체 높이에서 NavigationBar 높이를 뺌 */
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+`;
 
 // 스타일 변수 목록
 const MapContent = styled.div`
     display: flex;
     flex-direction: column;
     width: 100%;
+    height: 100%; /* 부모 컨테이너의 전체 높이를 차지 */
     max-width: 975px;
     margin: 0 auto;
-    height: 100vh;
     box-shadow: 0 0 15px gray;
+    
     header {
         display: flex;
         justify-content: space-between;
