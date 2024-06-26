@@ -9,7 +9,7 @@ const RecipeEdit = () => {
     const [recipe, setRecipe] = useState({
         title: '',
         ingredients: '',
-        recipe: '',
+        recipeText: '',
         times: '',
         calories: '',
         spiciness: '',
@@ -20,8 +20,7 @@ const RecipeEdit = () => {
         meat: 0,
         categories: '',
         customCategory: '',
-        dishType: []
-        
+        dishType: '' // 초기 값을 문자열로 설정합니다.
     });
     const [ingredients, setIngredients] = useState([]);
     const location = useLocation();
@@ -56,19 +55,19 @@ const RecipeEdit = () => {
                     [name]: checked ? 1 : 0
                 }));
             } else if (name === 'dishType') {
-                const dishTypes = recipe.dishType.split(',').filter(item => item.trim() !== '');
-                    if (checked) {
-                        dishTypes.push(value);
-                    } else {
-                        const index = dishTypes.indexOf(value);
-                        if (index > -1) {
-                            dishTypes.splice(index, 1);
-                        }
+                const dishTypes = recipe.dishType ? recipe.dishType.split(',') : [];
+                if (checked) {
+                    dishTypes.push(value);
+                } else {
+                    const index = dishTypes.indexOf(value);
+                    if (index > -1) {
+                        dishTypes.splice(index, 1);
                     }
-                    setRecipe(prev => ({
-                        ...prev,
-                        dishType: dishTypes.join(',')
-                 }));
+                }
+                setRecipe(prev => ({
+                    ...prev,
+                    dishType: dishTypes.join(',')
+                }));
             } else {
                 setRecipe(prev => ({
                     ...prev,
@@ -76,12 +75,10 @@ const RecipeEdit = () => {
                 }));
             }
         } else if (type === 'radio') {
-            if (name === 'vegan' || name === 'meat' || name === 'soup') {
-                setRecipe(prev => ({
-                    ...prev,
-                    [name]: value === name ? 1 : 0
-                }));
-            }
+            setRecipe(prev => ({
+                ...prev,
+                [name]: value
+            }));
         } else if (name === 'categories') {
             setRecipe(prev => ({
                 ...prev,
@@ -113,9 +110,9 @@ const RecipeEdit = () => {
             navigate('/', { state: { refresh: true } });
         } else {
             const sendData = new FormData();
-            recipe.dishType.forEach(type => {
+            recipe.dishType.split(',').forEach(type => {
                 sendData.append('dishType[]', type); 
-              });
+            });
             for (const key in recipe) {
                 if (recipe.hasOwnProperty(key)) {
                     sendData.append(key, recipe[key]);
@@ -153,138 +150,138 @@ const RecipeEdit = () => {
         setIngredients(filtered);
         setRecipe({ ...recipe, ingredients: filtered.join(',') });
     };
-  return (
-    <RecipeEditContainer>
-      <Navigation />
-      <BackBtn />
-      <RecipeForm onSubmit={handleSubmit}>
-        <h1>나만의 레시피 {location.pathname.startsWith('/recipe/modify') ? '수정' : '작성'}</h1>
-        <RecipeLabel>
-          <LabelText>제목:</LabelText>
-          <RecipeInput
-            name="title"
-            type="text"
-            placeholder="제목을 입력해주세요 (20자 이내)"
-            value={recipe.title}
-            maxLength={20}
-            onChange={handleChange}
-          />
-        </RecipeLabel>
-        <RecipeLabel>
-          <LabelText>재료:</LabelText>
-          <RecipeTextarea
-            name="ingredients"
-            placeholder="재료를 쉼표로 구분해서 입력하세요 (예: 양파, 대파, 쪽파)"
-            value={recipe.ingredients}
-            onChange={(e)=>filterIngredients(e.target.value)}
-          />
-        </RecipeLabel>
-        <RecipeLabel>
-          <LabelText>조리법:</LabelText>
-          <RecipeTextarea
-            name="recipeText"
-            placeholder="조리법을 입력해주세요. 모두가 쉽게 이용할 수 있도록 부탁드립니다."
-            value={recipe.recipeText}
-            onChange={handleChange}
-          />
-        </RecipeLabel>
-        <RecipeLabel>
-          <LabelText>조리시간/분:</LabelText>
-          <StyledInput
-            name="time"
-            type="number"
-            min="0"
-            max="999"
-            placeholder='조리시간을 입력해주세요 (분)'
-            value={recipe.times}
-            onChange={handleChange}
-          />
-        </RecipeLabel>
-        <hr />
-        <RecipeLabel>
-          <LabelText>사진 첨부:</LabelText>
-          <RecipeFileInput type="file" accept="image/*" name="imgs[]" onChange={handleFileChange}/>
-          {recipe.imagePreview && <ImagePreview src={recipe.imagePreview} alt="Preview"/>}
-        </RecipeLabel>
-        <Fieldset>
-          <legend>언제 먹기 좋은 음식인가요?</legend>
-          <Label>
-            <input type="checkbox" name="Cold" value="Cold" onChange={handleChange} checked={recipe.Cold === 1} /> 더울때
-          </Label>
-          <Label>
-            <input type="checkbox" name="Warm" value="Warm" onChange={handleChange} checked={recipe.Warm === 1} /> 추울때
-          </Label>
-        </Fieldset>
-        <Fieldset>
-          <legend>채식주의자용 요리인가요?</legend>
-          <Label>
-            <input type="radio" name=" vegan" value=" vegan" onChange={handleChange} checked={recipe.vegan === 1} /> 네
-          </Label>
-          <Label>
-            <input type="radio" name="meat" value="meat" onChange={handleChange} checked={recipe.meat === 1} /> 아니요
-          </Label>
-        </Fieldset>
-        <Fieldset>
-            <legend>국물 요리인가요?</legend>
-            <Label>
-                <input type="radio" name="soup" value="soup" onChange={handleChange} checked={recipe.soup === 1} /> 네
-            </Label>
-            <Label>
-                <input type="radio" name="soup" value="nosoup" onChange={handleChange} checked={recipe.soup !== 1} /> 아니요 
-            </Label>
-        </Fieldset>
-
-        <Fieldset>
-          <legend>열량이 어느정도 되나요?</legend>
-          <div>
-            칼로리:
-            <Label><input type="radio" name="calories" value="Low" onChange={handleChange} checked={recipe.calories === 'Low'} /> 낮은 음식이에요</Label>
-            <Label><input type="radio" name="calories" value="Medium" onChange={handleChange} checked={recipe.calories === 'Medium'} /> 평범해요</Label>
-            <Label><input type="radio" name="calories" value="High" onChange={handleChange} checked={recipe.calories === 'High'} /> 많이 먹으면 살쪄요</Label>
-          </div>
-          <div>
-            맵기정도:
-            <Label><input type="radio" name="spiciness" value="0" onChange={handleChange} checked={recipe.spiciness === '0'} /> 전혀 안매워요</Label>
-            <Label><input type="radio" name="spiciness" value="1" onChange={handleChange} checked={recipe.spiciness === '1'} /> 조금매워요</Label>
-            <Label><input type="radio" name="spiciness" value="2" onChange={handleChange} checked={recipe.spiciness === '2'} /> 신라면정도 맵기에요</Label>
-            <Label><input type="radio" name="spiciness" value="3" onChange={handleChange} checked={recipe.spiciness === '3'} /> 좀 매워요</Label>
-            <Label><input type="radio" name="spiciness" value="4" onChange={handleChange} checked={recipe.spiciness === '4'} /> 많이 매워요</Label>
-          </div>
-        </Fieldset>
-        <Fieldset>
-          <legend>어떤 지역 음식인가요?</legend>
-          <div>
-            <Label><input type="radio" name="categories" value="korean" onChange={handleChange} checked={recipe.categories === 'korean'} /> 한식</Label>
-            <Label><input type="radio" name="categories" value="chinese" onChange={handleChange} checked={recipe.categories === 'chinese'} /> 중식</Label>
-            <Label><input type="radio" name="categories" value="japanese" onChange={handleChange} checked={recipe.categories === 'japanese'} /> 일식</Label>
-            <Label><input type="radio" name="categories" value="other" onChange={handleChange} checked={recipe.categories === 'other'} /> 기타</Label>
-            {recipe.categories === 'other' && (
-              <StyledInput
-                name="customCategory"
-                type="text"
-                placeholder="예시: 이탈리아, 멕시코, 태국"
-                value={recipe.customCategory}
-                onChange={handleChange}
-              />
-            )}
-          </div>
-        </Fieldset>
-        <Fieldset>
-          <legend>어떤 용도의 요리인가요?</legend>
-          <div>
-            <Label><input type="checkbox" name="dishType" value="반찬" onChange={handleChange} checked={recipe.dishType.includes('반찬')} /> 반찬</Label>
-            <Label><input type="checkbox" name="dishType" value="메인요리" onChange={handleChange} checked={recipe.dishType.includes('메인요리')} /> 메인 요리</Label>
-            <Label><input type="checkbox" name="dishType" value="간식" onChange={handleChange} checked={recipe.dishType.includes('간식')} /> 간식</Label>
-            <Label><input type="checkbox" name="dishType" value="국물요리" onChange={handleChange} checked={recipe.dishType.includes('국물요리')} /> 국물 요리</Label>
-            <Label><input type="checkbox" name="dishType" value="소스" onChange={handleChange} checked={recipe.dishType.includes('소스')} /> 소스</Label>
-          </div>
-        </Fieldset>
-        <RecipeFooter>
-          <RecipeButton type="submit">{location.pathname.startsWith('/recipe/modify') ? '수정' : '작성'}하기</RecipeButton>
-        </RecipeFooter>
-      </RecipeForm>
-    </RecipeEditContainer>
-  );
+    
+    return (
+        <RecipeEditContainer>
+            <Navigation />
+            <BackBtn />
+            <RecipeForm onSubmit={handleSubmit}>
+                <h1>나만의 레시피 {location.pathname.startsWith('/recipe/modify') ? '수정' : '작성'}</h1>
+                <RecipeLabel>
+                    <LabelText>제목:</LabelText>
+                    <RecipeInput
+                        name="title"
+                        type="text"
+                        placeholder="제목을 입력해주세요 (20자 이내)"
+                        value={recipe.title}
+                        maxLength={20}
+                        onChange={handleChange}
+                    />
+                </RecipeLabel>
+                <RecipeLabel>
+                    <LabelText>재료:</LabelText>
+                    <RecipeTextarea
+                        name="ingredients"
+                        placeholder="재료를 쉼표로 구분해서 입력하세요 (예: 양파, 대파, 쪽파)"
+                        value={recipe.ingredients}
+                        onChange={(e)=>filterIngredients(e.target.value)}
+                    />
+                </RecipeLabel>
+                <RecipeLabel>
+                    <LabelText>조리법:</LabelText>
+                    <RecipeTextarea
+                        name="recipeText"
+                        placeholder="조리법을 입력해주세요. 모두가 쉽게 이용할 수 있도록 부탁드립니다."
+                        value={recipe.recipeText}
+                        onChange={handleChange}
+                    />
+                </RecipeLabel>
+                <RecipeLabel>
+                    <LabelText>조리시간/분:</LabelText>
+                    <StyledInput
+                        name="times"
+                        type="number"
+                        min="0"
+                        max="999"
+                        placeholder='조리시간을 입력해주세요 (분)'
+                        value={recipe.times}
+                        onChange={handleChange}
+                    />
+                </RecipeLabel>
+                <hr />
+                <RecipeLabel>
+                    <LabelText>사진 첨부:</LabelText>
+                    <RecipeFileInput type="file" accept="image/*" name="imgs[]" onChange={handleFileChange}/>
+                    {imagePreview && <ImagePreview src={imagePreview} alt="Preview"/>}
+                </RecipeLabel>
+                <Fieldset>
+                    <legend>언제 먹기 좋은 음식인가요?</legend>
+                    <Label>
+                        <input type="checkbox" name="Cold" value="Cold" onChange={handleChange} checked={recipe.Cold === 1} /> 더울때
+                    </Label>
+                    <Label>
+                        <input type="checkbox" name="Warm" value="Warm" onChange={handleChange} checked={recipe.Warm === 1} /> 추울때
+                    </Label>
+                </Fieldset>
+                <Fieldset>
+                    <legend>채식주의자용 요리인가요?</legend>
+                    <Label>
+                        <input type="radio" name="vegan" value="1" onChange={handleChange} checked={recipe.vegan === 1} /> 네
+                    </Label>
+                    <Label>
+                        <input type="radio" name="vegan" value="0" onChange={handleChange} checked={recipe.vegan === 0} /> 아니요
+                    </Label>
+                </Fieldset>
+                <Fieldset>
+                    <legend>국물 요리인가요?</legend>
+                    <Label>
+                        <input type="radio" name="soup" value="1" onChange={handleChange} checked={recipe.soup === 1} /> 네
+                    </Label>
+                    <Label>
+                        <input type="radio" name="soup" value="0" onChange={handleChange} checked={recipe.soup === 0} /> 아니요
+                    </Label>
+                </Fieldset>
+                <Fieldset>
+                    <legend>열량이 어느정도 되나요?</legend>
+                    <div>
+                        칼로리:
+                        <Label><input type="radio" name="calories" value="Low" onChange={handleChange} checked={recipe.calories === 'Low'} /> 낮은 음식이에요</Label>
+                        <Label><input type="radio" name="calories" value="Medium" onChange={handleChange} checked={recipe.calories === 'Medium'} /> 평범해요</Label>
+                        <Label><input type="radio" name="calories" value="High" onChange={handleChange} checked={recipe.calories === 'High'} /> 많이 먹으면 살쪄요</Label>
+                    </div>
+                    <div>
+                        맵기정도:
+                        <Label><input type="radio" name="spiciness" value="0" onChange={handleChange} checked={recipe.spiciness === '0'} /> 전혀 안매워요</Label>
+                        <Label><input type="radio" name="spiciness" value="1" onChange={handleChange} checked={recipe.spiciness === '1'} /> 조금매워요</Label>
+                        <Label><input type="radio" name="spiciness" value="2" onChange={handleChange} checked={recipe.spiciness === '2'} /> 신라면정도 맵기에요</Label>
+                        <Label><input type="radio" name="spiciness" value="3" onChange={handleChange} checked={recipe.spiciness === '3'} /> 좀 매워요</Label>
+                        <Label><input type="radio" name="spiciness" value="4" onChange={handleChange} checked={recipe.spiciness === '4'} /> 많이 매워요</Label>
+                    </div>
+                </Fieldset>
+                <Fieldset>
+                    <legend>어떤 지역 음식인가요?</legend>
+                    <div>
+                        <Label><input type="radio" name="categories" value="korean" onChange={handleChange} checked={recipe.categories === 'korean'} /> 한식</Label>
+                        <Label><input type="radio" name="categories" value="chinese" onChange={handleChange} checked={recipe.categories === 'chinese'} /> 중식</Label>
+                        <Label><input type="radio" name="categories" value="japanese" onChange={handleChange} checked={recipe.categories === 'japanese'} /> 일식</Label>
+                        <Label><input type="radio" name="categories" value="other" onChange={handleChange} checked={recipe.categories === 'other'} /> 기타</Label>
+                        {recipe.categories === 'other' && (
+                        <StyledInput
+                            name="customCategory"
+                            type="text"
+                            placeholder="예시: 이탈리아, 멕시코, 태국"
+                            value={recipe.customCategory}
+                            onChange={handleChange}
+                        />
+                        )}
+                    </div>
+                </Fieldset>
+                <Fieldset>
+                    <legend>어떤 용도의 요리인가요?</legend>
+                    <div>
+                        <Label><input type="checkbox" name="dishType" value="반찬" onChange={handleChange} checked={recipe.dishType.includes('반찬')} /> 반찬</Label>
+                        <Label><input type="checkbox" name="dishType" value="메인요리" onChange={handleChange} checked={recipe.dishType.includes('메인요리')} /> 메인 요리</Label>
+                        <Label><input type="checkbox" name="dishType" value="간식" onChange={handleChange} checked={recipe.dishType.includes('간식')} /> 간식</Label>
+                        <Label><input type="checkbox" name="dishType" value="국물요리" onChange={handleChange} checked={recipe.dishType.includes('국물요리')} /> 국물 요리</Label>
+                        <Label><input type="checkbox" name="dishType" value="소스" onChange={handleChange} checked={recipe.dishType.includes('소스')} /> 소스</Label>
+                    </div>
+                </Fieldset>
+                <RecipeFooter>
+                    <RecipeButton type="submit">{location.pathname.startsWith('/recipe/modify') ? '수정' : '작성'}하기</RecipeButton>
+                </RecipeFooter>
+            </RecipeForm>
+        </RecipeEditContainer>
+    );
 };
 
 export default RecipeEdit;
