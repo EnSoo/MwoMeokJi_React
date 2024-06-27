@@ -170,7 +170,10 @@ const RecipeEdit = () => {
     };
 
     const filterIngredients = (input) => {
-        const filtered = input.split(',').filter(item => item.trim() !== '');
+        // 쉼표 앞뒤의 공백을 제거하고, 연속된 쉼표를 하나로 치환
+        const cleaned = input.replace(/\s*,\s*/g, ',').replace(/,+/g, ',');
+        // 빈 문자열이 아닌 항목만 필터링
+        const filtered = cleaned.split(',').filter(item => item !== '');
         setIngredients(filtered);
         setRecipe({ ...recipe, ingredients: filtered.join(',') });
     };
