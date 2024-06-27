@@ -6,6 +6,7 @@ import { useSelector } from "react-redux";
 import { MdFavorite, MdFavoriteBorder } from "react-icons/md";
 import { GrView } from "react-icons/gr";
 import { RiRobot2Fill, RiRobot2Line } from "react-icons/ri";
+import Navigation from "./Navigation";
 
 const Card = ({ recipe, onDelete, onClick, fromRecommender, delay }) => {
   const navigate = useNavigate();
@@ -144,6 +145,7 @@ const Card = ({ recipe, onDelete, onClick, fromRecommender, delay }) => {
       isVisible={isVisible} 
       ref={cardRef}
     >
+      <Navigation />
       <CardHeader>
         {location.pathname === '/recipe' && recipe.my_recipe === "1" && (
           <>
