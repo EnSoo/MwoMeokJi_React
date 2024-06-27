@@ -18,10 +18,6 @@ const HomeLayout = () => {
         <Left>
             <img className='img' src={logo} alt='logo' onClick={()=>handleNavigate('/')}></img>
         </Left>
-        <Right>
-            <input className='search' type='search' placeholder='search'></input>
-            <button className='button' type='submit'><img src={click} alt='click'></img></button>
-        </Right>
     </Layout>
   )
 }
