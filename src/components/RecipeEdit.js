@@ -75,11 +75,24 @@ const RecipeEdit = () => {
                 }));
             }
         } else if (type === 'radio') {
-            setRecipe(prev => ({
-                ...prev,
-                [name]: value
-            }));
-        } else if (name === 'categories') {
+            if (name === 'vegan' || name === 'meat') {
+                setRecipe(prev => ({
+                    ...prev,
+                    vegan: name === 'vegan' ? 1 : 0,
+                    meat: name === 'meat' ? 1 : 0
+                }));
+            } else if (name === 'soup') {
+                setRecipe(prev => ({
+                    ...prev,
+                    [name]: value === '1' ? 1 : 0
+                }));
+            } else {
+                setRecipe(prev => ({
+                    ...prev,
+                    [name]: value
+                }));
+            }
+        }else if (name === 'categories') {
             setRecipe(prev => ({
                 ...prev,
                 categories: value,
@@ -216,19 +229,19 @@ const RecipeEdit = () => {
                 <Fieldset>
                     <legend>채식주의자용 요리인가요?</legend>
                     <Label>
-                        <input type="radio" name="vegan" value="1" onChange={handleChange} checked={recipe.vegan === 1} /> 네
+                        <input type="radio" name="meat" value="meat" onChange={handleChange} checked={recipe.meat === 1} /> 네
                     </Label>
                     <Label>
-                        <input type="radio" name="vegan" value="0" onChange={handleChange} checked={recipe.vegan === 0} /> 아니요
+                        <input type="radio" name="vegan" value="vegan" onChange={handleChange} checked={recipe.vegan === 1} /> 아니요
                     </Label>
                 </Fieldset>
                 <Fieldset>
                     <legend>국물 요리인가요?</legend>
                     <Label>
-                        <input type="radio" name="soup" value="1" onChange={handleChange} checked={recipe.soup === 1} /> 네
+                        <input type="radio" name="soup" value="soup" onChange={handleChange} checked={recipe.soup === 1} /> 네
                     </Label>
                     <Label>
-                        <input type="radio" name="soup" value="0" onChange={handleChange} checked={recipe.soup === 0} /> 아니요
+                        <input type="radio" name="soup" value="soup" onChange={handleChange} checked={recipe.soup === 0} /> 아니요
                     </Label>
                 </Fieldset>
                 <Fieldset>
