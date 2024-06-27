@@ -49,7 +49,7 @@ width: 100%;
 const Title = styled.div`
   text-align: center;
   flex: 1;
-  font-size: 40px; /* 원하는 폰트 크기로 수정 */
+  font-size: 24px; /* 원하는 폰트 크기로 수정 */
   font-weight: bold; /* 두껍게 설정 */
 `
 const BackBtn = ({title}) => {
