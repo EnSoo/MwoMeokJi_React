@@ -253,10 +253,10 @@ const RecipeEdit = () => {
                 <Fieldset>
                     <legend>국물 요리인가요?</legend>
                     <Label>
-                        <input type="radio" name="soup" value="soup" onChange={handleChange} checked={recipe.soup === 1} /> 네
+                        <input type="radio" name="soup" value="1" onChange={handleChange} checked={recipe.soup === 1} /> 네
                     </Label>
                     <Label>
-                        <input type="radio" name="soup" value="soup" onChange={handleChange} checked={recipe.soup === 0} /> 아니요
+                        <input type="radio" name="soup" value="0" onChange={handleChange} checked={recipe.soup === 0} /> 아니요
                     </Label>
                 </Fieldset>
                 <Fieldset>
