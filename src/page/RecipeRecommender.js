@@ -8,9 +8,10 @@ import BackBtn from '../components/BackBtn';
 import AlertDialog from '../components/AlertDialog';
 import { recommendRecipes } from '../utils/recipeUtils';
 import { useSelector } from 'react-redux';
+import RecipeList from '../components/RecipeList';
 
 const Container = styled.div`
-  padding: 20px;
+  padding: 10px;
   max-width: 800px;
   margin: auto;
   font-family: Arial, sans-serif;
@@ -35,7 +36,7 @@ const RecipeContainer = styled.div`
   flex-wrap: wrap;
   justify-content: space-around;  /* Adjusted to space-around for better distribution */
   gap: 1rem;
-  padding: 1rem;
+  padding: 0rem;
   margin-bottom: 20px;
 `;
 
@@ -123,19 +124,8 @@ const RecipeRecommender = () => {
             <LoadingMessage>추천 중...</LoadingMessage>
           ) : (
             <RecipeContainer>
-              {(filteredRecipes.length > 0 ? filteredRecipes : recommendedRecipes).map(recipe => (
-                <Card 
-                  key={recipe.no} 
-                  recipe={recipe} 
-                  onClick={() => handleCardClick(recipe)} // 카드 클릭 시 핸들러 호출
-                  onDelete={(recipeNo) => {
-                    setRecommendedRecipes(recommendedRecipes.filter(r => r.no !== recipeNo));
-                    setFilteredRecipes(filteredRecipes.filter(r => r.no !== recipeNo));
-                  }} 
-                />
-              ))}
+              {(filteredRecipes.length > 0 ? <RecipeList recipes={filteredRecipes} setRecipes={setFilteredRecipes} /> : <RecipeList recipes={recommendedRecipes} setRecipes={setRecommendedRecipes} />)}
               {!window.isAndroid && <StyledButton  onClick={()=>localStorage.clear()}>선호도 초기화</StyledButton> }
-              
             </RecipeContainer>
           )}
         </>
