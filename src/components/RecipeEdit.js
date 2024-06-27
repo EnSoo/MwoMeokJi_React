@@ -124,10 +124,14 @@ const RecipeEdit = () => {
     const handleSubmit = (event) => {
         event.preventDefault();
         
-        if (window.isAndroid) {
+        if (!window.isAndroid) {
             alert('앱에서만 가능한 기능입니다');
             navigate('/', { state: { refresh: true } });
         } else {
+            if(recipe.categories == "other" && recipe.customCategory == "") {
+                alert('기타를 선택하셨습니다. 세부 카테고리를 입력해주세요')
+                return
+            }
             const sendData = new FormData();
             recipe.dishType.split(',').forEach(type => {
                 sendData.append('dishType[]', type); 
