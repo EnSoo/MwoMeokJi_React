@@ -37,7 +37,7 @@ const RecipeContainer = styled.div`
   justify-content: space-around;  /* Adjusted to space-around for better distribution */
   gap: 1rem;
   padding: 0rem;
-  margin-bottom: 20px;
+  margin-bottom: 60px;
 `;
 
 const RecipeRecommender = () => {
