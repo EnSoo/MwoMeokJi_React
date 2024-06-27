@@ -169,15 +169,14 @@ const RecipeEdit = () => {
         }
     };
 
-    const filterIngredients = (input) => {
-        // 쉼표 앞뒤의 공백을 제거하고, 연속된 쉼표를 하나로 치환
-        const cleaned = input.replace(/\s*,\s*/g, ',').replace(/,+/g, ',');
-        // 빈 문자열이 아닌 항목만 필터링
-        const filtered = cleaned.split(',').filter(item => item !== '');
-        setIngredients(filtered);
-        setRecipe({ ...recipe, ingredients: filtered.join(',') });
-    };
-
+    const handleIngredientChange = (e) => {
+        const input = e.target.value;
+        
+        setRecipe(prevRecipe => ({
+          ...prevRecipe,
+          ingredients: input
+        }));
+      };
     return (
         <RecipeEditContainer>
             <Navigation/>
@@ -200,7 +199,7 @@ const RecipeEdit = () => {
                         name="ingredients"
                         placeholder="재료를 쉼표로 구분해서 입력하세요 (예: 양파, 대파, 쪽파)"
                         value={recipe.ingredients}
-                        onChange={(e)=>filterIngredients(e.target.value)}
+                        onChange={handleIngredientChange}
                     />
                 </RecipeLabel>
                 <RecipeLabel>
