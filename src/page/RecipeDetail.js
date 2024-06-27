@@ -19,7 +19,7 @@ const RecipeDetail = () => {
     }
     const handleEdit = (e) => {
         e.stopPropagation(); // Prevent the card click event
-        navigate(`${process.env.PUBLIC_URL}/recipe/detail/:id/${recipe.no}`, { state: { recipe } })
+        navigate(`${process.env.PUBLIC_URL}/recipe/modify/${recipe.no}`, { state: { recipe } })
     }
     const handleDelete = (e) => {
         e.stopPropagation(); // Prevent the card click event

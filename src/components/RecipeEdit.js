@@ -9,7 +9,7 @@ const RecipeEdit = () => {
     const [recipe, setRecipe] = useState({
         title: '',
         ingredients: '',
-        recipeText: '',
+        recipe: '',
         times: '',
         calories: '',
         spiciness: '',
@@ -180,10 +180,9 @@ const RecipeEdit = () => {
 
     return (
         <RecipeEditContainer>
-            <Navigation />
-            <BackBtn />
+            <Navigation/>
+            <BackBtn title={<>나만의 레시피 {location.pathname.startsWith('/recipe/modify') ? '수정' : '작성'}</>}/>
             <RecipeForm onSubmit={handleSubmit}>
-                <h1>나만의 레시피 {location.pathname.startsWith('/recipe/modify') ? '수정' : '작성'}</h1>
                 <RecipeLabel>
                     <LabelText>제목:</LabelText>
                     <RecipeInput
@@ -207,9 +206,9 @@ const RecipeEdit = () => {
                 <RecipeLabel>
                     <LabelText>조리법:</LabelText>
                     <RecipeTextarea
-                        name="recipeText"
+                        name="recipe"
                         placeholder="조리법을 입력해주세요. 모두가 쉽게 이용할 수 있도록 부탁드립니다."
-                        value={recipe.recipeText}
+                        value={recipe.recipe}
                         onChange={handleChange}
                     />
                 </RecipeLabel>
