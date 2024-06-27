@@ -75,16 +75,20 @@ const RecipeEdit = () => {
                 }));
             }
         } else if (type === 'radio') {
+
             if (name === 'vegan' || name === 'meat') {
                 setRecipe(prev => ({
                     ...prev,
                     vegan: name === 'vegan' ? 1 : 0,
                     meat: name === 'meat' ? 1 : 0
+
                 }));
             } else if (name === 'soup') {
                 setRecipe(prev => ({
                     ...prev,
+
                     [name]: value === '1' ? 1 : 0
+
                 }));
             } else {
                 setRecipe(prev => ({
@@ -92,7 +96,10 @@ const RecipeEdit = () => {
                     [name]: value
                 }));
             }
+
         }else if (name === 'categories') {
+
+
             setRecipe(prev => ({
                 ...prev,
                 categories: value,
@@ -163,7 +170,7 @@ const RecipeEdit = () => {
         setIngredients(filtered);
         setRecipe({ ...recipe, ingredients: filtered.join(',') });
     };
-    
+
     return (
         <RecipeEditContainer>
             <Navigation />
@@ -229,10 +236,12 @@ const RecipeEdit = () => {
                 <Fieldset>
                     <legend>채식주의자용 요리인가요?</legend>
                     <Label>
+
                         <input type="radio" name="meat" value="meat" onChange={handleChange} checked={recipe.meat === 1} /> 네
                     </Label>
                     <Label>
                         <input type="radio" name="vegan" value="vegan" onChange={handleChange} checked={recipe.vegan === 1} /> 아니요
+
                     </Label>
                 </Fieldset>
                 <Fieldset>
