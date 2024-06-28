@@ -9,7 +9,7 @@ const RecipeEdit = () => {
     const [recipe, setRecipe] = useState({
         title: '',
         ingredients: '',
-        recipeText: '',
+        recipe: '',
         times: '',
         calories: '',
         spiciness: '',
@@ -201,10 +201,9 @@ const RecipeEdit = () => {
 
     return (
         <RecipeEditContainer>
-            <Navigation />
-            <BackBtn />
+            <Navigation/>
+            <BackBtn title={<>나만의 레시피 {location.pathname.startsWith('/recipe/modify') ? '수정' : '작성'}</>}/>
             <RecipeForm onSubmit={handleSubmit}>
-                <h1>나만의 레시피 {location.pathname.startsWith('/recipe/modify') ? '수정' : '작성'}</h1>
                 <RecipeLabel>
                     <LabelText>제목:</LabelText>
                     <RecipeInput
@@ -225,12 +224,15 @@ const RecipeEdit = () => {
                         onChange={handleIngredientChange}
                         />
                     </RecipeLabel>
+
+                    
+
                 <RecipeLabel>
                     <LabelText>조리법:</LabelText>
                     <RecipeTextarea
                         name="recipe"
                         placeholder="조리법을 입력해주세요. 모두가 쉽게 이용할 수 있도록 부탁드립니다."
-                        value={recipe.recipeText}
+                        value={recipe.recipe}
                         onChange={handleChange}
                     />
                 </RecipeLabel>
@@ -275,10 +277,10 @@ const RecipeEdit = () => {
                 <Fieldset>
                     <legend>국물 요리인가요?</legend>
                     <Label>
-                        <input type="radio" name="soup" value="soup" onChange={handleChange} checked={recipe.soup === 1} /> 네
+                        <input type="radio" name="soup" value="1" onChange={handleChange} checked={recipe.soup === 1} /> 네
                     </Label>
                     <Label>
-                        <input type="radio" name="soup" value="soup" onChange={handleChange} checked={recipe.soup === 0} /> 아니요
+                        <input type="radio" name="soup" value="0" onChange={handleChange} checked={recipe.soup === 0} /> 아니요
                     </Label>
                 </Fieldset>
                 <Fieldset>
