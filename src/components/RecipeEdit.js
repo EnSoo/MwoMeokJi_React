@@ -7,6 +7,7 @@ import BackBtn from './BackBtn';
 
 const RecipeEdit = () => {
     const [recipe, setRecipe] = useState({
+        no: '',
         title: '',
         ingredients: '',
         recipe: '',
@@ -35,16 +36,13 @@ const RecipeEdit = () => {
         if (location.pathname.startsWith('/recipe/modify')) {
             setComment('수정');
             const transdata=transformRecipeData(location.state.recipe)
-                console.log("변환된 데이터",transdata)
+                
             setRecipe(transdata);
             setImagePreview(`${process.env.PUBLIC_URL}/imgs/${location.state.recipe.imgurl}`);
         } else if (location.pathname === '/recipe/add') {
             setComment('작성');
         }
 
-        if (location.state && location.state.recipe) {
-            setRecipe(location.state.recipe);
-        }
     }, [location.pathname, location.state]);
 
     const handleChange = (e) => {
@@ -126,9 +124,10 @@ const RecipeEdit = () => {
 
     function transformRecipeData(apiData) {
         return {
+            no: apiData.no,
           title: apiData.title,
           ingredients: apiData.ingredients,
-          recipeText: apiData.recipe,
+          recipe: apiData.recipe,
           times: apiData.times,
           calories: apiData.calories,
           spiciness: apiData.spiciness,
@@ -138,7 +137,7 @@ const RecipeEdit = () => {
           vegan: apiData.vegan === "1" ? 1 : 0,
           meat: apiData.meat === "1" ? 1 : 0,
           categories: apiData.categories,
-          customCategory: "", // 기존 값 유지 (필요에 따라 수정)
+          customCategory: apiData.customCategory,
           dishType: apiData.dishType || "" // dishType 필드 추가 (초기 값은 빈 문자열)
         };
       }
@@ -146,7 +145,7 @@ const RecipeEdit = () => {
     const handleSubmit = (event) => {
         event.preventDefault();
         
-        if (!window.isAndroid) {
+        if (window.isAndroid) {
             alert('앱에서만 가능한 기능입니다');
             navigate('/', { state: { refresh: true } });
         } else {
@@ -257,20 +256,20 @@ const RecipeEdit = () => {
                 <Fieldset>
                     <legend>언제 먹기 좋은 음식인가요?</legend>
                     <Label>
-                        <input type="checkbox" name="Cold" value="Cold" onChange={handleChange} checked={recipe.Cold === 1} /> 더울때
+                        <input type="checkbox" name="Cold" value="1" onChange={handleChange} checked={recipe.Cold === 1} /> 더울때
                     </Label>
                     <Label>
-                        <input type="checkbox" name="Warm" value="Warm" onChange={handleChange} checked={recipe.Warm === 1} /> 추울때
+                        <input type="checkbox" name="Warm" value="1" onChange={handleChange} checked={recipe.Warm === 1} /> 추울때
                     </Label>
                 </Fieldset>
                 <Fieldset>
                     <legend>채식주의자용 요리인가요?</legend>
                     <Label>
 
-                        <input type="radio" name="meat" value="meat" onChange={handleChange} checked={recipe.meat === 1} /> 네
+                        <input type="radio" name="vegan" value="1" onChange={handleChange} checked={recipe.vegan === 1} /> 네
                     </Label>
                     <Label>
-                        <input type="radio" name="vegan" value="vegan" onChange={handleChange} checked={recipe.vegan === 1} /> 아니요
+                        <input type="radio" name="meat" value="1" onChange={handleChange} checked={recipe.meat === 1} /> 아니요
 
                     </Label>
                 </Fieldset>
