@@ -34,7 +34,9 @@ const RecipeEdit = () => {
     useEffect(() => {
         if (location.pathname.startsWith('/recipe/modify')) {
             setComment('수정');
-            setRecipe(location.state.recipe);
+            const transdata=transformRecipeData(location.state.recipe)
+                console.log("변환된 데이터",transdata)
+            setRecipe(transdata);
             setImagePreview(`${process.env.PUBLIC_URL}/imgs/${location.state.recipe.imgurl}`);
         } else if (location.pathname === '/recipe/add') {
             setComment('작성');
@@ -122,6 +124,25 @@ const RecipeEdit = () => {
         }
     };
 
+    function transformRecipeData(apiData) {
+        return {
+          title: apiData.title,
+          ingredients: apiData.ingredients,
+          recipeText: apiData.recipe,
+          times: apiData.times,
+          calories: apiData.calories,
+          spiciness: apiData.spiciness,
+          Cold: apiData["weather(Cold)"] === "1" ? 1 : 0, // 문자열 "1"을 숫자 1로 변환, 아니면 0
+          Warm: apiData["weather(Warm)"] === "1" ? 1 : 0,
+          soup: apiData.soup === "1" ? 1 : 0,
+          vegan: apiData.vegan === "1" ? 1 : 0,
+          meat: apiData.meat === "1" ? 1 : 0,
+          categories: apiData.categories,
+          customCategory: "", // 기존 값 유지 (필요에 따라 수정)
+          dishType: apiData.dishType || "" // dishType 필드 추가 (초기 값은 빈 문자열)
+        };
+      }
+
     const handleSubmit = (event) => {
         event.preventDefault();
         
@@ -196,18 +217,18 @@ const RecipeEdit = () => {
                     />
                 </RecipeLabel>
                 <RecipeLabel>
-                    <LabelText>재료:</LabelText>
-                    <RecipeTextarea
+                        <LabelText>재료:</LabelText>
+                        <RecipeTextarea
                         name="ingredients"
                         placeholder="재료를 쉼표로 구분해서 입력하세요 (예: 양파, 대파, 쪽파)"
                         value={recipe.ingredients}
-                        onChange={(e)=>filterIngredients(e.target.value)}
-                    />
-                </RecipeLabel>
+                        onChange={handleIngredientChange}
+                        />
+                    </RecipeLabel>
                 <RecipeLabel>
                     <LabelText>조리법:</LabelText>
                     <RecipeTextarea
-                        name="recipeText"
+                        name="recipe"
                         placeholder="조리법을 입력해주세요. 모두가 쉽게 이용할 수 있도록 부탁드립니다."
                         value={recipe.recipeText}
                         onChange={handleChange}
